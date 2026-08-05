@@ -1,4 +1,4 @@
----
+--- layout: "single"
 title: "Test of Design (ToD)"
 date: 2026-08-02
 tags: ["ToD", "test-of-design", "assurance", "audit", "controls"]
