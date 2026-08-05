@@ -6,7 +6,6 @@ categories: ["architecture"]
 description: "Secure architecture patterns for modern cloud-native systems — microservices, API security, secrets management, containers, and Kubernetes."
 showToc: true
 layout: "single"
-layout: "single"
 ---
 
 ## Overview
