@@ -1,0 +1,51 @@
+version: "1.0"
+component: "security-engineering-wiki"
+description: "Hugo static site + OpenTofu IaC + GitHub Actions pipeline"
+last_reviewed: "2026-08-02"
+reviewer: "Logan"
+
+threats:
+  - id: T-01
+    component: "GitHub Actions pipeline"
+    category: "tampering"
+    description: "Malicious dependency in GitHub Actions workflow"
+    stride: "T"
+    dread_score: 7.8
+    status: mitigated
+    mitigation: "Pin all actions to SHA not mutable tags"
+
+  - id: T-02
+    component: "AWS IAM"
+    category: "elevation_of_privilege"
+    description: "Overprivileged IAM user allows unintended resource creation"
+    stride: "E"
+    dread_score: 7.2
+    status: mitigated
+    mitigation: "Scoped IAM policy — S3 only, specific bucket prefix"
+
+  - id: T-03
+    component: "GitHub Secrets"
+    category: "information_disclosure"
+    description: "AWS credentials leaked via workflow log output"
+    stride: "I"
+    dread_score: 8.6
+    status: mitigated
+    mitigation: "Credentials passed via env variables only, never echoed"
+
+  - id: T-04
+    component: "Terraform Cloud"
+    category: "information_disclosure"
+    description: "State file contains sensitive output values"
+    stride: "I"
+    dread_score: 5.4
+    status: accepted
+    notes: "Outputs only contain bucket name and ARN, no credentials"
+
+  - id: T-05
+    component: "GitHub Pages"
+    category: "tampering"
+    description: "Unauthorised push to gh-pages branch replaces site content"
+    stride: "T"
+    dread_score: 6.0
+    status: mitigated
+    mitigation: "Branch protection — only Actions bot can push via GITHUB_TOKEN"
