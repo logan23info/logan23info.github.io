@@ -5,6 +5,7 @@ tags: ["containers", "Docker", "image-scanning", "runtime-security", "supply-cha
 categories: ["architecture"]
 description: "Complete guide to container security — secure Dockerfile practices, image scanning, runtime security, least privilege, and supply chain integrity."
 showToc: true
+layout: "single"
 ---
 
 ## Container attack surface

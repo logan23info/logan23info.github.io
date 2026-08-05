@@ -5,6 +5,7 @@ tags: ["Kubernetes", "K8s", "RBAC", "network-policy", "pod-security", "admission
 categories: ["architecture"]
 description: "Complete Kubernetes security hardening guide — RBAC, network policies, pod security standards, admission controllers, secrets encryption, and cluster hardening."
 showToc: true
+layout: "single"
 ---
 
 ## Kubernetes threat model

@@ -5,6 +5,7 @@ tags: ["microservices", "mTLS", "service-mesh", "zero-trust", "architecture"]
 categories: ["architecture"]
 description: "Security patterns for microservices architectures — service identity, mTLS, zero trust between services, service mesh, and lateral movement prevention."
 showToc: true
+layout: "single"
 ---
 
 ## The microservices security problem

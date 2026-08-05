@@ -5,6 +5,7 @@ tags: ["secrets", "vault", "AWS-Secrets-Manager", "credentials", "rotation", "ar
 categories: ["architecture"]
 description: "Complete guide to secrets management — avoiding hardcoded secrets, Vault, AWS Secrets Manager, secret injection patterns, rotation, and detection."
 showToc: true
+layout: "single"
 ---
 
 ## The secrets problem

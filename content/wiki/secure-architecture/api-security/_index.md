@@ -5,6 +5,7 @@ tags: ["API", "REST", "GraphQL", "authentication", "authorisation", "rate-limiti
 categories: ["architecture"]
 description: "Complete guide to secure API design — authentication, authorisation, input validation, rate limiting, API gateways, and the OWASP API Security Top 10."
 showToc: true
+layout: "single"
 ---
 
 ## Why API security is different
