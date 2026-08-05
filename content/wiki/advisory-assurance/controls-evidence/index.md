@@ -1,5 +1,6 @@
 ---
 title: "Controls & Evidence Catalogue"
+layout: "single"
 date: 2026-08-02
 tags: ["controls", "evidence", "assurance", "audit", "catalogue"]
 categories: ["governance"]
