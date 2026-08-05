@@ -1,5 +1,6 @@
 ---
 title: "Test of Operating Effectiveness (ToOE)"
+layout: "single"
 date: 2026-08-02
 tags: ["ToOE", "test-of-operating-effectiveness", "assurance", "audit", "controls"]
 categories: ["governance"]
