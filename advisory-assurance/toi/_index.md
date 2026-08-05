@@ -1,6 +1,5 @@
---- 
+---
 title: "Test of Implementation (ToI)"
-layout: "single"
 date: 2026-08-02
 tags: ["ToI", "test-of-implementation", "assurance", "audit", "controls"]
 categories: ["governance"]
