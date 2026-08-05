@@ -1,62 +1,36 @@
-name: IaC + Hugo Deploy
+name: Hugo Deploy
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
 
 jobs:
-  tofu:
-    name: OpenTofu (AWS)
-    runs-on: ubuntu-latest
-    env:
-      TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup OpenTofu
-        uses: opentofu/setup-opentofu@v1
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region:            us-east-1
-      - name: OpenTofu Init
-        run: tofu init
-        working-directory: infra
-      - name: OpenTofu Plan
-        run: tofu plan
-        working-directory: infra
-      - name: OpenTofu Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: tofu apply -auto-approve
-        working-directory: infra
-
   deploy-hugo:
     name: Build + Deploy Hugo
     runs-on: ubuntu-latest
-    needs: tofu
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "latest"
           extended: true
+
       - name: Build Hugo site
         run: hugo --minify
+
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          publish_branch: gh-pages
+          force_orphan: true
