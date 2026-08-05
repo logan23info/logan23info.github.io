@@ -12,7 +12,7 @@ buildFuture = false
   minifyOutput = true
 
 [params]
-  description         = "Security Engineering Maturity — Threat Modelling, ASM, Red Teaming, Purple Teaming, Threat Intelligence, Zero Trust, Supply Chain Security"
+  description         = "A practitioner's reference for Security Engineering — Threat Modelling, OWASP, Secure Architecture, Red Teaming, Zero Trust, Advisory & Assurance"
   author              = "Logan"
   defaultTheme        = "auto"
   ShowReadingTime     = true
@@ -35,10 +35,10 @@ buildFuture = false
 [params.homeInfoParams]
   Title   = "🛡️ Security Engineering Wiki"
   Content = """
-A practitioner's reference covering the **Security Engineering Maturity Ladder** — \
-from Threat Modelling foundations through Attack Surface Management, Red Teaming, \
-Purple Teaming, Threat Intelligence, Zero Trust Architecture, and Supply Chain Security. \
-All content is practitioner-focused — real techniques, real trade-offs, working code.
+A practitioner's reference covering the full security engineering lifecycle — \
+**Threat Modelling**, **OWASP Top 10**, **Secure Architecture**, **Red & Purple Teaming**, \
+**Threat Intelligence**, **Zero Trust**, **Supply Chain Security**, and **Advisory & Assurance**. \
+Real techniques, working code, evidence templates.
 """
 
 [[params.socialIcons]]
@@ -58,23 +58,42 @@ All content is practitioner-focused — real techniques, real trade-offs, workin
   [[menu.main]]
     name       = "Posts"
     url        = "/posts/"
-    weight     = 1
+    weight     = 10
+
   [[menu.main]]
     name       = "Wiki"
     url        = "/wiki/"
-    weight     = 2
+    weight     = 20
+
   [[menu.main]]
     name       = "🪜 Maturity Ladder"
     url        = "/wiki/maturity-ladder/"
-    weight     = 3
+    weight     = 30
+
+  [[menu.main]]
+    name       = "OWASP Top 10"
+    url        = "/wiki/owasp-top10/"
+    weight     = 40
+
+  [[menu.main]]
+    name       = "Secure Architecture"
+    url        = "/wiki/secure-architecture/"
+    weight     = 50
+
+  [[menu.main]]
+    name       = "Assurance"
+    url        = "/wiki/advisory-assurance/"
+    weight     = 60
+
   [[menu.main]]
     name       = "Tags"
     url        = "/tags/"
-    weight     = 4
+    weight     = 70
+
   [[menu.main]]
     name       = "About"
     url        = "/about/"
-    weight     = 5
+    weight     = 80
 
 [markup]
   [markup.highlight]
