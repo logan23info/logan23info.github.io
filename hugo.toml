@@ -54,50 +54,61 @@ Start at the **[Wiki index](/wiki/)** to navigate by topic or role.
 
 [menu]
   [[menu.main]]
-    name   = "Posts"
-    url    = "/posts/"
-    weight = 10
+    name    = "Posts"
+    url     = "/posts/"
+    pageRef = "/posts/"
+    weight  = 10
   [[menu.main]]
-    name   = "Wiki"
-    url    = "/wiki/"
-    weight = 20
+    name    = "Wiki"
+    url     = "/wiki/"
+    pageRef = "/wiki/"
+    weight  = 20
   [[menu.main]]
-    name   = "OWASP Top 10"
-    url    = "/wiki/owasp-top10/"
-    weight = 30
+    name    = "OWASP"
+    url     = "/wiki/owasp-top10/"
+    pageRef = "/wiki/owasp-top10/"
+    weight  = 30
   [[menu.main]]
-    name   = "Cloud"
-    url    = "/wiki/cloud-security/"
-    weight = 40
+    name    = "Cloud"
+    url     = "/wiki/cloud-security/"
+    pageRef = "/wiki/cloud-security/"
+    weight  = 40
   [[menu.main]]
-    name   = "Detection"
-    url    = "/wiki/detection-engineering/"
-    weight = 50
+    name    = "Detection"
+    url     = "/wiki/detection-engineering/"
+    pageRef = "/wiki/detection-engineering/"
+    weight  = 50
   [[menu.main]]
-    name   = "AI Security"
-    url    = "/wiki/ai-security/"
-    weight = 60
+    name    = "AI/LLM"
+    url     = "/wiki/ai-security/"
+    pageRef = "/wiki/ai-security/"
+    weight  = 60
   [[menu.main]]
-    name   = "Crypto"
-    url    = "/wiki/crypto/"
-    weight = 70
+    name    = "Crypto"
+    url     = "/wiki/crypto/"
+    pageRef = "/wiki/crypto/"
+    weight  = 70
   [[menu.main]]
-    name   = "Compliance"
-    url    = "/wiki/compliance/"
-    weight = 80
+    name    = "Compliance"
+    url     = "/wiki/compliance/"
+    pageRef = "/wiki/compliance/"
+    weight  = 80
   [[menu.main]]
-    name   = "IR"
-    url    = "/wiki/incident-response/"
-    weight = 90
+    name    = "IR"
+    url     = "/wiki/incident-response/"
+    pageRef = "/wiki/incident-response/"
+    weight  = 90
   [[menu.main]]
-    name   = "OT/ICS"
-    url    = "/wiki/ot-ics/"
-    weight = 100
+    name    = "OT/ICS"
+    url     = "/wiki/ot-ics/"
+    pageRef = "/wiki/ot-ics/"
+    weight  = 100
   [[menu.main]]
-    name   = "Tags"
-    url    = "/tags/"
-    weight = 110
-
+    name    = "Tags"
+    url     = "/tags/"
+    pageRef = "/tags/"
+    weight  = 110
+    
 [markup]
   [markup.highlight]
     noClasses = false
