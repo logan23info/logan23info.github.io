@@ -62,7 +62,7 @@ Start at the **[Wiki index](/wiki/)** to navigate by topic or role.
     url    = "/wiki/"
     weight = 20
   [[menu.main]]
-    name   = "OWASP"
+    name   = "OWASP Top 10"
     url    = "/wiki/owasp-top10/"
     weight = 30
   [[menu.main]]
