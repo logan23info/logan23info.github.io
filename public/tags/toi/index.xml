@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ToI on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/toi/</link>
+    <description>Recent content in ToI on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/toi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Advisory &amp; Assurance — The Governance Layer Over Security Engineering</title>
+      <link>https://logan23info.github.io/posts/07-advisory-assurance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/07-advisory-assurance/</guid>
+      <description>&lt;h2 id=&#34;the-missing-layer&#34;&gt;The missing layer&lt;/h2&gt;&#xA;&lt;p&gt;You have threat models, a red team, purple team exercises, and a Zero Trust roadmap. But how does anyone — the board, your customers, regulators — know the controls are actually working?&lt;/p&gt;&#xA;&lt;p&gt;That is the role of &lt;strong&gt;Advisory &amp;amp; Assurance&lt;/strong&gt;: an independent governance layer that validates what security engineering builds.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Security Engineering   → designs and builds controls&#xA;Advisory               → advises on control design and gaps&#xA;Assurance              → independently validates controls work&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;These are not competing functions. They are the complete control lifecycle.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Test of Implementation (ToI)</title>
+      <link>https://logan23info.github.io/wiki/advisory-assurance/toi/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/advisory-assurance/toi/</guid>
+      <description>&lt;h2 id=&#34;what-is-a-test-of-implementation&#34;&gt;What is a Test of Implementation?&lt;/h2&gt;&#xA;&lt;p&gt;A Test of Implementation (ToI) is an assurance activity that validates whether a security control has been &lt;strong&gt;correctly and completely implemented&lt;/strong&gt; in accordance with its design. It bridges the gap between design intent and technical reality.&lt;/p&gt;&#xA;&lt;p&gt;A control can pass the ToD (design is sound) but fail the ToI because:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;The implementation is incomplete — only partially deployed&lt;/li&gt;&#xA;&lt;li&gt;The implementation has a technical error — a misconfiguration&lt;/li&gt;&#xA;&lt;li&gt;The implementation deviates from the design — shortcuts were taken&lt;/li&gt;&#xA;&lt;li&gt;The implementation was correct but has drifted — configuration changed since deployment&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;toi-vs-penetration-testing&#34;&gt;ToI vs Penetration Testing&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Dimension&lt;/th&gt;&#xA;          &lt;th&gt;ToI&lt;/th&gt;&#xA;          &lt;th&gt;Penetration Test&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Goal&lt;/td&gt;&#xA;          &lt;td&gt;Verify control is correctly implemented&lt;/td&gt;&#xA;          &lt;td&gt;Find exploitable vulnerabilities&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Approach&lt;/td&gt;&#xA;          &lt;td&gt;Evidence-based + targeted technical testing&lt;/td&gt;&#xA;          &lt;td&gt;Adversarial, creative&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Scope&lt;/td&gt;&#xA;          &lt;td&gt;Specific controls being assured&lt;/td&gt;&#xA;          &lt;td&gt;Broad attack surface&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Output&lt;/td&gt;&#xA;          &lt;td&gt;Pass/Fail per control&lt;/td&gt;&#xA;          &lt;td&gt;Vulnerability list&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Who performs&lt;/td&gt;&#xA;          &lt;td&gt;Assurance team, internal audit&lt;/td&gt;&#xA;          &lt;td&gt;Red team, pen testers&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Frequency&lt;/td&gt;&#xA;          &lt;td&gt;Per control lifecycle change&lt;/td&gt;&#xA;          &lt;td&gt;Annually or per compliance&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;ToI is structured and control-focused. Pen testing is adversarial and open-ended.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

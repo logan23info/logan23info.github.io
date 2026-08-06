@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Detection-Engineering on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/detection-engineering/</link>
+    <description>Recent content in Detection-Engineering on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/detection-engineering/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Purple Teaming</title>
+      <link>https://logan23info.github.io/wiki/purple-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/purple-teaming/</guid>
+      <description>&lt;h2 id=&#34;what-is-purple-teaming&#34;&gt;What is Purple Teaming?&lt;/h2&gt;&#xA;&lt;p&gt;Purple Teaming is a collaborative security exercise where the Red Team (attackers) and Blue Team (defenders) work together simultaneously. The red team executes attack techniques one at a time, the blue team monitors whether their detection tools catch it, and both teams immediately discuss and fix gaps.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Red = Attacker. Blue = Defender. Purple = Both working together.&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Unlike traditional red teaming where findings are only shared at the end in a report, purple teaming produces immediate improvements — gaps are fixed in real time during the exercise.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

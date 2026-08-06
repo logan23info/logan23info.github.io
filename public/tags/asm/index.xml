@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ASM on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/asm/</link>
+    <description>Recent content in ASM on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/asm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attack Surface Management (ASM)</title>
+      <link>https://logan23info.github.io/wiki/asm/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/asm/</guid>
+      <description>&lt;h2 id=&#34;what-is-attack-surface-management&#34;&gt;What is Attack Surface Management?&lt;/h2&gt;&#xA;&lt;p&gt;Attack Surface Management (ASM) is the continuous process of discovering, inventorying, classifying, and monitoring every asset an organisation exposes to the internet — including assets the organisation may not know it has.&lt;/p&gt;&#xA;&lt;p&gt;Where threat modelling is a &lt;strong&gt;design-time&lt;/strong&gt; activity (what could go wrong?), ASM is &lt;strong&gt;runtime&lt;/strong&gt; (what is actually exposed right now?).&lt;/p&gt;&#xA;&lt;p&gt;The attack surface includes:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Web applications and APIs&lt;/li&gt;&#xA;&lt;li&gt;Cloud storage buckets and databases&lt;/li&gt;&#xA;&lt;li&gt;Subdomains and DNS records&lt;/li&gt;&#xA;&lt;li&gt;SSL/TLS certificates and their expiry dates&lt;/li&gt;&#xA;&lt;li&gt;Open ports and running services&lt;/li&gt;&#xA;&lt;li&gt;Third-party SaaS integrations&lt;/li&gt;&#xA;&lt;li&gt;Shadow IT — systems deployed without IT&amp;rsquo;s knowledge&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;why-asm-matters&#34;&gt;Why ASM matters&lt;/h2&gt;&#xA;&lt;h3 id=&#34;the-shadow-it-problem&#34;&gt;The shadow IT problem&lt;/h3&gt;&#xA;&lt;p&gt;In a 2023 survey, organisations discovered an average of &lt;strong&gt;30% more internet-facing assets&lt;/strong&gt; than they had in their official inventory. Every untracked asset is a potential entry point an attacker can find — and an organisation can&amp;rsquo;t defend what it doesn&amp;rsquo;t know exists.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Level 1 — Threat Modelling           What could go wrong?&#xA;Level 2 — Attack Surface Management  Where are we exposed right now?&#xA;Level 3 — Red Teaming                Can attacks actually succeed?&#xA;Level 4 — Purple Teaming             Can we detect those attacks?&#xA;Level 5 — Threat Intelligence        Who is actually targeting us?&#xA;Level 6 — Zero Trust Architecture    Eliminate trust entirely&#xA;   +1   — Supply Chain Security      Is our code itself safe?&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Maturity-Ladder on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/maturity-ladder/</link>
+    <description>Recent content in Maturity-Ladder on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/maturity-ladder/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Security Engineering Maturity Ladder</title>
+      <link>https://logan23info.github.io/wiki/maturity-ladder/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/maturity-ladder/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The Security Engineering Maturity Ladder describes how organisations evolve their security practices from reactive to proactive, from manual to automated, and from hypothetical to intelligence-driven. Each level builds on the previous one — you cannot effectively run a Red Team if you have not first modelled what you are defending.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────────────┐&#xA;│         SECURITY ENGINEERING MATURITY LADDER                   │&#xA;├───────┬─────────────────────────────────┬──────────────────────┤&#xA;│ Level │ Discipline                      │ Core question        │&#xA;├───────┼─────────────────────────────────┼──────────────────────┤&#xA;│   1   │ Threat Modelling                │ What could go wrong? │&#xA;│   2   │ Attack Surface Management       │ Where are we exposed?│&#xA;│   3   │ Red Teaming                     │ Can attacks succeed? │&#xA;│   4   │ Purple Teaming                  │ Can we detect them?  │&#xA;│   5   │ Threat Intelligence             │ Who is targeting us? │&#xA;│   6   │ Zero Trust Architecture         │ Trust nothing, ever  │&#xA;│  +1   │ Supply Chain Security           │ Is our code safe?    │&#xA;└───────┴─────────────────────────────────┴──────────────────────┘&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally. Level 6 is a multi-year architectural transformation.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Level 1 — Threat Modelling           What could go wrong?&#xA;Level 2 — Attack Surface Management  Where are we exposed right now?&#xA;Level 3 — Red Teaming                Can attacks actually succeed?&#xA;Level 4 — Purple Teaming             Can we detect those attacks?&#xA;Level 5 — Threat Intelligence        Who is actually targeting us?&#xA;Level 6 — Zero Trust Architecture    Eliminate trust entirely&#xA;   +1   — Supply Chain Security      Is our code itself safe?&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

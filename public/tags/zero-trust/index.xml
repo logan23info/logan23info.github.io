@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zero-Trust on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/zero-trust/</link>
+    <description>Recent content in Zero-Trust on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/zero-trust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;p&gt;The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Level 1 — Threat Modelling           What could go wrong?&#xA;Level 2 — Attack Surface Management  Where are we exposed right now?&#xA;Level 3 — Red Teaming                Can attacks actually succeed?&#xA;Level 4 — Purple Teaming             Can we detect those attacks?&#xA;Level 5 — Threat Intelligence        Who is actually targeting us?&#xA;Level 6 — Zero Trust Architecture    Eliminate trust entirely&#xA;   +1   — Supply Chain Security      Is our code itself safe?&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Zero Trust Architecture (ZTA)</title>
+      <link>https://logan23info.github.io/wiki/zero-trust/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/zero-trust/</guid>
+      <description>&lt;h2 id=&#34;what-is-zero-trust&#34;&gt;What is Zero Trust?&lt;/h2&gt;&#xA;&lt;p&gt;Zero Trust is a security architecture philosophy based on a single principle:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;&amp;ldquo;Never trust, always verify.&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;In a traditional perimeter-based security model, anything inside the corporate network is trusted. Zero Trust eliminates the concept of a trusted network. Every request — regardless of where it comes from (corporate office, home, cloud, internal network) — must be authenticated, authorised, and continuously validated before access is granted.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;The traditional model:&lt;/strong&gt; Trust the network. Verify at the perimeter. Everything inside is safe.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Microservices Security</title>
+      <link>https://logan23info.github.io/wiki/secure-architecture/microservices/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/secure-architecture/microservices/</guid>
+      <description>&lt;h2 id=&#34;the-microservices-security-problem&#34;&gt;The microservices security problem&lt;/h2&gt;&#xA;&lt;p&gt;In a monolith, a function call stays inside a process — it cannot be intercepted, spoofed, or tampered with by an external attacker. In a microservices architecture, every function call becomes a network request. Each service-to-service call is a potential attack surface.&lt;/p&gt;&#xA;&lt;p&gt;The core threats in microservices:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Threat&lt;/th&gt;&#xA;          &lt;th&gt;STRIDE category&lt;/th&gt;&#xA;          &lt;th&gt;Example&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Service A impersonating Service B&lt;/td&gt;&#xA;          &lt;td&gt;Spoofing&lt;/td&gt;&#xA;          &lt;td&gt;Attacker spins up rogue service claiming to be payment service&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;MITM between services&lt;/td&gt;&#xA;          &lt;td&gt;Tampering, Info Disclosure&lt;/td&gt;&#xA;          &lt;td&gt;Attacker intercepts internal API calls&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Compromised service pivoting&lt;/td&gt;&#xA;          &lt;td&gt;Lateral movement&lt;/td&gt;&#xA;          &lt;td&gt;Attacker in one pod reaches all other services&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Missing auth on internal APIs&lt;/td&gt;&#xA;          &lt;td&gt;Elevation of Privilege&lt;/td&gt;&#xA;          &lt;td&gt;Internal endpoint assumed safe, no auth check&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Overprivileged service&lt;/td&gt;&#xA;          &lt;td&gt;Elevation of Privilege&lt;/td&gt;&#xA;          &lt;td&gt;Order service can access user credentials&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;pattern-1--service-identity-with-mtls&#34;&gt;Pattern 1 — Service identity with mTLS&lt;/h2&gt;&#xA;&lt;p&gt;Every service must have a cryptographic identity. Mutual TLS (mTLS) means both the client and server present certificates — so each service proves who it is before communication is allowed.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

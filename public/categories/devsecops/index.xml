@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devsecops on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/categories/devsecops/</link>
+    <description>Recent content in Devsecops on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/categories/devsecops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Threat Modelling in DevSecOps Pipelines</title>
+      <link>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</guid>
+      <description>&lt;h2 id=&#34;the-problem-with-point-in-time-threat-modelling&#34;&gt;The problem with point-in-time threat modelling&lt;/h2&gt;&#xA;&lt;p&gt;Most organisations treat threat modelling as an annual exercise. By the next quarter the system has changed enough that the report is obsolete. DevSecOps flips this — security reviews happen continuously, at the pace of engineering.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;where-threat-modelling-fits-in-the-pipeline&#34;&gt;Where threat modelling fits in the pipeline&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Pipeline stage&lt;/th&gt;&#xA;          &lt;th&gt;Security activity&lt;/th&gt;&#xA;          &lt;th&gt;Threat modelling touchpoint&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Plan / design&lt;/td&gt;&#xA;          &lt;td&gt;Architecture review&lt;/td&gt;&#xA;          &lt;td&gt;Full threat model for new features&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Code&lt;/td&gt;&#xA;          &lt;td&gt;Pre-commit hooks&lt;/td&gt;&#xA;          &lt;td&gt;STRIDE checklist for the component&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Build&lt;/td&gt;&#xA;          &lt;td&gt;SAST, dependency scanning&lt;/td&gt;&#xA;          &lt;td&gt;Checks against threat register&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Test&lt;/td&gt;&#xA;          &lt;td&gt;DAST, fuzzing&lt;/td&gt;&#xA;          &lt;td&gt;Attack scenarios from threat model&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Release&lt;/td&gt;&#xA;          &lt;td&gt;Security gate&lt;/td&gt;&#xA;          &lt;td&gt;Unmitigated critical threats block release&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Deploy&lt;/td&gt;&#xA;          &lt;td&gt;IaC scanning (Checkov)&lt;/td&gt;&#xA;          &lt;td&gt;Infrastructure threat model validated&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Monitor&lt;/td&gt;&#xA;          &lt;td&gt;SIEM, anomaly detection&lt;/td&gt;&#xA;          &lt;td&gt;Threat model informs detection rules&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;pattern-1--threat-model-as-code&#34;&gt;Pattern 1 — Threat model as code&lt;/h2&gt;&#xA;&lt;p&gt;Store your threat model as YAML alongside your code:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

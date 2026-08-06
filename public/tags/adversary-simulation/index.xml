@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Adversary-Simulation on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/adversary-simulation/</link>
+    <description>Recent content in Adversary-Simulation on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/adversary-simulation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Red Teaming &amp; Adversary Simulation</title>
+      <link>https://logan23info.github.io/wiki/red-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/red-teaming/</guid>
+      <description>&lt;h2 id=&#34;what-is-red-teaming&#34;&gt;What is Red Teaming?&lt;/h2&gt;&#xA;&lt;p&gt;Red Teaming is the authorised simulation of a real-world adversary against your organisation&amp;rsquo;s people, processes, and technology. It goes far beyond penetration testing — rather than finding vulnerabilities in isolation, a red team simulates a complete attack campaign from initial access through to the attacker&amp;rsquo;s end goal (data theft, ransomware deployment, business disruption).&lt;/p&gt;&#xA;&lt;p&gt;The term comes from military wargaming, where a &amp;ldquo;red team&amp;rdquo; plays the role of the enemy to test defensive plans.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

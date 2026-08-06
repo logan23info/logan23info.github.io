@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/kubernetes/</link>
+    <description>Recent content in Kubernetes on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes Security Hardening</title>
+      <link>https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/</guid>
+      <description>&lt;h2 id=&#34;kubernetes-threat-model&#34;&gt;Kubernetes threat model&lt;/h2&gt;&#xA;&lt;p&gt;Kubernetes has a large attack surface. Understanding the threat model is the starting point:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;External attacker&#xA;    │&#xA;    ▼&#xA;[Ingress / API Server]  ← auth bypass, CVEs&#xA;    │&#xA;    ▼&#xA;[Pod / Container]       ← container escape, privilege escalation&#xA;    │&#xA;    ├──► [etcd]         ← unencrypted secrets, direct access&#xA;    ├──► [kubelet]      ← unauthenticated API, exec into pods&#xA;    ├──► [RBAC]         ← overprivileged service accounts&#xA;    ├──► [Network]      ← lateral movement between pods&#xA;    └──► [Supply chain] ← malicious images, helm charts&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The four highest-risk areas: &lt;strong&gt;RBAC misconfiguration, missing network policies, privileged pods, and unencrypted etcd secrets.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

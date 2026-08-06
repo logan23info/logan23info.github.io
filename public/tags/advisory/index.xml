@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Advisory on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/advisory/</link>
+    <description>Recent content in Advisory on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/advisory/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Advisory &amp; Assurance — The Governance Layer Over Security Engineering</title>
+      <link>https://logan23info.github.io/posts/07-advisory-assurance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/07-advisory-assurance/</guid>
+      <description>&lt;h2 id=&#34;the-missing-layer&#34;&gt;The missing layer&lt;/h2&gt;&#xA;&lt;p&gt;You have threat models, a red team, purple team exercises, and a Zero Trust roadmap. But how does anyone — the board, your customers, regulators — know the controls are actually working?&lt;/p&gt;&#xA;&lt;p&gt;That is the role of &lt;strong&gt;Advisory &amp;amp; Assurance&lt;/strong&gt;: an independent governance layer that validates what security engineering builds.&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Security Engineering   → designs and builds controls&#xA;Advisory               → advises on control design and gaps&#xA;Assurance              → independently validates controls work&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;These are not competing functions. They are the complete control lifecycle.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Advisory &amp; Assurance</title>
+      <link>https://logan23info.github.io/wiki/advisory-assurance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/advisory-assurance/</guid>
+      <description>&lt;h2 id=&#34;what-is-advisory--assurance&#34;&gt;What is Advisory &amp;amp; Assurance?&lt;/h2&gt;&#xA;&lt;p&gt;Advisory and Assurance are two complementary functions that provide independent validation that security controls are designed correctly, implemented properly, and operating effectively over time.&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Who does it&lt;/th&gt;&#xA;          &lt;th&gt;What it answers&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Advisory&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Internal security team, consultants&lt;/td&gt;&#xA;          &lt;td&gt;&amp;ldquo;Are we building the right controls?&amp;rdquo;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;strong&gt;Assurance&lt;/strong&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Internal audit, external auditors, regulators&lt;/td&gt;&#xA;          &lt;td&gt;&amp;ldquo;Do the controls actually work?&amp;rdquo;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;The two functions work together across three testing disciplines:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Test of Design (ToD)&#xA;  → Is the control designed to address the risk?&#xA;&#xA;Test of Implementation (ToI)&#xA;  → Has the control been correctly implemented?&#xA;&#xA;Test of Operating Effectiveness (ToOE)&#xA;  → Is the control working consistently over time?&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;These map directly to the security controls your engineering team builds using the &lt;a href=&#34;https://logan23info.github.io/wiki/maturity-ladder/&#34;&gt;Security Engineering Maturity Ladder&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
