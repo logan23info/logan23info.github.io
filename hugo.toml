@@ -12,7 +12,7 @@ buildFuture = false
   minifyOutput = true
 
 [params]
-  description         = "A practitioner's reference for Security Engineering — Threat Modelling, OWASP, Secure Architecture, Red Teaming, Zero Trust, Advisory & Assurance"
+  description         = "A practitioner's reference for Security Engineering — Threat Modelling, OWASP, Cloud, Detection, AI/LLM, Cryptography, Privacy, Compliance, Incident Response, and OT/ICS."
   author              = "Logan"
   defaultTheme        = "auto"
   ShowReadingTime     = true
@@ -27,18 +27,17 @@ buildFuture = false
   disableScrollToTop  = false
   comments            = false
   hidemeta            = false
-  disableSpecial1stPost = false
-  disableAnchoredHeadings = false
   ShowAllPagesInArchive = true
   mainSections        = ["posts"]
 
 [params.homeInfoParams]
   Title   = "🛡️ Security Engineering Wiki"
   Content = """
-A practitioner's reference covering the full security engineering lifecycle — \
-**Threat Modelling**, **OWASP Top 10**, **Secure Architecture**, **Red & Purple Teaming**, \
-**Threat Intelligence**, **Zero Trust**, **Supply Chain Security**, and **Advisory & Assurance**. \
-Real techniques, working code, evidence templates.
+A practitioner's reference covering the full security engineering lifecycle — over 85 pages of working code, templates, and checklists.
+
+**Foundations** (threat modelling, red/purple teaming, zero trust) · **OWASP Top 10** · **Secure Architecture** · **Cloud Security** (AWS/GCP/Azure) · **Detection Engineering** · **AI & LLM Security** · **Cryptography** · **Privacy** · **Compliance** (GDPR/PCI/ISO/SOC2/DORA) · **Incident Response** · **OT/ICS Security** · **Security Metrics**.
+
+Start at the **[Wiki index](/wiki/)** to navigate by topic or role.
 """
 
 [[params.socialIcons]]
@@ -52,55 +51,59 @@ Real techniques, working code, evidence templates.
 [taxonomies]
   tag      = "tags"
   category = "categories"
-  series   = "series"
 
 [menu]
   [[menu.main]]
-    name       = "Posts"
-    url        = "/posts/"
-    weight     = 10
-
+    name   = "Posts"
+    url    = "/posts/"
+    weight = 10
   [[menu.main]]
-    name       = "Wiki"
-    url        = "/wiki/"
-    weight     = 20
-
+    name   = "Wiki"
+    url    = "/wiki/"
+    weight = 20
   [[menu.main]]
-    name       = "🪜 Maturity Ladder"
-    url        = "/wiki/maturity-ladder/"
-    weight     = 30
-
+    name   = "OWASP"
+    url    = "/wiki/owasp-top10/"
+    weight = 30
   [[menu.main]]
-    name       = "OWASP Top 10"
-    url        = "/wiki/owasp-top10/"
-    weight     = 40
-
+    name   = "Cloud"
+    url    = "/wiki/cloud-security/"
+    weight = 40
   [[menu.main]]
-    name       = "Secure Architecture"
-    url        = "/wiki/secure-architecture/"
-    weight     = 50
-
+    name   = "Detection"
+    url    = "/wiki/detection-engineering/"
+    weight = 50
   [[menu.main]]
-    name       = "Assurance"
-    url        = "/wiki/advisory-assurance/"
-    weight     = 60
-
+    name   = "AI Security"
+    url    = "/wiki/ai-security/"
+    weight = 60
   [[menu.main]]
-    name       = "Tags"
-    url        = "/tags/"
-    weight     = 70
-
+    name   = "Crypto"
+    url    = "/wiki/crypto/"
+    weight = 70
   [[menu.main]]
-    name       = "About"
-    url        = "/about/"
-    weight     = 80
+    name   = "Compliance"
+    url    = "/wiki/compliance/"
+    weight = 80
+  [[menu.main]]
+    name   = "IR"
+    url    = "/wiki/incident-response/"
+    weight = 90
+  [[menu.main]]
+    name   = "OT/ICS"
+    url    = "/wiki/ot-ics/"
+    weight = 100
+  [[menu.main]]
+    name   = "Tags"
+    url    = "/tags/"
+    weight = 110
 
 [markup]
   [markup.highlight]
-    noClasses  = false
-    style      = "monokai"
-    lineNos    = false
-    tabWidth   = 2
+    noClasses = false
+    style     = "monokai"
+    lineNos   = false
+    tabWidth  = 2
   [markup.goldmark.renderer]
     unsafe = true
   [markup.tableOfContents]
