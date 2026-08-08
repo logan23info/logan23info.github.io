@@ -33,11 +33,11 @@ buildFuture = false
 [params.homeInfoParams]
   Title   = "🛡️ Security Engineering Wiki"
   Content = """
-A practitioner's reference covering the full security engineering lifecycle — over 85 pages of working code, templates, and checklists.
+A practitioner's reference covering the full security engineering lifecycle — over 90 pages of working code, templates, and checklists.
 
-**Foundations** (threat modelling, red/purple teaming, zero trust) · **OWASP Top 10** · **Secure Architecture** · **Cloud Security** (AWS/GCP/Azure) · **Detection Engineering** · **AI & LLM Security** · **Cryptography** · **Privacy** · **Compliance** (GDPR/PCI/ISO/SOC2/DORA) · **Incident Response** · **OT/ICS Security** · **Security Metrics**.
+**Start here:** [Threat Modelling](/threat-modelling/) · [OWASP Top 10](/wiki/owasp-top10/) · [Cloud Security](/wiki/cloud-security/) · [Detection Engineering](/wiki/detection-engineering/) · [AI & LLM Security](/wiki/ai-security/) · [Incident Response](/wiki/incident-response/)
 
-Start at the **[Wiki index](/wiki/)** to navigate by topic or role.
+Want the full picture first? See the **[Security Engineering Landscape](/wiki/landscape/)** — a map of how every domain connects. Or browse everything from the **[Wiki index](/wiki/)**.
 """
 
 [[params.socialIcons]]
@@ -54,72 +54,66 @@ Start at the **[Wiki index](/wiki/)** to navigate by topic or role.
 
 [menu]
   [[menu.main]]
-    name       = "Posts"
-    url        = "/posts/"
-    pageRef    = "/posts/"
-    identifier = "nav-posts"
-    weight     = 10
+    name    = "Posts"
+    url     = "/posts/"
+    pageRef = "/posts/"
+    weight  = 10
   [[menu.main]]
-    name       = "Wiki"
-    url        = "/wiki/"
-    pageRef    = "/wiki/"
-    identifier = "nav-wiki"
-    weight     = 20
+    name    = "Wiki"
+    url     = "/wiki/"
+    pageRef = "/wiki/"
+    weight  = 20
   [[menu.main]]
-    name       = "OWASP"
-    url        = "/wiki/owasp-top10/"
-    pageRef    = "/wiki/owasp-top10/"
-    identifier = "nav-owasp"
-    weight     = 30
+    name    = "Threat Modelling"
+    url     = "/threat-modelling/"
+    pageRef = "/threat-modelling/"
+    weight  = 25
   [[menu.main]]
-    name       = "Cloud"
-    url        = "/wiki/cloud-security/"
-    pageRef    = "/wiki/cloud-security/"
-    identifier = "nav-cloud"
-    weight     = 40
+    name    = "OWASP"
+    url     = "/wiki/owasp-top10/"
+    pageRef = "/wiki/owasp-top10/"
+    weight  = 30
   [[menu.main]]
-    name       = "Detection"
-    url        = "/wiki/detection-engineering/"
-    pageRef    = "/wiki/detection-engineering/"
-    identifier = "nav-detection"
-    weight     = 50
+    name    = "Cloud"
+    url     = "/wiki/cloud-security/"
+    pageRef = "/wiki/cloud-security/"
+    weight  = 40
   [[menu.main]]
-    name       = "AI/LLM"
-    url        = "/wiki/ai-security/"
-    pageRef    = "/wiki/ai-security/"
-    identifier = "nav-ai-llm"
-    weight     = 60
+    name    = "Detection"
+    url     = "/wiki/detection-engineering/"
+    pageRef = "/wiki/detection-engineering/"
+    weight  = 50
   [[menu.main]]
-    name       = "Crypto"
-    url        = "/wiki/crypto/"
-    pageRef    = "/wiki/crypto/"
-    identifier = "nav-crypto"
-    weight     = 70
+    name    = "AI/LLM"
+    url     = "/wiki/ai-security/"
+    pageRef = "/wiki/ai-security/"
+    weight  = 60
   [[menu.main]]
-    name       = "Compliance"
-    url        = "/wiki/compliance/"
-    pageRef    = "/wiki/compliance/"
-    identifier = "nav-compliance"
-    weight     = 80
+    name    = "Crypto"
+    url     = "/wiki/crypto/"
+    pageRef = "/wiki/crypto/"
+    weight  = 70
   [[menu.main]]
-    name       = "IR"
-    url        = "/wiki/incident-response/"
-    pageRef    = "/wiki/incident-response/"
-    identifier = "nav-ir"
-    weight     = 90
+    name    = "Compliance"
+    url     = "/wiki/compliance/"
+    pageRef = "/wiki/compliance/"
+    weight  = 80
   [[menu.main]]
-    name       = "OT/ICS"
-    url        = "/wiki/ot-ics/"
-    pageRef    = "/wiki/ot-ics/"
-    identifier = "nav-ot-ics"
-    weight     = 100
+    name    = "IR"
+    url     = "/wiki/incident-response/"
+    pageRef = "/wiki/incident-response/"
+    weight  = 90
   [[menu.main]]
-    name       = "Tags"
-    url        = "/tags/"
-    pageRef    = "/tags/"
-    identifier = "nav-tags"
+    name    = "OT/ICS"
+    url     = "/wiki/ot-ics/"
+    pageRef = "/wiki/ot-ics/"
+    weight  = 100
+  [[menu.main]]
+    name    = "Tags"
+    url     = "/tags/"
+    pageRef = "/tags/"
     weight  = 110
-    
+
 [markup]
   [markup.highlight]
     noClasses = false
