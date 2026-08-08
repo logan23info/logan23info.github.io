@@ -30,21 +30,47 @@ buildFuture = false
   ShowAllPagesInArchive = true
   mainSections        = ["posts"]
 
-[params.profileMode]
-  enabled     = true
-  title       = "🛡️ Security Engineering Wiki"
-  subtitle    = "A practitioner's reference covering the full security engineering lifecycle — over 90 pages of working code, templates, and checklists."
-  imageUrl    = ""
-  imageWidth  = 120
-  imageHeight = 120
-  buttons = [
-    { name = "Threat Modelling", url = "/threat-modelling/" },
-    { name = "OWASP Top 10", url = "/wiki/owasp-top10/" },
-    { name = "Cloud Security", url = "/wiki/cloud-security/" },
-    { name = "Detection Eng", url = "/wiki/detection-engineering/" },
-    { name = "AI & LLM Security", url = "/wiki/ai-security/" },
-    { name = "Full Wiki Index", url = "/wiki/" },
-  ]
+[params.homeInfoParams]
+  Title   = "🛡️ Security Engineering Wiki"
+  Content = """
+A practitioner's reference covering the full security engineering lifecycle — over 90 pages of working code, templates, and checklists across 14 domains.
+
+<div class="references-section">
+
+## 🧭 How to read this wiki — 4 steps
+
+<div class="ref-grid">
+  <a class="ref-card" href="/threat-modelling/"><span class="ref-label">Step 1</span>Start with Threat Modelling — understand what can go wrong before you build</a>
+  <a class="ref-card" href="/wiki/"><span class="ref-label">Step 2</span>Pick your domain from the Wiki index — 14 areas, browse by role or topic</a>
+  <a class="ref-card" href="/wiki/landscape/"><span class="ref-label">Step 3</span>See the Landscape page — how every domain connects across the lifecycle</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/"><span class="ref-label">Step 4</span>Validate with Advisory & Assurance — turn controls into evidence</a>
+</div>
+
+</div>
+
+<div class="references-section">
+
+## 🚀 Jump straight to a domain
+
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/owasp-top10/"><span class="ref-label">AppSec</span>OWASP Top 10</a>
+  <a class="ref-card" href="/wiki/secure-architecture/"><span class="ref-label">Design</span>Secure Architecture</a>
+  <a class="ref-card" href="/wiki/cloud-security/"><span class="ref-label">Cloud</span>AWS · GCP · Azure Baselines</a>
+  <a class="ref-card" href="/wiki/detection-engineering/"><span class="ref-label">SOC</span>Detection Engineering</a>
+  <a class="ref-card" href="/wiki/ai-security/"><span class="ref-label">AI</span>AI & LLM Security</a>
+  <a class="ref-card" href="/wiki/crypto/"><span class="ref-label">Crypto</span>Cryptography</a>
+  <a class="ref-card" href="/wiki/privacy/"><span class="ref-label">Privacy</span>GDPR Engineering & DPIA</a>
+  <a class="ref-card" href="/wiki/compliance/"><span class="ref-label">Compliance</span>GDPR · PCI · ISO · SOC2 · DORA</a>
+  <a class="ref-card" href="/wiki/incident-response/"><span class="ref-label">IR</span>Playbooks & Post-Incident Review</a>
+  <a class="ref-card" href="/wiki/ot-ics/"><span class="ref-label">OT/ICS</span>Purdue Model & ATT&CK for ICS</a>
+  <a class="ref-card" href="/wiki/metrics/"><span class="ref-label">Metrics</span>KPIs & Board Reporting</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Foundations</span>Maturity Ladder</a>
+</div>
+
+</div>
+
+**Reading by role?** Developer, Security Engineer, Auditor, SOC Analyst, AI/ML Engineer, and OT/ICS paths are on the **[Wiki index](/wiki/)**.
+"""
 
 [[params.socialIcons]]
   name = "github"
