@@ -1,0 +1,2172 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Threat-Modelling on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/threat-modelling/</link>
+    <description>Recent content in Threat-Modelling on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/threat-modelling/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</guid>
+      <description>What threat modelling is, why every engineering team needs it, and the four core questions that drive every session.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-threat-modelling">What is Threat Modelling?</h2>
+<p>Threat modelling is a structured process for <strong>identifying security risks before attackers do</strong>. Instead of waiting for a penetration test or a production incident, you reason about your system&rsquo;s weaknesses during design — when changes are cheap.</p>
+<p>Every threat modelling session answers four questions:</p>
+<ol>
+<li><strong>What are we building?</strong> — understand the system</li>
+<li><strong>What can go wrong?</strong> — enumerate threats</li>
+<li><strong>What are we going to do about it?</strong> — decide on mitigations</li>
+<li><strong>Did we do a good enough job?</strong> — validate</li>
+</ol>
+<hr>
+<h2 id="why-most-teams-skip-it-and-why-they-shouldnt">Why most teams skip it (and why they shouldn&rsquo;t)</h2>
+<p>Done well, a threat modelling session is a <strong>60-minute whiteboard conversation</strong> that produces a prioritised list of risks — a handful of actionable tickets, not a 40-page report.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Finding stage</th>
+					<th>Average cost to fix</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Design</td>
+					<td>$80</td>
+			</tr>
+			<tr>
+					<td>Development</td>
+					<td>$240</td>
+			</tr>
+			<tr>
+					<td>Testing</td>
+					<td>$960</td>
+			</tr>
+			<tr>
+					<td>Production</td>
+					<td>$7,600+</td>
+			</tr>
+	</tbody>
+</table>
+<p>The earlier you find a flaw, the cheaper it is to fix.</p>
+<hr>
+<h2 id="what-you-need-to-start">What you need to start</h2>
+<ul>
+<li><strong>A data flow diagram (DFD)</strong> — how data moves through your system</li>
+<li><strong>A threat enumeration method</strong> — STRIDE, PASTA, or attack trees</li>
+<li><strong>A risk scoring approach</strong> — DREAD or CVSS</li>
+<li><strong>30–90 minutes</strong> with the people who built the system</li>
+</ul>
+<hr>
+<h2 id="data-flow-diagram-example">Data Flow Diagram example</h2>
+<pre tabindex="0"><code>[Browser] --HTTPS--&gt; [API Gateway] --gRPC--&gt; [Auth Service]
+                          |                        |
+                          v                        v
+                     [App DB]              [User DB]
+</code></pre><p>Every arrow crossing a trust boundary is a candidate threat.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-maturity-ladder">Where threat modelling fits in the maturity ladder</h2>
+<p>Threat modelling is <strong>Level 1</strong> of the <a href="/wiki/maturity-ladder/">Security Engineering Maturity Ladder</a>. It is the foundation that every other security discipline builds on:</p>
+<ul>
+<li><strong>Level 2 ASM</strong> validates your threat model with real exposure data</li>
+<li><strong>Level 3 Red Teaming</strong> proves whether your threat model&rsquo;s mitigations work</li>
+<li><strong>Level 4 Purple Teaming</strong> validates whether you can detect the attacks you modelled</li>
+<li><strong>Level 5 Threat Intelligence</strong> makes your threat model attacker-realistic</li>
+</ul>
+<p>Start here. Get good at this. Then climb the ladder.</p>
+<hr>
+<h2 id="frameworks-covered-in-this-wiki">Frameworks covered in this wiki</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Framework</th>
+					<th>Best for</th>
+					<th>Complexity</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="/wiki/stride/">STRIDE</a></td>
+					<td>General-purpose</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/dread/">DREAD</a></td>
+					<td>Risk scoring</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/pasta/">PASTA</a></td>
+					<td>Business-risk-driven</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/attack-trees/">Attack Trees</a></td>
+					<td>Attack path analysis</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE: The Practitioner&#39;s Guide</title>
+      <link>https://logan23info.github.io/posts/02-stride-methodology/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/02-stride-methodology/</guid>
+      <description>A complete walkthrough of STRIDE with worked examples on a real Auth Service.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-stride">What is STRIDE?</h2>
+<p>STRIDE is a threat categorisation framework developed at Microsoft in 1999. It gives you a checklist of threat types to apply systematically to each component and data flow in your system.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Threat</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>S</strong></td>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Can an attacker pretend to be someone else?</td>
+			</tr>
+			<tr>
+					<td><strong>T</strong></td>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Can an attacker modify data or code?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can an attacker deny having done something?</td>
+			</tr>
+			<tr>
+					<td><strong>I</strong></td>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Can an attacker read data they should not?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can an attacker make the system unavailable?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>Can an attacker gain permissions they should not have?</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stride-by-element-type">STRIDE by element type</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="worked-example-auth-service">Worked example: Auth Service</h2>
+<h3 id="spoofing">Spoofing</h3>
+<ul>
+<li>JWT replay via stolen token</li>
+<li><strong>Mitigation:</strong> Short-lived JWTs (15 min), validate exp claim, rotate signing keys</li>
+</ul>
+<h3 id="tampering">Tampering</h3>
+<ul>
+<li>alg:none JWT forgery — remove signature, set algorithm to none</li>
+<li><strong>Mitigation:</strong> Whitelist allowed algorithms explicitly in jwt.verify()</li>
+</ul>
+<h3 id="repudiation">Repudiation</h3>
+<ul>
+<li>No audit log for password resets or login events</li>
+<li><strong>Mitigation:</strong> Structured auth event logging to tamper-evident store</li>
+</ul>
+<h3 id="information-disclosure">Information Disclosure</h3>
+<ul>
+<li>User enumeration via different error messages for valid vs invalid usernames</li>
+<li><strong>Mitigation:</strong> Return generic error messages to clients always</li>
+</ul>
+<h3 id="denial-of-service">Denial of Service</h3>
+<ul>
+<li>Credential stuffing exhausts database connection pool</li>
+<li><strong>Mitigation:</strong> Rate limiting per IP and account, connection pool limits</li>
+</ul>
+<h3 id="elevation-of-privilege">Elevation of Privilege</h3>
+<ul>
+<li>JWT role claim trusted without server-side validation</li>
+<li><strong>Mitigation:</strong> Always validate roles server-side from the database on every request</li>
+</ul>
+<hr>
+<h2 id="threat-register-output">Threat register output</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>Category</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>Spoofing</td>
+					<td>High</td>
+					<td>Short TTL + rotation</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>alg:none forgery</td>
+					<td>Tampering</td>
+					<td>Critical</td>
+					<td>Whitelist algorithms</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>Repudiation</td>
+					<td>Medium</td>
+					<td>Auth event logging</td>
+			</tr>
+			<tr>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>Info Disclosure</td>
+					<td>Medium</td>
+					<td>Generic errors</td>
+			</tr>
+			<tr>
+					<td>T-05</td>
+					<td>Credential stuffing</td>
+					<td>DoS</td>
+					<td>High</td>
+					<td>Rate limiting</td>
+			</tr>
+			<tr>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>EoP</td>
+					<td>Critical</td>
+					<td>Server-side validation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-scoring-your-findings">Next: scoring your findings</h2>
+<p>Use <a href="/posts/03-dread-scoring/">DREAD</a> to score and prioritise which threats to fix first.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>DREAD: Risk Scoring for Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/03-dread-scoring/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/03-dread-scoring/</guid>
+      <description>How to use DREAD to score and prioritise threats so your team knows what to fix first.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-dread">What is DREAD?</h2>
+<p>DREAD is a risk scoring model. Where STRIDE tells you what kind of threat something is, DREAD tells you how bad it is — so you can prioritise your mitigation backlog.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Dimension</th>
+					<th>Question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Damage</td>
+					<td>How much damage if exploited?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Reproducibility</td>
+					<td>How easy is it to reproduce?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Exploitability</td>
+					<td>How much skill does exploitation require?</td>
+			</tr>
+			<tr>
+					<td><strong>A</strong></td>
+					<td>Affected users</td>
+					<td>How many users are impacted?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Discoverability</td>
+					<td>How easy is it to find the vulnerability?</td>
+			</tr>
+	</tbody>
+</table>
+<p>Each dimension scored 1–10. Final score = average of all five.</p>
+<hr>
+<h2 id="scoring-guide">Scoring guide</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + custom tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>Fix SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9–10</td>
+					<td>Critical</td>
+					<td>Within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7–8.9</td>
+					<td>High</td>
+					<td>Within 1 week</td>
+			</tr>
+			<tr>
+					<td>4–6.9</td>
+					<td>Medium</td>
+					<td>Within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="prioritised-backlog-from-auth-service-threats">Prioritised backlog from Auth Service threats</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Priority</th>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>DREAD</th>
+					<th>Action</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>T-02</td>
+					<td>alg:none JWT forgery</td>
+					<td>9.0</td>
+					<td>Fix immediately</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>8.8</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>8.4</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>8.2</td>
+					<td>Fix this sprint</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>T-05</td>
+					<td>Credential stuffing DoS</td>
+					<td>6.6</td>
+					<td>Next sprint</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>5.2</td>
+					<td>Next sprint</td>
+			</tr>
+	</tbody>
+</table>
+<p>Now your backlog is prioritised — no guessing what matters most.</p>
+<hr>
+<h2 id="dread-vs-alternatives">DREAD vs alternatives</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Model</th>
+					<th>Strengths</th>
+					<th>When to use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DREAD</td>
+					<td>Fast, intuitive</td>
+					<td>Quick triage, smaller teams</td>
+			</tr>
+			<tr>
+					<td>CVSS v3.1</td>
+					<td>Standardised, auditable</td>
+					<td>Enterprise, compliance</td>
+			</tr>
+			<tr>
+					<td>OWASP Risk Rating</td>
+					<td>Includes business impact</td>
+					<td>Stakeholder reporting</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see <a href="/posts/04-pasta-framework/">PASTA</a> for business-risk-aligned threat modelling.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>PASTA: Process for Attack Simulation and Threat Analysis</title>
+      <link>https://logan23info.github.io/posts/04-pasta-framework/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/04-pasta-framework/</guid>
+      <description>A deep dive into PASTA — the seven-stage, business-risk-aligned framework that thinks like an attacker.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-pasta">What is PASTA?</h2>
+<p>PASTA is a seven-stage, risk-centric threat modelling framework. Unlike STRIDE (developer-friendly, component-focused), PASTA is attacker-centric — it simulates realistic attack scenarios and ties every finding back to business impact.</p>
+<p>Use PASTA when findings need to reach business stakeholders, not just engineers.</p>
+<hr>
+<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewels</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerabilities mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-i--business-objectives-example">Stage I — Business objectives example</h2>
+<pre tabindex="0"><code>Application: Payment processing API
+Crown jewels: cardholder data, payment tokens
+Regulatory scope: PCI-DSS Level 1
+Business impact of breach: up to $500k fines + customer churn
+Critical processes: checkout, refund, fraud detection
+</code></pre><hr>
+<h2 id="stage-iv--attacker-profiling">Stage IV — Attacker profiling</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat actor</th>
+					<th>Motivation</th>
+					<th>Capability</th>
+					<th>Likelihood</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External cybercriminal</td>
+					<td>Financial</td>
+					<td>High</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Sabotage</td>
+					<td>Medium</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Nation-state</td>
+					<td>IP theft</td>
+					<td>Very high</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Script kiddie</td>
+					<td>Opportunistic</td>
+					<td>Low</td>
+					<td>High</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-vi--attack-tree-example">Stage VI — Attack tree example</h2>
+<pre tabindex="0"><code>Goal: obtain cardholder PAN in plaintext
+├── Attack the application layer
+│   ├── SQL injection → dump card_tokens table
+│   ├── IDOR → access other users stored cards
+│   └── XSS → steal card details from DOM
+├── Attack the infrastructure
+│   └── Intercept traffic (no TLS enforced)
+└── Attack the supply chain
+    └── Compromise payment SDK dependency
+</code></pre><hr>
+<h2 id="pasta-vs-stride">PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>STRIDE</th>
+					<th>PASTA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time</td>
+					<td>1–2 hours</td>
+					<td>1–2 days</td>
+			</tr>
+			<tr>
+					<td>Audience</td>
+					<td>Engineering</td>
+					<td>Engineering + business + leadership</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Threat list</td>
+					<td>Risk register with financial impact</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Agile sprint review</td>
+					<td>Compliance, enterprise risk management</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see how to embed all of this into your CI/CD pipeline in <a href="/posts/05-threat-modelling-in-devsecops/">Threat Modelling in DevSecOps</a>.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threat Modelling in DevSecOps Pipelines</title>
+      <link>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</guid>
+      <description>How to integrate threat modelling into your CI/CD pipeline so security is a gate, not an afterthought.</description>
+      <content:encoded><![CDATA[<h2 id="the-problem-with-point-in-time-threat-modelling">The problem with point-in-time threat modelling</h2>
+<p>Most organisations treat threat modelling as an annual exercise. By the next quarter the system has changed enough that the report is obsolete. DevSecOps flips this — security reviews happen continuously, at the pace of engineering.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-pipeline">Where threat modelling fits in the pipeline</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Pipeline stage</th>
+					<th>Security activity</th>
+					<th>Threat modelling touchpoint</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Plan / design</td>
+					<td>Architecture review</td>
+					<td>Full threat model for new features</td>
+			</tr>
+			<tr>
+					<td>Code</td>
+					<td>Pre-commit hooks</td>
+					<td>STRIDE checklist for the component</td>
+			</tr>
+			<tr>
+					<td>Build</td>
+					<td>SAST, dependency scanning</td>
+					<td>Checks against threat register</td>
+			</tr>
+			<tr>
+					<td>Test</td>
+					<td>DAST, fuzzing</td>
+					<td>Attack scenarios from threat model</td>
+			</tr>
+			<tr>
+					<td>Release</td>
+					<td>Security gate</td>
+					<td>Unmitigated critical threats block release</td>
+			</tr>
+			<tr>
+					<td>Deploy</td>
+					<td>IaC scanning (Checkov)</td>
+					<td>Infrastructure threat model validated</td>
+			</tr>
+			<tr>
+					<td>Monitor</td>
+					<td>SIEM, anomaly detection</td>
+					<td>Threat model informs detection rules</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="pattern-1--threat-model-as-code">Pattern 1 — Threat model as code</h2>
+<p>Store your threat model as YAML alongside your code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;auth-service&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_reviewed</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">threats</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-01</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">spoofing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;JWT replay attack using stolen token&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">8.4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">mitigated</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mitigation</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;15-minute TTL enforced, refresh token rotation&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-02</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">tampering</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;alg:none JWT forgery&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">9.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">open</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;team-auth&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">due</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-09&#34;</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-2--security-gate-in-github-actions">Pattern 2 — Security gate in GitHub Actions</h2>
+<p>Block deployments if open Critical threats exist:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Check for open critical threats</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    python3 - &lt;&lt; &#39;PYEOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="sd">    import yaml, sys
+</span></span></span><span class="line"><span class="cl"><span class="sd">    with open(&#34;threat-model.yml&#34;) as f:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        model = yaml.safe_load(f)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    open_critical = [
+</span></span></span><span class="line"><span class="cl"><span class="sd">        t for t in model.get(&#34;threats&#34;, [])
+</span></span></span><span class="line"><span class="cl"><span class="sd">        if t.get(&#34;status&#34;) == &#34;open&#34; and t.get(&#34;dread_score&#34;, 0) &gt;= 9.0
+</span></span></span><span class="line"><span class="cl"><span class="sd">    ]
+</span></span></span><span class="line"><span class="cl"><span class="sd">    if open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        print(&#34;BLOCKED: Open critical threats found:&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        for t in open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">            print(f&#34;  [{t[&#39;id&#39;]}] {t[&#39;description&#39;]} (DREAD: {t[&#39;dread_score&#39;]})&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        sys.exit(1)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    print(&#34;Security gate passed.&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    PYEOF</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-3--iac-scanning-with-checkov">Pattern 3 — IaC scanning with Checkov</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run Checkov on infra</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">bridgecrewio/checkov-action@v12</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l">infra/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l">terraform</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">soft_fail</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span></code></pre></div><p>Checkov maps IaC misconfigurations directly to STRIDE categories — an S3 bucket without encryption is Information Disclosure, an open security group is Elevation of Privilege.</p>
+<hr>
+<h2 id="realistic-cadence">Realistic cadence</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Trigger</th>
+					<th>Activity</th>
+					<th>Time</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New service or major feature</td>
+					<td>Full STRIDE threat model</td>
+					<td>60–90 min</td>
+			</tr>
+			<tr>
+					<td>PR touching auth/payments/PII</td>
+					<td>STRIDE checklist review</td>
+					<td>15 min</td>
+			</tr>
+			<tr>
+					<td>Every sprint</td>
+					<td>Review open threat register items</td>
+					<td>20 min</td>
+			</tr>
+			<tr>
+					<td>Quarterly</td>
+					<td>Full PASTA review for tier-1 services</td>
+					<td>Half day</td>
+			</tr>
+			<tr>
+					<td>Post-incident</td>
+					<td>Threat model update to reflect attacker path</td>
+					<td>30 min</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-level-climbing-the-maturity-ladder">Next level: climbing the maturity ladder</h2>
+<p>Once threat modelling is embedded in your pipeline, you are ready to climb:</p>
+<ul>
+<li><strong><a href="/wiki/asm/">Level 2: Attack Surface Management</a></strong> — discover what is actually exposed</li>
+<li><strong><a href="/wiki/red-teaming/">Level 3: Red Teaming</a></strong> — prove whether your mitigations work</li>
+<li><strong><a href="/wiki/purple-teaming/">Level 4: Purple Teaming</a></strong> — validate whether you can detect attacks</li>
+<li><strong><a href="/wiki/threat-intelligence/">Level 5: Threat Intelligence</a></strong> — make your threat models attacker-realistic</li>
+<li><strong><a href="/wiki/zero-trust/">Level 6: Zero Trust</a></strong> — eliminate entire threat categories architecturally</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Attack Trees — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/attack-trees/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/attack-trees/</guid>
+      <description>How to build and use attack trees to map all paths an attacker could take.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-an-attack-tree">What is an attack tree?</h2>
+<p>An attack tree maps all the ways an attacker could achieve a specific goal. Root = attacker goal. Branches = sub-goals. Leaves = individual attack steps.</p>
+<h2 id="and-vs-or-nodes">AND vs OR nodes</h2>
+<ul>
+<li><strong>OR-node</strong> — any single child path is enough for the attacker to succeed</li>
+<li><strong>AND-node</strong> — all child steps must succeed (multi-step attack chain)</li>
+</ul>
+<h2 id="example-gain-admin-access">Example: Gain admin access</h2>
+<pre tabindex="0"><code>GOAL: Gain admin access
+├── [OR] Compromise admin credentials
+│   ├── Phishing attack on admin user
+│   ├── Credential stuffing with leaked lists
+│   └── Brute force weak admin password
+├── [OR] Exploit application vulnerability
+│   ├── SQL injection → extract + crack password hashes
+│   └── IDOR on admin endpoint (missing auth check)
+└── [OR] Compromise infrastructure
+    ├── [AND] Exploit vulnerable dependency
+    │   ├── Identify outdated package via public scan
+    │   └── Use public exploit for that CVE
+    └── Steal developer session token
+</code></pre><h2 id="scoring-paths">Scoring paths</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Path</th>
+					<th>Attacker cost</th>
+					<th>Probability</th>
+					<th>Priority to mitigate</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Phishing admin</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>IDOR missing auth</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>Brute force</td>
+					<td>Low</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>CVE exploit</td>
+					<td>Medium</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Steal dev session</td>
+					<td>High</td>
+					<td>Low</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="when-to-use-attack-trees">When to use attack trees</h2>
+<ul>
+<li>You have a specific high-value asset to protect</li>
+<li>Preparing penetration test or red team scope</li>
+<li>Communicating risk to non-technical stakeholders</li>
+<li>Stage VI of PASTA methodology</li>
+</ul>
+<h2 id="free-tools">Free tools</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>draw.io / diagrams.net</td>
+					<td>Visual, free, export to XML</td>
+			</tr>
+			<tr>
+					<td>OWASP Threat Dragon</td>
+					<td>Integrated with DFD threat modelling</td>
+			</tr>
+			<tr>
+					<td>Plain Markdown/ASCII</td>
+					<td>Version-controllable in Git</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE Reference</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Stage VI uses attack trees</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming</a>
+  <a class="ref-card" href="/wiki/templates/dfd/"><span class="ref-label">Template</span>Data Flow Diagram Guide</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/"><span class="ref-label">Post</span>Intro to Threat Modelling</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Data Flow Diagram (DFD) Guide</title>
+      <link>https://logan23info.github.io/wiki/templates/dfd/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/templates/dfd/</guid>
+      <description>How to draw a Data Flow Diagram for threat modelling — notation, examples, and free tools.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-a-dfd">What is a DFD?</h2>
+<p>A Data Flow Diagram (DFD) maps how data moves through your system. It is the foundational artefact for threat modelling — every threat is found by examining each component and each data flow in the diagram.</p>
+<hr>
+<h2 id="dfd-notation">DFD notation</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Symbol</th>
+					<th>Meaning</th>
+					<th>Example</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Rectangle</td>
+					<td><strong>External entity</strong> — outside your control</td>
+					<td>User browser, third-party API</td>
+			</tr>
+			<tr>
+					<td>Rounded rectangle / circle</td>
+					<td><strong>Process</strong> — your code</td>
+					<td>Auth service, API gateway</td>
+			</tr>
+			<tr>
+					<td>Two parallel lines</td>
+					<td><strong>Data store</strong> — persisted data</td>
+					<td>PostgreSQL, Redis, S3 bucket</td>
+			</tr>
+			<tr>
+					<td>Arrow</td>
+					<td><strong>Data flow</strong> — data in motion</td>
+					<td>HTTPS request, gRPC call, queue message</td>
+			</tr>
+			<tr>
+					<td>Dashed line</td>
+					<td><strong>Trust boundary</strong> — where privilege changes</td>
+					<td>Internet ↔ DMZ, DMZ ↔ internal network</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="example-dfd--web-application">Example DFD — Web application</h2>
+<pre tabindex="0"><code>[User Browser]
+      |
+      | HTTPS (JWT in Authorization header)
+      |
+[Load Balancer / WAF]  ·····trust boundary·····
+      |
+      | HTTP
+      |
+[API Gateway]
+      |──────────────────────────────┐
+      |                              |
+      | gRPC                         | gRPC
+      |                              |
+[Auth Service]              [Order Service]
+      |                              |
+      | SQL (TLS)                    | SQL (TLS)
+      |                              |
+[PostgreSQL: users]      [PostgreSQL: orders]
+
+
+[Auth Service] ──Redis PubSub──► [Notification Service]
+                                          |
+                                          | SMTP
+                                          |
+                                    [Email Provider]
+                                    (External entity)
+</code></pre><hr>
+<h2 id="threat-modelling-from-the-dfd">Threat modelling from the DFD</h2>
+<p>For each element, ask the relevant STRIDE questions:</p>
+<table>
+	<thead>
+			<tr>
+					<th>DFD element</th>
+					<th>STRIDE categories to check</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Every <strong>data flow crossing a trust boundary</strong></td>
+					<td>Spoofing (who sent this?), Tampering (was it modified?), Info Disclosure (can it be read?)</td>
+			</tr>
+			<tr>
+					<td>Every <strong>process</strong></td>
+					<td>All 6 STRIDE categories</td>
+			</tr>
+			<tr>
+					<td>Every <strong>data store</strong></td>
+					<td>Tampering, Repudiation, Info Disclosure, DoS</td>
+			</tr>
+			<tr>
+					<td>Every <strong>external entity</strong></td>
+					<td>Spoofing, Repudiation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="free-dfd-tools">Free DFD tools</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Notes</th>
+					<th>Link</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OWASP Threat Dragon</td>
+					<td>DFD + STRIDE built in</td>
+					<td>threatdragon.com</td>
+			</tr>
+			<tr>
+					<td>draw.io / diagrams.net</td>
+					<td>Free, web-based, export to XML</td>
+					<td>diagrams.net</td>
+			</tr>
+			<tr>
+					<td>Excalidraw</td>
+					<td>Fast whiteboard-style DFDs</td>
+					<td>excalidraw.com</td>
+			</tr>
+			<tr>
+					<td>Mermaid</td>
+					<td>Code-based diagrams, renders in GitHub</td>
+					<td>mermaid.js.org</td>
+			</tr>
+			<tr>
+					<td>Lucidchart</td>
+					<td>Professional, free tier</td>
+					<td>lucidchart.com</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="dfd-in-mermaid-renders-in-github-markdown">DFD in Mermaid (renders in GitHub markdown)</h3>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TD
+    A[User Browser] --&gt;|HTTPS| B[API Gateway]
+    B --&gt;|gRPC| C[Auth Service]
+    B --&gt;|gRPC| D[Order Service]
+    C --&gt;|SQL TLS| E[(PostgreSQL: users)]
+    D --&gt;|SQL TLS| F[(PostgreSQL: orders)]
+    C --&gt;|Redis PubSub| G[Notification Service]
+    G --&gt;|SMTP| H[Email Provider]
+
+    style B fill:#6366f1,color:#fff
+    style C fill:#6366f1,color:#fff
+    style D fill:#6366f1,color:#fff
+</code></pre><div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE — Apply to your DFD
+  </a>
+  <a class="ref-card" href="/wiki/templates/threat-register/">
+    <span class="ref-label">Template</span>Threat Register Template
+  </a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/">
+    <span class="ref-label">Post</span>Introduction to Threat Modelling
+  </a>
+  <a class="ref-card" href="/wiki/attack-trees/">
+    <span class="ref-label">Wiki</span>Attack Trees
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Microsoft Threat Modelling Tool</title>
+      <link>https://logan23info.github.io/wiki/tools/ms-tmt/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/ms-tmt/</guid>
+      <description>Guide to the Microsoft Threat Modelling Tool — the classic free STRIDE-based DFD tool from the team that invented STRIDE.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-the-microsoft-threat-modelling-tool">What is the Microsoft Threat Modelling Tool?</h2>
+<p>The Microsoft Threat Modelling Tool (TMT) is a free Windows application developed by Microsoft&rsquo;s Security Engineering team — the same team that invented STRIDE. It provides a graphical DFD editor and automatically generates a list of potential threats for each element using a built-in threat template library.</p>
+<p><strong>Download:</strong> <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a>
+<strong>Platform:</strong> Windows only
+<strong>Cost:</strong> Free</p>
+<hr>
+<h2 id="key-features">Key features</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DFD editor</td>
+					<td>Visual drag-and-drop diagram builder</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Automatically suggests threats per element based on STRIDE</td>
+			</tr>
+			<tr>
+					<td>Built-in templates</td>
+					<td>Azure, generic web app, IoT, and custom templates</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>100+ pre-built threats with mitigations</td>
+			</tr>
+			<tr>
+					<td>SDL integration</td>
+					<td>Built for Microsoft&rsquo;s Security Development Lifecycle</td>
+			</tr>
+			<tr>
+					<td>Report export</td>
+					<td>HTML and CSV reports</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation">Installation</h2>
+<ol>
+<li>Go to → <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a></li>
+<li>Download the installer (Windows only)</li>
+<li>Run <code>ThreatModelingTool.msi</code></li>
+<li>Launch from Start menu</li>
+</ol>
+<p>For non-Windows users, use <a href="/wiki/tools/threat-dragon/">OWASP Threat Dragon</a> or <a href="/wiki/tools/threagile/">Threagile</a> instead.</p>
+<hr>
+<h2 id="quickstart">Quickstart</h2>
+<h3 id="step-1--create-a-new-model">Step 1 — Create a new model</h3>
+<p>File → New → give it a name</p>
+<h3 id="step-2--draw-your-dfd">Step 2 — Draw your DFD</h3>
+<p>Drag from the stencil panel:</p>
+<ul>
+<li><strong>Browser / Generic External Interactor</strong> — external entities</li>
+<li><strong>Generic Process / Web Application</strong> — your services</li>
+<li><strong>Generic Data Store / SQL Database</strong> — databases</li>
+<li><strong>Flow</strong> — connect elements with arrows</li>
+<li><strong>Boundary</strong> — draw trust boundaries as boxes around groups</li>
+</ul>
+<h3 id="step-3--generate-threats">Step 3 — Generate threats</h3>
+<p>Go to <strong>View → Analysis View</strong> (or press F5).
+The tool automatically generates threats for every element and data flow. Each threat includes:</p>
+<ul>
+<li>Threat category (STRIDE)</li>
+<li>Threat title and description</li>
+<li>Suggested mitigation</li>
+<li>Priority (High / Medium / Low)</li>
+</ul>
+<h3 id="step-4--review-and-mitigate">Step 4 — Review and mitigate</h3>
+<p>For each generated threat, set the state:</p>
+<ul>
+<li><strong>Mitigated</strong> — add your mitigation text</li>
+<li><strong>Not Applicable</strong> — explain why it does not apply</li>
+<li><strong>Needs Investigation</strong> — flag for follow-up</li>
+</ul>
+<h3 id="step-5--export-report">Step 5 — Export report</h3>
+<p>View → Reports → Generate Full Report → saves as HTML</p>
+<hr>
+<h2 id="microsoft-tmt-vs-owasp-threat-dragon">Microsoft TMT vs OWASP Threat Dragon</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Microsoft TMT</th>
+					<th>OWASP Threat Dragon</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Platform</td>
+					<td>Windows only</td>
+					<td>Web + Desktop + Docker</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>No</td>
+					<td>Yes</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Extensive (Azure-focused)</td>
+					<td>Basic</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Yes</td>
+					<td>Partial</td>
+			</tr>
+			<tr>
+					<td>Git integration</td>
+					<td>No</td>
+					<td>Yes (GitHub)</td>
+			</tr>
+			<tr>
+					<td>Report quality</td>
+					<td>Excellent</td>
+					<td>Good</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Windows / Azure teams</td>
+					<td>Cross-platform teams</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/wiki/tools/threagile/">
+    <span class="ref-label">Tool</span>Threagile — TM as YAML
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/02-stride-methodology/">
+    <span class="ref-label">Post</span>STRIDE Practitioner's Guide
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>OWASP Threat Dragon</title>
+      <link>https://logan23info.github.io/wiki/tools/threat-dragon/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/threat-dragon/</guid>
+      <description>Complete guide to OWASP Threat Dragon — the free, open-source threat modelling tool for creating DFDs and running STRIDE analysis.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-owasp-threat-dragon">What is OWASP Threat Dragon?</h2>
+<p>OWASP Threat Dragon is a free, open-source threat modelling tool that lets you draw data flow diagrams (DFDs) and run STRIDE analysis against each component. It is part of the OWASP (Open Web Application Security Project) toolset and is available as a web app, desktop app, and Docker container.</p>
+<p><strong>Website:</strong> <a href="https://owasp.org/www-project-threat-dragon/">https://owasp.org/www-project-threat-dragon/</a>
+<strong>GitHub:</strong> <a href="https://github.com/OWASP/threat-dragon">https://github.com/OWASP/threat-dragon</a></p>
+<hr>
+<h2 id="key-features">Key features</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Visual DFD editor</td>
+					<td>Drag-and-drop diagram builder with all DFD elements</td>
+			</tr>
+			<tr>
+					<td>STRIDE per element</td>
+					<td>Automated STRIDE checklist per process, data store, and data flow</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Built-in threats with descriptions and mitigations</td>
+			</tr>
+			<tr>
+					<td>JSON export</td>
+					<td>Store threat model as code in your Git repo</td>
+			</tr>
+			<tr>
+					<td>GitHub integration</td>
+					<td>Load and save models directly from GitHub repos</td>
+			</tr>
+			<tr>
+					<td>Report generation</td>
+					<td>Export threat model as PDF or HTML report</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>Free forever, no vendor lock-in</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation-options">Installation options</h2>
+<h3 id="option-1--web-app-no-install">Option 1 — Web app (no install)</h3>
+<p>Go to: <a href="https://www.threatdragon.com">https://www.threatdragon.com</a></p>
+<p>Log in with GitHub → your threat models are saved as JSON files in a GitHub repo.</p>
+<h3 id="option-2--desktop-app">Option 2 — Desktop app</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Download from GitHub releases</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># https://github.com/OWASP/threat-dragon/releases</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Mac</span>
+</span></span><span class="line"><span class="cl">brew install --cask owasp-threat-dragon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Linux (AppImage)</span>
+</span></span><span class="line"><span class="cl">chmod +x threat-dragon-*.AppImage
+</span></span><span class="line"><span class="cl">./threat-dragon-*.AppImage
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows: download the .exe installer from GitHub releases</span>
+</span></span></code></pre></div><h3 id="option-3--docker">Option 3 — Docker</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Pull and run</span>
+</span></span><span class="line"><span class="cl">docker pull owasp/threat-dragon:latest
+</span></span><span class="line"><span class="cl">docker run -it --rm <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -p 3000:3000 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -e <span class="nv">NODE_ENV</span><span class="o">=</span>production <span class="se">\
+</span></span></span><span class="line"><span class="cl">  owasp/threat-dragon:latest
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Open http://localhost:3000</span>
+</span></span></code></pre></div><hr>
+<h2 id="quickstart-walkthrough">Quickstart walkthrough</h2>
+<h3 id="step-1--create-a-new-model">Step 1 — Create a new model</h3>
+<ol>
+<li>Open Threat Dragon (web or desktop)</li>
+<li>Click <strong>&ldquo;New Model&rdquo;</strong></li>
+<li>Name it: <code>auth-service-threat-model</code></li>
+<li>Add metadata: owner, description, reviewer</li>
+</ol>
+<h3 id="step-2--draw-your-dfd">Step 2 — Draw your DFD</h3>
+<p>Use the left panel to drag elements onto the canvas:</p>
+<ul>
+<li><strong>Actor</strong> (external entity) — drag for User, Third-party API</li>
+<li><strong>Process</strong> (rounded box) — drag for each service</li>
+<li><strong>Data Store</strong> (parallel lines) — drag for each database</li>
+<li><strong>Data Flow</strong> (arrow) — connect elements</li>
+<li><strong>Trust Boundary</strong> (dashed box) — surround internal components</li>
+</ul>
+<h3 id="step-3--add-threats-per-element">Step 3 — Add threats per element</h3>
+<p>Click any process or data flow → click <strong>&ldquo;Edit Threats&rdquo;</strong> → the STRIDE checklist appears. For each relevant category:</p>
+<ol>
+<li>Click <strong>&ldquo;Add Threat&rdquo;</strong></li>
+<li>Fill in: Title, Description, STRIDE category, Severity (Critical/High/Medium/Low)</li>
+<li>Add mitigation text</li>
+<li>Set status: Open / Mitigated / Not Applicable</li>
+</ol>
+<h3 id="step-4--export">Step 4 — Export</h3>
+<ul>
+<li><strong>JSON</strong> → commit to your Git repo alongside the code</li>
+<li><strong>PDF report</strong> → share with stakeholders</li>
+<li><strong>PNG</strong> → embed in Confluence/Notion</li>
+</ul>
+<hr>
+<h2 id="storing-threat-models-as-code">Storing threat models as code</h2>
+<p>Threat Dragon saves models as JSON. Commit this to your repo:</p>
+<pre tabindex="0"><code>your-repo/
+├── src/
+├── infra/
+└── threat-models/
+    ├── auth-service.json          ← Threat Dragon model
+    ├── payment-service.json
+    └── api-gateway.json
+</code></pre><p>Add a GitHub Actions step to validate models on every PR:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Validate threat models</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    for f in threat-models/*.json; do
+</span></span></span><span class="line"><span class="cl"><span class="sd">      python3 -c &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">import json, sys</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">with open(&#39;$f&#39;) as f</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">model = json.load(f)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Check for open critical threats</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">diagrams = model.get(&#39;detail&#39;, {}).get(&#39;diagrams&#39;, [])</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">open_critical = []</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">for diagram in diagrams</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">for cell in diagram.get(&#39;cells&#39;, [])</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">for threat in cell.get(&#39;threats&#39;, [])</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">if threat.get(&#39;status&#39;) == &#39;Open&#39; and threat.get(&#39;severity&#39;) == &#39;Critical&#39;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="l">open_critical.append(threat.get(&#39;title&#39;, &#39;Unknown&#39;))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">if open_critical</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">print(f&#39;BLOCKED in $f</span><span class="p">:</span><span class="w"> </span><span class="nt">Open Critical threats</span><span class="p">:</span><span class="w"> </span>{<span class="l">open_critical}&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">sys.exit(1)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">print(f&#39;OK</span><span class="p">:</span><span class="w"> </span><span class="l">$f&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">done</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="threat-dragon-vs-microsoft-tmt">Threat Dragon vs Microsoft TMT</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>OWASP Threat Dragon</th>
+					<th>Microsoft TMT</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cost</td>
+					<td>Free</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Platform</td>
+					<td>Web + Desktop + Docker</td>
+					<td>Windows only</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>Yes</td>
+					<td>No</td>
+			</tr>
+			<tr>
+					<td>Git integration</td>
+					<td>Yes (GitHub)</td>
+					<td>No</td>
+			</tr>
+			<tr>
+					<td>STRIDE support</td>
+					<td>Yes</td>
+					<td>Yes</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Basic</td>
+					<td>Extensive</td>
+			</tr>
+			<tr>
+					<td>Report quality</td>
+					<td>Good</td>
+					<td>Excellent</td>
+			</tr>
+			<tr>
+					<td>Active development</td>
+					<td>Yes</td>
+					<td>Limited</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Cross-platform teams</td>
+					<td>Windows / Azure-focused teams</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/ms-tmt/">
+    <span class="ref-label">Tool</span>Microsoft Threat Modelling Tool
+  </a>
+  <a class="ref-card" href="/wiki/tools/threagile/">
+    <span class="ref-label">Tool</span>Threagile — TM as YAML
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/">
+    <span class="ref-label">Post</span>Introduction to Threat Modelling
+  </a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/">
+    <span class="ref-label">Post</span>Threat Modelling in DevSecOps
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/stride/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/stride/</guid>
+      <description>Quick reference card for the STRIDE threat categorisation framework.</description>
+      <content:encoded><![CDATA[<h2 id="categories">Categories</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Category</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+					<th>Common examples</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Who are you, really?</td>
+					<td>Fake JWT, ARP spoofing, phishing</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Has this been modified?</td>
+					<td>SQL injection, MITM, log tampering</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can you prove who did it?</td>
+					<td>Missing audit logs, log deletion</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Who can read this?</td>
+					<td>Insecure S3, verbose errors</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can it be made unavailable?</td>
+					<td>Credential stuffing, regex DoS</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>What can you do that you shouldn&rsquo;t?</td>
+					<td>IDOR, JWT role claim</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="which-categories-apply-to-which-elements">Which categories apply to which elements</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="standard-mitigations">Standard mitigations</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Strong authentication, MFA, signed tokens</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Digital signatures, input validation, parameterised queries</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Tamper-evident audit logging</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Encryption, least privilege, data masking</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Rate limiting, circuit breakers, auto-scaling</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Least privilege, server-side authorisation, RBAC</td>
+			</tr>
+	</tbody>
+</table>
+<p>See the <a href="/posts/02-stride-methodology/">STRIDE deep-dive post</a> for a full worked example.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Framework</span>DREAD — Risk Scoring</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Full Methodology</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/wiki/templates/threat-register/"><span class="ref-label">Template</span>Threat Register</a>
+  <a class="ref-card" href="/posts/02-stride-methodology/"><span class="ref-label">Post</span>STRIDE Deep-Dive</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threagile — Threat Modelling as YAML</title>
+      <link>https://logan23info.github.io/wiki/tools/threagile/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/threagile/</guid>
+      <description>Complete guide to Threagile — the open-source tool that generates a full threat model report from a YAML architecture description.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-threagile">What is Threagile?</h2>
+<p>Threagile is an open-source, agile threat modelling toolkit that lets you describe your architecture in YAML and automatically generates a complete threat model — including a DFD diagram, STRIDE analysis, risk-ranked findings, and a PDF report. It is built on the principle of <strong>threat modelling as code</strong>: your threat model lives in version control, evolves with your architecture, and can be validated in CI/CD.</p>
+<p><strong>GitHub:</strong> <a href="https://github.com/Threagile/threagile">https://github.com/Threagile/threagile</a>
+<strong>License:</strong> MIT (free, open source)</p>
+<hr>
+<h2 id="why-threagile">Why Threagile?</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Benefit</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>YAML-based model</td>
+					<td>Version-controlled, diff-able, PR-reviewable</td>
+			</tr>
+			<tr>
+					<td>Automated analysis</td>
+					<td>No manual STRIDE enumeration — engine does it</td>
+			</tr>
+			<tr>
+					<td>Risk ranking</td>
+					<td>Findings auto-ranked by severity</td>
+			</tr>
+			<tr>
+					<td>Multiple outputs</td>
+					<td>PDF report, DFD PNG, JSON findings, Excel</td>
+			</tr>
+			<tr>
+					<td>CI/CD integration</td>
+					<td>Runs in Docker, fits in any pipeline</td>
+			</tr>
+			<tr>
+					<td>150+ built-in threats</td>
+					<td>Covers OWASP Top 10, CWEs, STRIDE categories</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation">Installation</h2>
+<h3 id="option-1--docker-recommended">Option 1 — Docker (recommended)</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Pull image</span>
+</span></span><span class="line"><span class="cl">docker pull threagile/threagile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Run against a model file</span>
+</span></span><span class="line"><span class="cl">docker run --rm -it <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -v <span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span>:/app/work <span class="se">\
+</span></span></span><span class="line"><span class="cl">  threagile/threagile <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -model /app/work/threagile-model.yaml <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -output /app/work/output <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -verbose
+</span></span></code></pre></div><p>Output folder will contain:</p>
+<ul>
+<li><code>risks.json</code> — all identified risks as JSON</li>
+<li><code>report.pdf</code> — full threat model report</li>
+<li><code>data-flow-diagram.png</code> — DFD diagram</li>
+<li><code>risks.xlsx</code> — risks in spreadsheet format</li>
+</ul>
+<h3 id="option-2--binary">Option 2 — Binary</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Download from GitHub releases</span>
+</span></span><span class="line"><span class="cl">curl -L https://github.com/Threagile/threagile/releases/latest/download/threagile-linux-amd64 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -o threagile <span class="o">&amp;&amp;</span> chmod +x threagile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Run</span>
+</span></span><span class="line"><span class="cl">./threagile -model threagile-model.yaml -output ./output
+</span></span></code></pre></div><hr>
+<h2 id="writing-a-threagile-model">Writing a Threagile model</h2>
+<p>Threagile models are YAML files describing your architecture. Here is a minimal example for an API + database:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">threagile_version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1.0.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Payment API Threat Model&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">author</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Logan&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">management_summary_comment</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  This threat model covers the payment processing API and its
+</span></span></span><span class="line"><span class="cl"><span class="sd">  dependencies including the PostgreSQL database and Redis cache.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">business_criticality</span><span class="p">:</span><span class="w"> </span><span class="l">critical    </span><span class="w"> </span><span class="c"># archive | operational | important | critical | mission-critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ── Technical Assets (your components) ──────────────────────────</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">technical_assets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">user-browser</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">user-browser</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">User Browser</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">external-entity</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">out_of_scope</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technologies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">browser</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">api-gateway</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">api-gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">API Gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">process</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technologies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="l">virtual</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">internet</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">multi_tenant</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">redundant</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">custom_developed_parts</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_processed</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">payment-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_stored</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">communication_links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">to-auth-service</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l">auth-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;gRPC to Auth&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">grpc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">authentication</span><span class="p">:</span><span class="w"> </span><span class="l">token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">authorization</span><span class="p">:</span><span class="w"> </span><span class="l">technical-user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">vpn</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">ip_filtered</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">readonly</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">data_assets_sent</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">data_assets_received</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="l">auth-token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auth-service</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">auth-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Auth Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">process</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technologies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">service-mesh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="l">container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">custom_developed_parts</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_processed</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">auth-token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_stored</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">communication_links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">to-user-db</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l">user-database</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;SQL to User DB&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">jdbc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">authentication</span><span class="p">:</span><span class="w"> </span><span class="l">credentials</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">authorization</span><span class="p">:</span><span class="w"> </span><span class="l">technical-user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">data_assets_sent</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">data_assets_received</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">user-database</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">user-database</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;PostgreSQL: Users&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">datastore</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technologies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">database</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="l">virtual</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">encryption</span><span class="p">:</span><span class="w"> </span><span class="l">data-with-symmetric-shared-key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">custom_developed_parts</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_processed</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">data_assets_stored</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ── Data Assets ──────────────────────────────────────────────────</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">data_assets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">customer-pii</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">customer-pii</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Customer PII</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l">many</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">confidentiality</span><span class="p">:</span><span class="w"> </span><span class="l">strictly-confidential</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">integrity</span><span class="p">:</span><span class="w"> </span><span class="l">critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">availability</span><span class="p">:</span><span class="w"> </span><span class="l">critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">justification_cia_rating</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Contains name, email, address — regulated under GDPR&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">payment-data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">payment-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Payment Card Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l">many</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">confidentiality</span><span class="p">:</span><span class="w"> </span><span class="l">strictly-confidential</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">integrity</span><span class="p">:</span><span class="w"> </span><span class="l">critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">availability</span><span class="p">:</span><span class="w"> </span><span class="l">critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">justification_cia_rating</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Cardholder data — PCI-DSS scope&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auth-token</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">auth-token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Auth Token (JWT)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">usage</span><span class="p">:</span><span class="w"> </span><span class="l">business</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l">many</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">confidentiality</span><span class="p">:</span><span class="w"> </span><span class="l">confidential</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">integrity</span><span class="p">:</span><span class="w"> </span><span class="l">critical</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">availability</span><span class="p">:</span><span class="w"> </span><span class="l">operational</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ── Trust Boundaries ─────────────────────────────────────────────</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">trust_boundaries</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">internet-boundary</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">internet-boundary</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Internet Boundary</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">network-on-prem</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technical_assets_inside</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">api-gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">internal-network</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">internal-network</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Internal Network</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">network-on-prem</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technical_assets_inside</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">auth-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">user-database</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ── Shared Runtimes ──────────────────────────────────────────────</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">shared_runtimes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">kubernetes-cluster</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">kubernetes-cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Kubernetes Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">technical_assets_running</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">api-gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">auth-service</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="reading-the-output">Reading the output</h2>
+<h3 id="risksjson">risks.json</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;category&#34;</span><span class="p">:</span> <span class="s2">&#34;sql-nosql-injection&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;risk_status&#34;</span><span class="p">:</span> <span class="s2">&#34;unchecked&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;severity&#34;</span><span class="p">:</span> <span class="s2">&#34;critical&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;exploitation_likelihood&#34;</span><span class="p">:</span> <span class="s2">&#34;likely&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;exploitation_impact&#34;</span><span class="p">:</span> <span class="s2">&#34;critical&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;SQL/NoSQL-Injection risk at &#39;Auth Service&#39; against database &#39;PostgreSQL: Users&#39;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;synthetic_id&#34;</span><span class="p">:</span> <span class="s2">&#34;sql-nosql-injection@auth-service&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;most_relevant_technical_asset&#34;</span><span class="p">:</span> <span class="s2">&#34;auth-service&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;most_relevant_communication_link&#34;</span><span class="p">:</span> <span class="s2">&#34;to-user-db&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><h3 id="cicd-integration">CI/CD integration</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .github/workflows/threat-model.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Threagile Threat Model</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;threat-models/threagile-model.yaml&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;threat-models/threagile-model.yaml&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">analyse</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run Threagile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          docker run --rm \
+</span></span></span><span class="line"><span class="cl"><span class="sd">            -v &#34;${{ github.workspace }}/threat-models&#34;:/app/work \
+</span></span></span><span class="line"><span class="cl"><span class="sd">            threagile/threagile \
+</span></span></span><span class="line"><span class="cl"><span class="sd">            -model /app/work/threagile-model.yaml \
+</span></span></span><span class="line"><span class="cl"><span class="sd">            -output /app/work/output</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Check for critical risks</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          CRITICAL=$(cat threat-models/output/risks.json | \
+</span></span></span><span class="line"><span class="cl"><span class="sd">            python3 -c &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">import json,sys</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">risks = json.load(sys.stdin)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">crit = [r[&#39;title&#39;] for r in risks if r[&#39;severity&#39;]==&#39;critical&#39; and r[&#39;risk_status&#39;]==&#39;unchecked&#39;]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">if crit</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">print(&#39;CRITICAL RISKS FOUND:&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="l">print(f&#39;  - {r}&#39;) for r in crit]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">sys.exit(1)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">print(&#39;No unchecked critical risks.&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">&#34;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Upload report</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">threat-model-report</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">threat-models/output/</span><span class="w">
+</span></span></span></code></pre></div><div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/wiki/tools/ms-tmt/">
+    <span class="ref-label">Tool</span>Microsoft Threat Modelling Tool
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/">
+    <span class="ref-label">Post</span>Threat Modelling in DevSecOps
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/wiki/supply-chain/">
+    <span class="ref-label">Wiki</span>Supply Chain Security
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threat Register Template</title>
+      <link>https://logan23info.github.io/wiki/templates/threat-register/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/templates/threat-register/</guid>
+      <description>A ready-to-use threat register template for tracking threats, mitigations, and status across your system components.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-a-threat-register">What is a Threat Register?</h2>
+<p>A threat register is a structured log of all threats identified during a threat modelling session, along with their severity scores, mitigations, owners, and current status. It is the primary output of a threat modelling exercise and the input to your security backlog.</p>
+<hr>
+<h2 id="markdown-template">Markdown template</h2>
+<p>Copy this into your repo as <code>threat-register.md</code> or embed it in Confluence/Notion:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># Threat Register — [System Name]
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gs">**Component:**</span> [e.g. Auth Service]
+</span></span><span class="line"><span class="cl"><span class="gs">**Last reviewed:**</span> YYYY-MM-DD
+</span></span><span class="line"><span class="cl"><span class="gs">**Reviewer:**</span> [Name]
+</span></span><span class="line"><span class="cl"><span class="gs">**Framework:**</span> STRIDE + DREAD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">| ID | Component | Threat description | STRIDE | DREAD | Severity | Mitigation | Owner | Status | Due |
+</span></span><span class="line"><span class="cl">|----|-----------|--------------------|--------|-------|----------|------------|-------|--------|-----|
+</span></span><span class="line"><span class="cl">| T-01 | | | | | | | | Open | |
+</span></span><span class="line"><span class="cl">| T-02 | | | | | | | | Open | |
+</span></span></code></pre></div><hr>
+<h2 id="yaml-template-threat-model-as-code">YAML template (threat-model-as-code)</h2>
+<p>Store this alongside your code in version control:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;your-service-name&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_reviewed</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">reviewer</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;your-name&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">next_review</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-11-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">threats</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-01</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;spoofing&#34;</span><span class="w">          </span><span class="c"># spoofing | tampering | repudiation | info_disclosure | dos | eop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;S&#34;</span><span class="w">                   </span><span class="c"># S | T | R | I | D | E</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">damage</span><span class="p">:</span><span class="w">          </span><span class="m">0</span><span class="w">          </span><span class="c"># 1-10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">reproducibility</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">exploitability</span><span class="p">:</span><span class="w">  </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">affected_users</span><span class="p">:</span><span class="w">  </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">discoverability</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">score</span><span class="p">:</span><span class="w">           </span><span class="m">0.0</span><span class="w">        </span><span class="c"># average of above</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;high&#34;</span><span class="w">              </span><span class="c"># critical | high | medium | low</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;open&#34;</span><span class="w">                </span><span class="c"># open | mitigated | accepted | transferred</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mitigation</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">due</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="severity-definitions">Severity definitions</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Severity</th>
+					<th>DREAD score</th>
+					<th>Remediation SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><span class="badge badge-critical">Critical</span></td>
+					<td>9.0 – 10.0</td>
+					<td>Fix within 24 hours</td>
+			</tr>
+			<tr>
+					<td><span class="badge badge-high">High</span></td>
+					<td>7.0 – 8.9</td>
+					<td>Fix within 1 week</td>
+			</tr>
+			<tr>
+					<td><span class="badge badge-medium">Medium</span></td>
+					<td>4.0 – 6.9</td>
+					<td>Fix within 1 sprint</td>
+			</tr>
+			<tr>
+					<td><span class="badge badge-low">Low</span></td>
+					<td>1.0 – 3.9</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="status-definitions">Status definitions</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Status</th>
+					<th>Meaning</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>Open</strong></td>
+					<td>Threat identified, mitigation not yet implemented</td>
+			</tr>
+			<tr>
+					<td><strong>Mitigated</strong></td>
+					<td>Mitigation implemented and verified</td>
+			</tr>
+			<tr>
+					<td><strong>Accepted</strong></td>
+					<td>Risk accepted by owner — documented rationale required</td>
+			</tr>
+			<tr>
+					<td><strong>Transferred</strong></td>
+					<td>Risk transferred (e.g. via insurance, third-party SLA)</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="example-completed-register">Example completed register</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Component</th>
+					<th>Threat</th>
+					<th>STRIDE</th>
+					<th>DREAD</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+					<th>Owner</th>
+					<th>Status</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>Auth Service</td>
+					<td>JWT replay via stolen token</td>
+					<td>S</td>
+					<td>8.4</td>
+					<td><span class="badge badge-high">High</span></td>
+					<td>15-min TTL + rotation</td>
+					<td>team-auth</td>
+					<td>Mitigated</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>Auth Service</td>
+					<td>alg:none JWT forgery</td>
+					<td>T</td>
+					<td>9.0</td>
+					<td><span class="badge badge-critical">Critical</span></td>
+					<td>Whitelist algorithms</td>
+					<td>team-auth</td>
+					<td>Mitigated</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Auth Service</td>
+					<td>Missing auth audit logs</td>
+					<td>R</td>
+					<td>5.2</td>
+					<td><span class="badge badge-medium">Medium</span></td>
+					<td>Structured event logging</td>
+					<td>team-auth</td>
+					<td>Open</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE — Threat Categorisation
+  </a>
+  <a class="ref-card" href="/wiki/dread/">
+    <span class="ref-label">Framework</span>DREAD — Risk Scoring
+  </a>
+  <a class="ref-card" href="/wiki/templates/pr-checklist/">
+    <span class="ref-label">Template</span>PR Security Checklist
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/02-stride-methodology/">
+    <span class="ref-label">Post</span>STRIDE Practitioner's Guide
+  </a>
+  <a class="ref-card" href="/posts/03-dread-scoring/">
+    <span class="ref-label">Post</span>DREAD Scoring Deep-Dive
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

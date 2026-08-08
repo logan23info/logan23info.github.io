@@ -1,0 +1,204 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Post-Incident Review Template | Security Engineering Wiki</title><meta name=keywords content="post-incident-review,PIR,lessons-learned,incident-response,blameless"><meta name=description content="Post-incident review template — blameless retrospective, timeline, root cause analysis, impact quantification, and action items."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/incident-response/post-incident-review/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/incident-response/post-incident-review/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/incident-response/post-incident-review/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/incident-response/post-incident-review/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Post-Incident Review Template"><meta property="og:description" content="Post-incident review template — blameless retrospective, timeline, root cause analysis, impact quantification, and action items."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Post-Incident Review Template"><meta name=twitter:description content="Post-incident review template — blameless retrospective, timeline, root cause analysis, impact quantification, and action items."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Incident Response","item":"https://logan23info.github.io/wiki/incident-response/"},{"@type":"ListItem","position":3,"name":"Post-Incident Review Template","item":"https://logan23info.github.io/wiki/incident-response/post-incident-review/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/incident-response/>Incident Response</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Post-Incident Review Template</h1><div class=post-description>Post-incident review template — blameless retrospective, timeline, root cause analysis, impact quantification, and action items.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>1301 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#purpose-of-the-post-incident-review aria-label="Purpose of the Post-Incident Review">Purpose of the Post-Incident Review</a></li><li><a href=#pir-template aria-label="PIR template">PIR template</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=purpose-of-the-post-incident-review>Purpose of the Post-Incident Review<a hidden class=anchor aria-hidden=true href=#purpose-of-the-post-incident-review>#</a></h2><p>A Post-Incident Review (PIR) — also called a post-mortem — is a structured retrospective conducted after every significant security incident. Its purpose is to:</p><ul><li>Understand exactly what happened and why</li><li>Identify systemic improvements that prevent recurrence</li><li>Learn from the incident without blaming individuals</li><li>Document decisions made and their rationale</li></ul><p><strong>Blameless culture:</strong> The PIR is not about finding who made a mistake. It is about understanding why a reasonable person, with the information available at the time, made the decisions they did — and what systemic changes would have led to a better outcome.</p><p><strong>Timing:</strong> Conduct within 2 weeks of incident resolution, while memories are fresh.</p><hr><h2 id=pir-template>PIR template<a hidden class=anchor aria-hidden=true href=#pir-template>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl><span class=gh># Post-Incident Review
+</span></span></span><span class=line><span class=cl><span class=gu>## [Incident ID] — [Incident title]
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Date of PIR:**</span> [date]
+</span></span><span class=line><span class=cl><span class=gs>**Incident Commander:**</span> [name]
+</span></span><span class=line><span class=cl><span class=gs>**Facilitator:**</span> [name — should not be IC]
+</span></span><span class=line><span class=cl><span class=gs>**Attendees:**</span> [list everyone present]
+</span></span><span class=line><span class=cl><span class=gs>**Document status:**</span> Draft / Final
+</span></span><span class=line><span class=cl><span class=gs>**Classification:**</span> Internal / Confidential
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 1. Incident summary
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| Field | Value |
+</span></span><span class=line><span class=cl>|---|---|
+</span></span><span class=line><span class=cl>| Incident ID | INC-2026-XXX |
+</span></span><span class=line><span class=cl>| Severity | P1 / P2 / P3 / P4 |
+</span></span><span class=line><span class=cl>| Category | Ransomware / Data breach / DDoS / Account compromise / Other |
+</span></span><span class=line><span class=cl>| Start time | [timestamp — when attack/issue began] |
+</span></span><span class=line><span class=cl>| Detection time | [timestamp — when we became aware] |
+</span></span><span class=line><span class=cl>| Containment time | [timestamp — when attacker access stopped] |
+</span></span><span class=line><span class=cl>| Recovery time | [timestamp — when services fully restored] |
+</span></span><span class=line><span class=cl>| Total duration | [hours/days from start to recovery] |
+</span></span><span class=line><span class=cl>| MTTD (Mean Time to Detect) | [start time → detection time] |
+</span></span><span class=line><span class=cl>| MTTC (Mean Time to Contain) | [detection time → containment time] |
+</span></span><span class=line><span class=cl>| MTTR (Mean Time to Recover) | [detection time → recovery time] |
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 2. Impact
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### Customer impact
+</span></span></span><span class=line><span class=cl><span class=k>-</span> Number of customers affected: [number or &#34;unknown&#34;]
+</span></span><span class=line><span class=cl><span class=k>-</span> Nature of impact: [service unavailable / data exposed / degraded service]
+</span></span><span class=line><span class=cl><span class=k>-</span> Duration of customer impact: [hours]
+</span></span><span class=line><span class=cl><span class=k>-</span> SLA breach: [Yes / No — specify SLA and breach duration]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### Data impact
+</span></span></span><span class=line><span class=cl><span class=k>-</span> Personal data involved: [Yes / No]
+</span></span><span class=line><span class=cl><span class=k>-</span> Categories of data: [if yes — specify]
+</span></span><span class=line><span class=cl><span class=k>-</span> Number of data subjects: [if yes — approximate]
+</span></span><span class=line><span class=cl><span class=k>-</span> Regulatory notification required: [Yes / No / Under investigation]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### Financial impact
+</span></span></span><span class=line><span class=cl><span class=k>-</span> Direct costs: [IR firm fees, forensic tools, overtime]
+</span></span><span class=line><span class=cl><span class=k>-</span> Indirect costs: [SLA credits, business disruption estimate]
+</span></span><span class=line><span class=cl><span class=k>-</span> Regulatory fines risk: [if notification required]
+</span></span><span class=line><span class=cl><span class=k>-</span> Reputational impact: [news coverage, customer churn estimate]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### Operational impact
+</span></span></span><span class=line><span class=cl><span class=k>-</span> Systems affected: [list]
+</span></span><span class=line><span class=cl><span class=k>-</span> Peak outage: [% of service unavailable at worst]
+</span></span><span class=line><span class=cl><span class=k>-</span> Data loss: [any data permanently lost?]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 3. Timeline
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=ge>*Be precise — use UTC timestamps. Every significant event in chronological order.*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| Time (UTC) | Event | Who | Source |
+</span></span><span class=line><span class=cl>|---|---|---|---|
+</span></span><span class=line><span class=cl>| [timestamp] | [Earliest indicator of attack/issue] | | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Alert fired in SIEM] | | SIEM |
+</span></span><span class=line><span class=cl>| [timestamp] | [SOC analyst investigates] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Incident declared — severity set] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [IR team assembled] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [First containment action] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Executive notified] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Regulator notified (if applicable)] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Customers notified (if applicable)] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Root cause identified] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Systems restored] | [name] | |
+</span></span><span class=line><span class=cl>| [timestamp] | [Incident closed] | [name] | |
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 4. Root cause analysis
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### 5-Whys analysis
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=ge>*Keep asking &#34;Why?&#34; until you reach a systemic cause.*</span>
+</span></span></code></pre></div><p>PROBLEM: [Describe the incident]</p><p>WHY 1: Why did this happen?
+→ [Answer]</p><p>WHY 2: Why did [answer to Why 1] happen?
+→ [Answer]</p><p>WHY 3: Why did [answer to Why 2] happen?
+→ [Answer]</p><p>WHY 4: Why did [answer to Why 3] happen?
+→ [Answer]</p><p>WHY 5: Why did [answer to Why 4] happen?
+→ ROOT CAUSE: [The systemic reason — this is what the action items must address]</p><pre tabindex=0><code>
+### Contributing factors
+
+*Beyond the root cause, what other factors made this worse?*
+
+| Factor | Description |
+|---|---|
+| Detection gap | [e.g. Alert threshold too high — should have fired earlier] |
+| Response gap | [e.g. On-call runbook not accessible during incident] |
+| Control gap | [e.g. MFA not enforced on affected account] |
+| Process gap | [e.g. Vendor patch notification not acted on] |
+| Training gap | [e.g. Analyst not familiar with this attack type] |
+
+---
+
+## 5. What went well
+
+*Be specific — recognise effective actions and decisions.*
+
+| What | Why it helped |
+|---|---|
+| [e.g. EDR isolation capability] | [Reduced spread to 3 systems instead of entire network] |
+| [e.g. IR retainer contract] | [IR firm on-site within 2 hours] |
+| [e.g. Immutable backups] | [Ransomware could not encrypt backups — recovery possible] |
+| [e.g. Out-of-band comms] | [Attacker could not intercept IR team communications] |
+
+---
+
+## 6. What could be improved
+
+*Be specific and blameless — focus on systems and processes, not people.*
+
+| What | Why it was a problem | Proposed improvement |
+|---|---|---|
+| [e.g. Detection delay] | [SIEM alert threshold too high — fired 4 hours late] | [Lower threshold, add correlated rule] |
+| [e.g. Playbook gap] | [No ransomware playbook — team improvised] | [Create and test ransomware playbook] |
+| [e.g. Access control] | [Compromised account had excessive permissions] | [Quarterly access review, least privilege enforcement] |
+
+---
+
+## 7. Action items
+
+*Every finding must have an owner and a due date. Track to completion.*
+
+| ID | Action | Owner | Priority | Due date | Status |
+|---|---|---|---|---|---|
+| PIR-001-01 | [Action description] | [Name/team] | Critical | [date] | Open |
+| PIR-001-02 | [Action description] | [Name/team] | High | [date] | Open |
+| PIR-001-03 | [Action description] | [Name/team] | Medium | [date] | Open |
+
+**Review cadence:** Action items reviewed at weekly security meeting until all closed.
+**Owner accountability:** [CISO name] is accountable for ensuring all PIR actions are completed.
+
+---
+
+## 8. Decisions log
+
+*Document major decisions made during the incident and the rationale.*
+
+| Time | Decision | Made by | Rationale |
+|---|---|---|---|
+| [timestamp] | [e.g. Decided not to pay ransom] | [IC + CEO] | [Backups available, clean restore feasible] |
+| [timestamp] | [e.g. Delayed customer notification by 6 hours] | [Legal + CISO] | [Needed to confirm scope before notification] |
+| [timestamp] | [e.g. Engaged external IR firm] | [CISO] | [Internal team at capacity] |
+
+---
+
+## 9. Communications log
+
+| Time | Audience | Channel | Message summary | Sent by |
+|---|---|---|---|---|
+| [timestamp] | Executive team | Phone bridge | Incident declared P1 | IC |
+| [timestamp] | Board | Email | Status update | CEO |
+| [timestamp] | Regulator (ICO) | Secure portal | Article 33 notification | DPO |
+| [timestamp] | Customers | Email | Breach notification | Comms lead |
+
+---
+
+## 10. Metrics update
+
+*Update the team&#39;s detection and response metrics based on this incident.*
+
+| Metric | This incident | Previous average | Trend |
+|---|---|---|---|
+| MTTD | [X hours] | [X hours] | ↑ worse / ↓ better |
+| MTTC | [X hours] | [X hours] | |
+| MTTR | [X hours] | [X hours] | |
+| Detection source | [SIEM / User report / External] | | |
+
+---
+
+## 11. Approval
+
+| Role | Name | Date |
+|---|---|---|
+| Incident Commander | | |
+| CISO | | |
+| Legal | | |
+| DPO (if applicable) | | |
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/incident-response/ir-plan/><span class=ref-label>IR</span>IR Plan</a>
+<a class=ref-card href=/wiki/incident-response/ransomware-playbook/><span class=ref-label>IR</span>Ransomware Playbook</a>
+<a class=ref-card href=/wiki/incident-response/data-breach-playbook/><span class=ref-label>IR</span>Data Breach Playbook</a>
+<a class=ref-card href=/wiki/detection-engineering/detection-metrics/><span class=ref-label>Detection</span>Detection Metrics — MTTD/MTTR</a>
+<a class=ref-card href=/wiki/compliance/gdpr/><span class=ref-label>Compliance</span>GDPR — notification requirements</a>
+<a class=ref-card href=/wiki/compliance/dora/><span class=ref-label>Compliance</span>DORA — incident reporting</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/post-incident-review/>Post-Incident-Review</a></li><li><a href=https://logan23info.github.io/tags/pir/>PIR</a></li><li><a href=https://logan23info.github.io/tags/lessons-learned/>Lessons-Learned</a></li><li><a href=https://logan23info.github.io/tags/incident-response/>Incident-Response</a></li><li><a href=https://logan23info.github.io/tags/blameless/>Blameless</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

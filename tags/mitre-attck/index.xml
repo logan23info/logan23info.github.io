@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>MITRE-ATT&amp;CK on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/mitre-attck/</link>
+    <description>Recent content in MITRE-ATT&amp;CK on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/mitre-attck/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Red Teaming &amp; Adversary Simulation</title>
+      <link>https://logan23info.github.io/wiki/red-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/red-teaming/</guid>
+      <description>Complete guide to Red Teaming — from basic penetration testing through to full adversary simulation using MITRE ATT&amp;amp;CK.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-red-teaming">What is Red Teaming?</h2>
+<p>Red Teaming is the authorised simulation of a real-world adversary against your organisation&rsquo;s people, processes, and technology. It goes far beyond penetration testing — rather than finding vulnerabilities in isolation, a red team simulates a complete attack campaign from initial access through to the attacker&rsquo;s end goal (data theft, ransomware deployment, business disruption).</p>
+<p>The term comes from military wargaming, where a &ldquo;red team&rdquo; plays the role of the enemy to test defensive plans.</p>
+<h3 id="red-team-vs-penetration-test">Red Team vs Penetration Test</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Penetration Test</th>
+					<th>Red Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Find as many vulnerabilities as possible</td>
+					<td>Achieve a specific attacker goal</td>
+			</tr>
+			<tr>
+					<td>Duration</td>
+					<td>Days to weeks</td>
+					<td>Weeks to months</td>
+			</tr>
+			<tr>
+					<td>Scope</td>
+					<td>Defined list of systems</td>
+					<td>Entire organisation</td>
+			</tr>
+			<tr>
+					<td>Rules</td>
+					<td>Specific targets in scope</td>
+					<td>Anything in scope to reach the goal</td>
+			</tr>
+			<tr>
+					<td>Stealth</td>
+					<td>Not required</td>
+					<td>Critical — avoid detection</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Vulnerability list</td>
+					<td>Attack narrative + detection gaps</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually / per compliance</td>
+					<td>Annually or after major changes</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="mitre-attck-framework">MITRE ATT&amp;CK Framework</h2>
+<p>Every red team operation should be mapped to MITRE ATT&amp;CK — the world&rsquo;s most comprehensive knowledge base of real adversary tactics and techniques, built from analysis of thousands of real-world incidents.</p>
+<h3 id="the-attck-matrix">The ATT&amp;CK Matrix</h3>
+<p>ATT&amp;CK organises adversary behaviour into <strong>14 Tactics</strong> (the why) and <strong>hundreds of Techniques</strong> (the how):</p>
+<table>
+	<thead>
+			<tr>
+					<th>Tactic</th>
+					<th>Description</th>
+					<th>Example technique</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Reconnaissance</td>
+					<td>Gather information</td>
+					<td>T1595: Active Scanning</td>
+			</tr>
+			<tr>
+					<td>Resource Development</td>
+					<td>Build attack infrastructure</td>
+					<td>T1583: Acquire Infrastructure</td>
+			</tr>
+			<tr>
+					<td>Initial Access</td>
+					<td>Get into the environment</td>
+					<td>T1566: Phishing</td>
+			</tr>
+			<tr>
+					<td>Execution</td>
+					<td>Run malicious code</td>
+					<td>T1059: Command and Scripting</td>
+			</tr>
+			<tr>
+					<td>Persistence</td>
+					<td>Maintain foothold</td>
+					<td>T1053: Scheduled Task/Job</td>
+			</tr>
+			<tr>
+					<td>Privilege Escalation</td>
+					<td>Gain higher permissions</td>
+					<td>T1068: Exploit Vulnerabilities</td>
+			</tr>
+			<tr>
+					<td>Defense Evasion</td>
+					<td>Avoid detection</td>
+					<td>T1070: Indicator Removal</td>
+			</tr>
+			<tr>
+					<td>Credential Access</td>
+					<td>Steal credentials</td>
+					<td>T1003: OS Credential Dumping</td>
+			</tr>
+			<tr>
+					<td>Discovery</td>
+					<td>Explore the environment</td>
+					<td>T1046: Network Service Scanning</td>
+			</tr>
+			<tr>
+					<td>Lateral Movement</td>
+					<td>Move between systems</td>
+					<td>T1021: Remote Services</td>
+			</tr>
+			<tr>
+					<td>Collection</td>
+					<td>Gather data of interest</td>
+					<td>T1005: Data from Local System</td>
+			</tr>
+			<tr>
+					<td>Command &amp; Control</td>
+					<td>Communicate with compromised systems</td>
+					<td>T1071: App Layer Protocol</td>
+			</tr>
+			<tr>
+					<td>Exfiltration</td>
+					<td>Steal data</td>
+					<td>T1041: Exfil over C2 Channel</td>
+			</tr>
+			<tr>
+					<td>Impact</td>
+					<td>Achieve attacker goal</td>
+					<td>T1486: Data Encrypted for Impact</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="red-team-operation-phases">Red Team operation phases</h2>
+<h3 id="phase-1--planning-and-scoping">Phase 1 — Planning and scoping</h3>
+<p>Define:</p>
+<ul>
+<li><strong>Objective:</strong> What is the attacker trying to achieve? (e.g. access customer database, deploy ransomware on 10 systems, access CFO email)</li>
+<li><strong>Threat actor profile:</strong> Which real-world attacker group are we emulating? (e.g. FIN7 for financial sector, APT29 for government)</li>
+<li><strong>Rules of engagement:</strong> What is explicitly out of scope? (production databases, specific systems)</li>
+<li><strong>Success criteria:</strong> How will we measure success or failure?</li>
+<li><strong>Emergency procedures:</strong> How does the red team stop if something goes wrong?</li>
+</ul>
+<h3 id="phase-2--reconnaissance">Phase 2 — Reconnaissance</h3>
+<p>Gather intelligence on the target without touching their systems:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># OSINT on the target organisation</span>
+</span></span><span class="line"><span class="cl">theHarvester -d targetcompany.com -b all
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Find employee names and roles on LinkedIn</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Identify technology stack from job postings</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Enumerate subdomains and IP ranges</span>
+</span></span><span class="line"><span class="cl">subfinder -d targetcompany.com <span class="p">|</span> httpx -title -tech-detect
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Search for leaked credentials</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Check HaveIBeenPwned API for compromised accounts</span>
+</span></span></code></pre></div><h3 id="phase-3--initial-access">Phase 3 — Initial access</h3>
+<p>Attempt to gain a foothold using the threat actor&rsquo;s preferred techniques:</p>
+<p><strong>Common initial access vectors:</strong></p>
+<ul>
+<li>Spear phishing with malicious attachments or links</li>
+<li>Exploiting internet-facing applications (VPN, email, web apps)</li>
+<li>Supply chain compromise (trojanised software update)</li>
+<li>Valid credentials (obtained via OSINT, credential stuffing, or purchase)</li>
+<li>Physical access (USB drops, tailgating)</li>
+</ul>
+<h3 id="phase-4--establish-persistence">Phase 4 — Establish persistence</h3>
+<p>Once inside, ensure the foothold survives reboots and credential rotations:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Common persistence mechanisms (ATT&amp;CK T1053)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Scheduled tasks (Windows)</span>
+</span></span><span class="line"><span class="cl">schtasks /create /tn <span class="s2">&#34;WindowsUpdate&#34;</span> /tr <span class="s2">&#34;C:\Users\Public\beacon.exe&#34;</span> /sc onlogon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Cron jobs (Linux)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;*/5 * * * * /tmp/.update&#34;</span> &gt;&gt; /var/spool/cron/root
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Registry run keys (Windows)</span>
+</span></span><span class="line"><span class="cl">reg add <span class="s2">&#34;HKCU\Software\Microsoft\Windows\CurrentVersion\Run&#34;</span> /v <span class="s2">&#34;Update&#34;</span> /t REG_SZ /d <span class="s2">&#34;C:\beacon.exe&#34;</span>
+</span></span></code></pre></div><h3 id="phase-5--privilege-escalation">Phase 5 — Privilege escalation</h3>
+<p>Escalate from standard user to administrator/root:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check for misconfigured sudo (Linux)</span>
+</span></span><span class="line"><span class="cl">sudo -l
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Look for SUID binaries</span>
+</span></span><span class="line"><span class="cl">find / -perm -4000 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows: check for unquoted service paths</span>
+</span></span><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode <span class="p">|</span> findstr /i <span class="s2">&#34;auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;c:\windows\\&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Token impersonation with tools like Rubeus or Mimikatz</span>
+</span></span></code></pre></div><h3 id="phase-6--lateral-movement">Phase 6 — Lateral movement</h3>
+<p>Move from the initial foothold to higher-value targets:</p>
+<pre tabindex="0"><code>Initial foothold (developer laptop)
+  → Steal credentials from memory (Mimikatz)
+    → Authenticate to internal file server
+      → Find database connection strings in config files
+        → Access production database
+          → Exfiltrate customer records
+</code></pre><p><strong>Common techniques:</strong></p>
+<ul>
+<li>Pass-the-Hash (PTH) — reuse NTLM hashes without cracking</li>
+<li>Pass-the-Ticket (PTT) — Kerberos ticket reuse (Golden/Silver ticket attacks)</li>
+<li>Remote services — RDP, WMI, PSExec, SSH</li>
+<li>Living-off-the-land — using built-in tools (PowerShell, WMI, certutil) to avoid AV detection</li>
+</ul>
+<h3 id="phase-7--objective-completion-and-reporting">Phase 7 — Objective completion and reporting</h3>
+<p>Once the objective is achieved (or time runs out), document:</p>
+<ul>
+<li>Complete attack narrative with timestamps</li>
+<li>Every technique used, mapped to ATT&amp;CK</li>
+<li>Evidence (screenshots, command output, data samples)</li>
+<li>Detection opportunities missed by the blue team</li>
+<li>Recommendations for each gap</li>
+</ul>
+<hr>
+<h2 id="red-team-tooling">Red Team tooling</h2>
+<h3 id="command-and-control-c2-frameworks">Command and Control (C2) frameworks</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Type</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cobalt Strike</td>
+					<td>Commercial</td>
+					<td>Industry standard, expensive (~$3,500/year)</td>
+			</tr>
+			<tr>
+					<td>Sliver</td>
+					<td>Open source</td>
+					<td>Modern Go-based C2, Cobalt Strike alternative</td>
+			</tr>
+			<tr>
+					<td>Metasploit</td>
+					<td>Open source</td>
+					<td>Broad exploit coverage, well-known (easily detected)</td>
+			</tr>
+			<tr>
+					<td>Havoc</td>
+					<td>Open source</td>
+					<td>Modern, evasion-focused</td>
+			</tr>
+			<tr>
+					<td>Brute Ratel</td>
+					<td>Commercial</td>
+					<td>Designed to evade EDR products</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="supporting-tools">Supporting tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mimikatz</td>
+					<td>Credential extraction from Windows memory</td>
+			</tr>
+			<tr>
+					<td>Rubeus</td>
+					<td>Kerberos attacks</td>
+			</tr>
+			<tr>
+					<td>BloodHound</td>
+					<td>Active Directory attack path analysis</td>
+			</tr>
+			<tr>
+					<td>Impacket</td>
+					<td>Python tools for Windows protocols</td>
+			</tr>
+			<tr>
+					<td>CrackMapExec</td>
+					<td>Network attack automation</td>
+			</tr>
+			<tr>
+					<td>Responder</td>
+					<td>Network credential capture</td>
+			</tr>
+			<tr>
+					<td>Burp Suite</td>
+					<td>Web application attacks</td>
+			</tr>
+			<tr>
+					<td>Nessus / OpenVAS</td>
+					<td>Vulnerability scanning</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="threat-intelligence-driven-red-teaming">Threat-intelligence-driven red teaming</h2>
+<p>The most advanced form of red teaming uses threat intelligence to emulate a specific threat actor relevant to your organisation and sector.</p>
+<h3 id="frameworks-for-intelligence-driven-red-teaming">Frameworks for intelligence-driven red teaming</h3>
+<p><strong>TIBER-EU</strong> (Threat Intelligence-Based Ethical Red Teaming)</p>
+<ul>
+<li>Developed by the European Central Bank</li>
+<li>Mandatory for financial institutions in many EU countries</li>
+<li>Three phases: preparation, red team test, closure</li>
+<li>Requires accredited threat intelligence provider + red team provider</li>
+</ul>
+<p><strong>CBEST</strong> (UK)</p>
+<ul>
+<li>Bank of England framework for UK financial sector</li>
+<li>Similar structure to TIBER-EU</li>
+<li>Uses CREST-accredited providers</li>
+</ul>
+<p><strong>DORA</strong> (Digital Operational Resilience Act)</p>
+<ul>
+<li>EU regulation requiring TLPT (Threat-Led Penetration Testing) for financial entities</li>
+<li>Effective January 2025</li>
+<li>Based on TIBER-EU methodology</li>
+</ul>
+<h3 id="selecting-a-threat-actor-profile">Selecting a threat actor profile</h3>
+<p>Research which threat actor groups target your sector using:</p>
+<ul>
+<li>MITRE ATT&amp;CK Groups: <a href="https://attack.mitre.org/groups/">https://attack.mitre.org/groups/</a></li>
+<li>Mandiant M-Trends annual report</li>
+<li>CrowdStrike Global Threat Report</li>
+<li>Sector-specific ISACs (Information Sharing and Analysis Centers)</li>
+</ul>
+<p><strong>Example: Financial sector threat actor profile</strong></p>
+<pre tabindex="0"><code>Threat actor: FIN7 (Carbanak)
+Primary motivation: Financial gain
+Typical initial access: Spear phishing with malicious Word docs
+Common tools: Carbanak malware, Cobalt Strike
+Target: Point-of-sale systems, wire transfer fraud
+Notable incidents: $1B+ stolen from banks globally
+MITRE ATT&amp;CK group: https://attack.mitre.org/groups/G0046/
+</code></pre><hr>
+<h2 id="red-team-reporting">Red Team reporting</h2>
+<p>A red team report contains:</p>
+<h3 id="executive-summary-12-pages">Executive summary (1–2 pages)</h3>
+<ul>
+<li>Objective and outcome</li>
+<li>Key findings in business impact terms</li>
+<li>Top 3–5 recommendations</li>
+</ul>
+<h3 id="attack-narrative">Attack narrative</h3>
+<ul>
+<li>Chronological story of the attack campaign</li>
+<li>Each step explained in plain language</li>
+<li>Business risk at each stage</li>
+</ul>
+<h3 id="technical-findings">Technical findings</h3>
+<ul>
+<li>Each technique used, mapped to ATT&amp;CK</li>
+<li>Evidence screenshots</li>
+<li>Detection status (detected / missed)</li>
+<li>Remediation recommendation</li>
+</ul>
+<h3 id="attck-navigator-heat-map">ATT&amp;CK Navigator heat map</h3>
+<p>A visual showing which techniques were used and which were detected:</p>
+<pre tabindex="0"><code>Technique             | Used | Detected | Gap
+T1566 Phishing        |  ✓   |    ✓     | None
+T1003 Credential Dump |  ✓   |    ✗     | HIGH GAP
+T1021 Remote Services |  ✓   |    ✗     | HIGH GAP
+T1486 Ransomware Sim  |  ✓   |    ✓     | None
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time to objective</td>
+					<td>How long to achieve the attacker&rsquo;s goal</td>
+			</tr>
+			<tr>
+					<td>Detection rate</td>
+					<td>% of techniques detected by blue team</td>
+			</tr>
+			<tr>
+					<td>Dwell time</td>
+					<td>Time between initial access and detection</td>
+			</tr>
+			<tr>
+					<td>Blast radius</td>
+					<td>Maximum access achieved</td>
+			</tr>
+			<tr>
+					<td>Coverage against ATT&amp;CK</td>
+					<td>% of relevant techniques tested</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Purple Teaming</title>
+      <link>https://logan23info.github.io/wiki/purple-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/purple-teaming/</guid>
+      <description>Complete guide to Purple Teaming — collaborative red and blue team exercises to validate and improve detection and response capabilities.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-purple-teaming">What is Purple Teaming?</h2>
+<p>Purple Teaming is a collaborative security exercise where the Red Team (attackers) and Blue Team (defenders) work together simultaneously. The red team executes attack techniques one at a time, the blue team monitors whether their detection tools catch it, and both teams immediately discuss and fix gaps.</p>
+<p><strong>Red = Attacker. Blue = Defender. Purple = Both working together.</strong></p>
+<p>Unlike traditional red teaming where findings are only shared at the end in a report, purple teaming produces immediate improvements — gaps are fixed in real time during the exercise.</p>
+<hr>
+<h2 id="purple-vs-red-vs-blue">Purple vs Red vs Blue</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Red Team</th>
+					<th>Blue Team</th>
+					<th>Purple Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Achieve attacker objective</td>
+					<td>Detect and respond</td>
+					<td>Improve detection coverage</td>
+			</tr>
+			<tr>
+					<td>Timing</td>
+					<td>Sequential (attack then report)</td>
+					<td>Reactive</td>
+					<td>Simultaneous collaboration</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Attack narrative</td>
+					<td>Incident reports</td>
+					<td>Detection coverage map</td>
+			</tr>
+			<tr>
+					<td>Feedback loop</td>
+					<td>Weeks (end of engagement)</td>
+					<td>After incident</td>
+					<td>Real-time</td>
+			</tr>
+			<tr>
+					<td>Improvement</td>
+					<td>Slow</td>
+					<td>Slow</td>
+					<td>Immediate</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually</td>
+					<td>Continuous</td>
+					<td>Quarterly / monthly</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="the-purple-team-exercise-structure">The Purple Team exercise structure</h2>
+<h3 id="pre-exercise">Pre-exercise</h3>
+<p><strong>1. Define scope using ATT&amp;CK Navigator</strong></p>
+<p>Select the techniques you want to test based on:</p>
+<ul>
+<li>Threat intelligence about actors targeting your sector</li>
+<li>Previous red team findings that weren&rsquo;t detected</li>
+<li>Compliance requirements (e.g. DORA, TIBER)</li>
+<li>Recent high-profile incidents in your industry</li>
+</ul>
+<p>Export the technique list as a checklist for the exercise.</p>
+<p><strong>2. Prepare the environment</strong></p>
+<ul>
+<li>Confirm SIEM and EDR are fully operational</li>
+<li>Ensure log sources are all feeding correctly</li>
+<li>Set up a dedicated exercise channel (Slack/Teams)</li>
+<li>Agree on communication protocol between red and blue</li>
+</ul>
+<p><strong>3. Set up tracking</strong></p>
+<p>Use VECTR (free, open source) or a simple spreadsheet:</p>
+<pre tabindex="0"><code>Technique ID | Name                  | Executed | Alert fired | Log found | Result
+T1566.001    | Phishing - Attachment | ✓        | ✗           | ✓         | PARTIAL
+T1003.001    | LSASS Memory Dump     | ✓        | ✓           | ✓         | DETECTED
+T1021.002    | SMB/Admin Shares      | ✓        | ✗           | ✗         | MISSED
+T1486        | Data Encrypted        | ✓        | ✓           | ✓         | DETECTED
+</code></pre><hr>
+<h2 id="exercise-execution">Exercise execution</h2>
+<h3 id="the-purple-team-loop">The purple team loop</h3>
+<p>For each technique:</p>
+<pre tabindex="0"><code>Red executes technique
+        ↓
+Blue checks SIEM/EDR (5-10 minutes)
+        ↓
+     Detected?
+    ↙         ↘
+  YES           NO
+   ↓             ↓
+Document      Find the log
+as detected   evidence manually
+              ↓
+         Log exists?
+        ↙         ↘
+      YES           NO
+       ↓             ↓
+  Write/tune      Fix log
+  detection rule  collection
+       ↓             ↓
+  Re-test         Re-test
+</code></pre><h3 id="example-exercise-session">Example exercise session</h3>
+<p><strong>09:00 — Technique: T1566.001 Spear Phishing</strong></p>
+<p>Red team sends a test phishing email with a benign payload to a test account.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Email gateway logs → email received and delivered</li>
+<li>EDR → macro execution detected? → YES, alert fired</li>
+<li>SIEM → correlation rule triggered? → NO, no SIEM alert</li>
+</ul>
+<p>Result: PARTIAL. EDR detects it, SIEM has no correlation rule.
+Action: Blue team creates SIEM rule to correlate EDR macro alert with email gateway log.
+Re-test: Rule fires correctly. Mark as DETECTED.</p>
+<hr>
+<p><strong>10:30 — Technique: T1003.001 LSASS Memory Dump</strong></p>
+<p>Red team runs <code>mimikatz.exe sekurlsa::logonpasswords</code> on a test endpoint.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>EDR → lsass access by unknown process → Alert fired, process quarantined</li>
+<li>SIEM → alert correlated → YES</li>
+<li>SOC analyst → alert reviewed in under 5 minutes</li>
+</ul>
+<p>Result: FULLY DETECTED. No action needed.</p>
+<hr>
+<p><strong>11:15 — Technique: T1021.002 SMB Lateral Movement</strong></p>
+<p>Red team connects to a network share on another system using valid credentials.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Network logs → SMB connection logged? → YES in firewall</li>
+<li>SIEM → alert fired? → NO</li>
+<li>EDR → anything? → NO (valid credentials, no malware)</li>
+</ul>
+<p>Result: MISSED. Legitimate-looking SMB with valid creds — no rule covers this.
+Action: Build a SIEM rule that alerts on SMB connections from workstations to workstations (unusual in most environments). Add user-entity baseline to detect off-hours access.</p>
+<hr>
+<h2 id="detection-engineering-from-purple-team-findings">Detection engineering from purple team findings</h2>
+<p>Each &ldquo;MISSED&rdquo; result becomes a detection engineering task.</p>
+<h3 id="detection-rule-lifecycle">Detection rule lifecycle</h3>
+<pre tabindex="0"><code>Purple team finds gap
+        ↓
+Write detection rule hypothesis
+        ↓
+Identify required log sources
+        ↓
+Verify logs are being collected
+        ↓
+Write SIEM rule / EDR policy
+        ↓
+Test rule with purple team re-execution
+        ↓
+Tune to reduce false positives
+        ↓
+Document and deploy to production
+        ↓
+Add to regression test suite
+</code></pre><h3 id="example-siem-rule-sigma-format">Example SIEM rule (Sigma format)</h3>
+<p>Sigma is a vendor-neutral format for SIEM detection rules:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Suspicious LSASS Access by Non-System Process</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">4a1c6c5e-3d8b-4f4a-9c2d-1e0a3b7f8d2c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">production</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Detects access to LSASS memory by processes that should not access it</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">tags</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.credential_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.t1003.001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">logsource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">process_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">product</span><span class="p">:</span><span class="w"> </span><span class="l">windows</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">detection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">TargetImage|endswith</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;\lsass.exe&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">filter</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">SourceImage|startswith</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Windows\System32\&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      - &#39;</span><span class="l">C:\Windows\SysWOW64\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Program Files\Windows Defender\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l">selection and not filter</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">falsepositives</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Legitimate security tools</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">AV software</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l">high</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="tooling">Tooling</h2>
+<h3 id="free-and-open-source">Free and open source</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>VECTR</td>
+					<td>Purple team exercise tracking and reporting</td>
+			</tr>
+			<tr>
+					<td>Atomic Red Team</td>
+					<td>Library of ATT&amp;CK technique test scripts</td>
+			</tr>
+			<tr>
+					<td>ATT&amp;CK Navigator</td>
+					<td>Visual ATT&amp;CK coverage mapping</td>
+			</tr>
+			<tr>
+					<td>Sigma</td>
+					<td>Vendor-neutral SIEM detection rule format</td>
+			</tr>
+			<tr>
+					<td>Caldera</td>
+					<td>Automated adversary emulation (MITRE project)</td>
+			</tr>
+			<tr>
+					<td>Invoke-AtomicRedTeam</td>
+					<td>PowerShell runner for Atomic Red Team</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="running-atomic-red-team-tests">Running Atomic Red Team tests</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># Install Atomic Red Team</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="nb">invoke-atomicredteam</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Import</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="nb">invoke-atomicredteam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Test T1003.001 — LSASS Memory Dump</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># List all available tests for a technique</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-ShowDetails</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Run specific test number</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-TestNumbers</span> <span class="mf">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Clean up after test</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-Cleanup</span>
+</span></span></code></pre></div><h3 id="vectr--tracking-exercise-results">VECTR — tracking exercise results</h3>
+<p>VECTR is a free, open-source platform for tracking purple team exercises:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Deploy VECTR with Docker</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/SecurityRiskAdvisors/VECTR
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> VECTR
+</span></span><span class="line"><span class="cl">docker-compose up -d
+</span></span><span class="line"><span class="cl"><span class="c1"># Access at http://localhost:8081</span>
+</span></span></code></pre></div><hr>
+<h2 id="coverage-measurement">Coverage measurement</h2>
+<p>After each exercise, measure your ATT&amp;CK coverage:</p>
+<pre tabindex="0"><code>Total techniques tested:          45
+Fully detected:                   28  (62%)
+Partially detected:                8  (18%)
+Missed:                            9  (20%)
+
+By tactic:
+Initial Access:      4/5 detected  (80%)
+Execution:           6/8 detected  (75%)
+Persistence:         3/6 detected  (50%)   ← gap
+Credential Access:   2/7 detected  (29%)   ← major gap
+Lateral Movement:    4/6 detected  (67%)
+Exfiltration:        2/3 detected  (67%)
+</code></pre><p>This coverage map directly drives your detection engineering roadmap — address the lowest-coverage tactics first.</p>
+<hr>
+<h2 id="purple-team-maturity-levels">Purple Team maturity levels</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Maturity</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Level 1</td>
+					<td>Ad-hoc: occasional exercises with no tracking</td>
+			</tr>
+			<tr>
+					<td>Level 2</td>
+					<td>Defined: regular exercises tracked in spreadsheet</td>
+			</tr>
+			<tr>
+					<td>Level 3</td>
+					<td>Managed: VECTR-tracked, ATT&amp;CK mapped, metrics reported</td>
+			</tr>
+			<tr>
+					<td>Level 4</td>
+					<td>Optimised: automated continuous testing, integrated with CI/CD</td>
+			</tr>
+	</tbody>
+</table>
+<p>Level 4 is sometimes called <strong>Continuous Purple Teaming</strong> — detection rules are tested automatically on every deployment, like unit tests for your SIEM.</p>
+<hr>
+<h2 id="key-outputs">Key outputs</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Output</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>ATT&amp;CK coverage heat map</td>
+					<td>Visual of detected vs missed techniques</td>
+			</tr>
+			<tr>
+					<td>Detection gap backlog</td>
+					<td>Prioritised list of rules to write</td>
+			</tr>
+			<tr>
+					<td>SOC playbook updates</td>
+					<td>New response procedures for newly detected techniques</td>
+			</tr>
+			<tr>
+					<td>Log source gaps</td>
+					<td>Missing data that prevents detection</td>
+			</tr>
+			<tr>
+					<td>MTTD improvement</td>
+					<td>Mean time to detect improving over time</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — Level 3</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — maps to ATT&CK techniques</a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/"><span class="ref-label">Post</span>Threat Modelling in DevSecOps</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threat Intelligence</title>
+      <link>https://logan23info.github.io/wiki/threat-intelligence/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/threat-intelligence/</guid>
+      <description>Complete guide to Cyber Threat Intelligence — from IOC feeds through to strategic intelligence-driven security programmes.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-cyber-threat-intelligence">What is Cyber Threat Intelligence?</h2>
+<p>Cyber Threat Intelligence (CTI) is structured, curated, and contextualised information about threats and threat actors that enables organisations to make faster and more accurate security decisions. It transforms security from reactive (responding to incidents) to proactive (anticipating and preventing them).</p>
+<p>Raw data becomes intelligence through the <strong>Intelligence Cycle:</strong></p>
+<pre tabindex="0"><code>Direction → Collection → Processing → Analysis → Dissemination → Feedback
+    ↑                                                                  |
+    └──────────────────────────────────────────────────────────────────┘
+</code></pre><hr>
+<h2 id="the-three-tiers-of-threat-intelligence">The three tiers of threat intelligence</h2>
+<h3 id="strategic-intelligence">Strategic intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> C-suite, board, business leaders</li>
+<li><strong>Timeframe:</strong> Months to years</li>
+<li><strong>Question:</strong> What threats should our business be preparing for?</li>
+<li><strong>Example:</strong> &ldquo;Nation-state actors are increasingly targeting critical infrastructure in our sector. We should invest in OT security this year.&rdquo;</li>
+<li><strong>Sources:</strong> Annual threat reports (Mandiant M-Trends, CrowdStrike Global Threat Report), government advisories (CISA, NCSC)</li>
+</ul>
+<h3 id="operational-intelligence">Operational intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> Security managers, incident responders, red/purple teams</li>
+<li><strong>Timeframe:</strong> Days to weeks</li>
+<li><strong>Question:</strong> What campaigns and threat actors are active right now?</li>
+<li><strong>Example:</strong> &ldquo;FIN7 is currently running a campaign targeting finance sector companies using a new phishing kit. Our red team should simulate this technique.&rdquo;</li>
+<li><strong>Sources:</strong> Threat intel platforms (Recorded Future, Mandiant), ISAC feeds, dark web monitoring</li>
+</ul>
+<h3 id="tactical-intelligence">Tactical intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> SOC analysts, threat hunters, SIEM engineers</li>
+<li><strong>Timeframe:</strong> Hours to days</li>
+<li><strong>Question:</strong> What specific indicators should we be blocking and detecting right now?</li>
+<li><strong>Example:</strong> IOCs — IP addresses, domains, file hashes, URLs associated with active malware campaigns</li>
+<li><strong>Sources:</strong> MISP, OTX AlienVault, threat intel feeds, VirusTotal</li>
+</ul>
+<hr>
+<h2 id="indicators-of-compromise-iocs">Indicators of Compromise (IOCs)</h2>
+<p>IOCs are artifacts that indicate a system has been compromised or an attack is in progress:</p>
+<table>
+	<thead>
+			<tr>
+					<th>IOC type</th>
+					<th>Example</th>
+					<th>Detection method</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>IP address</td>
+					<td>203.0.113.42 (C2 server)</td>
+					<td>Firewall / proxy block</td>
+			</tr>
+			<tr>
+					<td>Domain</td>
+					<td>evil-c2-server.com</td>
+					<td>DNS sinkhole / block</td>
+			</tr>
+			<tr>
+					<td>File hash (MD5/SHA256)</td>
+					<td>d41d8cd98f00b204e9800998ecf8427e</td>
+					<td>EDR / AV signature</td>
+			</tr>
+			<tr>
+					<td>URL</td>
+					<td><a href="https://phishing-site.com/login">https://phishing-site.com/login</a></td>
+					<td>Web proxy block</td>
+			</tr>
+			<tr>
+					<td>Email address</td>
+					<td><a href="mailto:attacker@evil.com">attacker@evil.com</a></td>
+					<td>Email gateway block</td>
+			</tr>
+			<tr>
+					<td>Registry key</td>
+					<td>HKCU\Software\Malware\persist</td>
+					<td>EDR detection rule</td>
+			</tr>
+			<tr>
+					<td>Mutex</td>
+					<td>\BaseNamedObjects\evil_mutex</td>
+					<td>Memory scanning</td>
+			</tr>
+			<tr>
+					<td>User agent</td>
+					<td>Mozilla/4.0 (compatible; MSIE 6.0)</td>
+					<td>Web proxy detection</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="the-pyramid-of-pain">The Pyramid of Pain</h3>
+<p>David Bianco&rsquo;s Pyramid of Pain shows how much disruption each IOC type causes to an attacker when blocked:</p>
+<pre tabindex="0"><code>              [TTPs]             ← hardest for attacker to change (MOST PAIN)
+           [Tools]
+        [Network/Host Artifacts]
+      [Domain Names]
+   [IP Addresses]
+[File Hashes]                    ← easiest for attacker to change (LEAST PAIN)
+</code></pre><p>Focus detection and blocking efforts on the top of the pyramid. Blocking a file hash costs the attacker nothing — they recompile and get a new hash in minutes. Detecting their TTPs (e.g. &ldquo;this process always dumps LSASS&rdquo;) forces them to fundamentally change their methods.</p>
+<hr>
+<h2 id="mitre-attck-for-threat-intelligence">MITRE ATT&amp;CK for threat intelligence</h2>
+<p>ATT&amp;CK provides a common language for describing threat actor behaviour, making it possible to compare intelligence from multiple sources and translate it directly into detections.</p>
+<h3 id="threat-actor-profiles">Threat actor profiles</h3>
+<p>ATT&amp;CK Groups catalogue known threat actors with their techniques:</p>
+<p><strong>APT29 (Cozy Bear, SVR)</strong></p>
+<ul>
+<li>Nation-state: Russia (SVR — Foreign Intelligence Service)</li>
+<li>Targets: Government, think tanks, healthcare, energy</li>
+<li>Known for: SolarWinds supply chain attack, COVID-19 vaccine research theft</li>
+<li>Key techniques: T1566 Phishing, T1195 Supply Chain Compromise, T1027 Obfuscated Files</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0016/">https://attack.mitre.org/groups/G0016/</a></li>
+</ul>
+<p><strong>FIN7 (Carbanak)</strong></p>
+<ul>
+<li>Motivation: Financial gain</li>
+<li>Targets: Retail, hospitality, finance (POS systems)</li>
+<li>Known for: $1B+ stolen, highly sophisticated spear phishing</li>
+<li>Key techniques: T1566.001 Spear Phishing, T1204 User Execution, T1055 Process Injection</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0046/">https://attack.mitre.org/groups/G0046/</a></li>
+</ul>
+<p><strong>Lazarus Group</strong></p>
+<ul>
+<li>Nation-state: North Korea (RGB)</li>
+<li>Motivation: Financial gain + espionage</li>
+<li>Targets: Cryptocurrency exchanges, banks, defence</li>
+<li>Known for: Bangladesh Bank heist ($81M), WannaCry ransomware</li>
+<li>Key techniques: T1189 Drive-by Compromise, T1195 Supply Chain, T1486 Ransomware</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0032/">https://attack.mitre.org/groups/G0032/</a></li>
+</ul>
+<h3 id="mapping-intelligence-to-detections">Mapping intelligence to detections</h3>
+<p>When you receive intelligence about a threat actor, translate their TTPs directly into SIEM detection rules:</p>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1003.001 (LSASS Memory Dump) via custom tool &#34;MiniDump&#34;
+
+→ Detection rule: Alert on any process accessing lsass.exe memory
+   that is not a known legitimate security tool
+
+→ Sigma rule:
+title: Suspicious LSASS Access - APT29 MiniDump Pattern
+tags:
+  - attack.t1003.001
+  - attribution.apt29
+detection:
+  selection:
+    TargetImage|endswith: &#39;\lsass.exe&#39;
+    GrantedAccess: &#39;0x1010&#39;
+</code></pre><hr>
+<h2 id="threat-intelligence-platforms">Threat intelligence platforms</h2>
+<h3 id="open-source--free">Open source / free</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MISP</td>
+					<td>Most widely used open-source TI sharing platform</td>
+			</tr>
+			<tr>
+					<td>OpenCTI</td>
+					<td>Modern, graph-based TI platform with ATT&amp;CK integration</td>
+			</tr>
+			<tr>
+					<td>OTX AlienVault</td>
+					<td>Free community threat intel feed</td>
+			</tr>
+			<tr>
+					<td>VirusTotal</td>
+					<td>File and URL analysis + community intelligence</td>
+			</tr>
+			<tr>
+					<td>Shodan</td>
+					<td>Internet scanning data (limited free tier)</td>
+			</tr>
+			<tr>
+					<td>URLhaus</td>
+					<td>Malicious URL database</td>
+			</tr>
+			<tr>
+					<td>MalwareBazaar</td>
+					<td>Malware sample repository</td>
+			</tr>
+			<tr>
+					<td>ThreatFox</td>
+					<td>IOC sharing platform by</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="commercial">Commercial</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Strengths</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Recorded Future</td>
+					<td>Broadest coverage, AI-powered, dark web</td>
+			</tr>
+			<tr>
+					<td>Mandiant Advantage</td>
+					<td>Incident response heritage, actor attribution</td>
+			</tr>
+			<tr>
+					<td>CrowdStrike Falcon Intel</td>
+					<td>Strong nation-state tracking</td>
+			</tr>
+			<tr>
+					<td>Microsoft Sentinel TI</td>
+					<td>Azure-native, MSTI integration</td>
+			</tr>
+			<tr>
+					<td>MISP (enterprise)</td>
+					<td>Self-hosted, full control, large community</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="setting-up-a-free-threat-intelligence-pipeline">Setting up a free threat intelligence pipeline</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># docker-compose.yml — free TI stack</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">misp</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/misp/misp-docker/misp-core:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;443:443&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MISP_ADMIN_EMAIL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;admin@example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">opencti</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">opencti/platform:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">APP__SECRET</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;changeme&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">OPENCTI__URL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;http://localhost:8080&#34;</span><span class="w">
+</span></span></span></code></pre></div><p><strong>Free intelligence feeds to connect:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Connect MISP to free feeds</span>
+</span></span><span class="line"><span class="cl"><span class="n">feeds</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://www.circl.lu/doc/misp/feed-osint/&#34;</span><span class="p">,</span>      <span class="c1"># CIRCL OSINT</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://bazaar.abuse.ch/export/csv/recent/&#34;</span><span class="p">,</span>      <span class="c1"># MalwareBazaar</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://feodotracker.abuse.ch/downloads/ipblocklist.csv&#34;</span><span class="p">,</span>  <span class="c1"># Feodo C2</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://urlhaus.abuse.ch/downloads/csv_recent/&#34;</span><span class="p">,</span>  <span class="c1"># URLhaus</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://otx.alienvault.com/api/v1/pulses/subscribed&#34;</span><span class="p">,</span>     <span class="c1"># OTX</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><hr>
+<h2 id="intelligence-driven-threat-modelling">Intelligence-driven threat modelling</h2>
+<p>The most powerful use of threat intelligence is feeding it directly into your threat models:</p>
+<h3 id="without-threat-intelligence">Without threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;An attacker could perform SQL injection on the login endpoint&#34;
+Severity: High (DREAD score 7.2)
+</code></pre><h3 id="with-threat-intelligence">With threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;FIN7 (active in our sector, confirmed targeting peers in Q3 2026)
+uses T1190 (Exploit Public-Facing Application) as primary initial access.
+Our login endpoint is internet-facing and handles authentication.
+FIN7 has used SQLi in 40% of confirmed incidents against retail targets.&#34;
+
+Severity: Critical (DREAD score 9.1)
+Priority: Immediate — active threat actor, confirmed sector targeting
+</code></pre><p>The second version drives urgency that gets executive attention and budget.</p>
+<hr>
+<h2 id="threat-hunting">Threat hunting</h2>
+<p>Threat intelligence enables proactive threat hunting — searching for attacker presence in your environment before an alert fires.</p>
+<h3 id="hypothesis-driven-hunting">Hypothesis-driven hunting</h3>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1078 (Valid Accounts) — stolen credentials
+              to authenticate to VPN from unusual geographies
+
+Hypothesis: If APT29 has stolen a user&#39;s VPN credentials, we would see
+            successful VPN logins from IPs in Russia/Eastern Europe
+            at unusual times
+
+Hunt query (Splunk):
+index=vpn_logs action=success
+| iplocation src_ip
+| where Country != &#34;India&#34;
+| stats count by user, Country, src_ip
+| where count &gt; 2
+| join user [search index=vpn_logs | stats earliest(_time) as first_seen by user]
+| where relative_time(now(), &#34;-7d&#34;) &gt; first_seen
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mean Time to Ingest IOC</td>
+					<td>&lt; 1 hour from feed to blocking</td>
+			</tr>
+			<tr>
+					<td>IOC False Positive Rate</td>
+					<td>&lt; 5% (too high = analyst fatigue)</td>
+			</tr>
+			<tr>
+					<td>Threat actor coverage</td>
+					<td>All sector-relevant groups profiled</td>
+			</tr>
+			<tr>
+					<td>Intelligence-to-detection rate</td>
+					<td>&gt; 80% of TTPs translated to detections</td>
+			</tr>
+			<tr>
+					<td>Feed freshness</td>
+					<td>All feeds updated within 24 hours</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — uses threat intel</a>
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — intelligence-driven threat modelling</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

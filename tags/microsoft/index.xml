@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Microsoft on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/microsoft/</link>
+    <description>Recent content in Microsoft on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/microsoft/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Microsoft Threat Modelling Tool</title>
+      <link>https://logan23info.github.io/wiki/tools/ms-tmt/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/ms-tmt/</guid>
+      <description>Guide to the Microsoft Threat Modelling Tool — the classic free STRIDE-based DFD tool from the team that invented STRIDE.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-the-microsoft-threat-modelling-tool">What is the Microsoft Threat Modelling Tool?</h2>
+<p>The Microsoft Threat Modelling Tool (TMT) is a free Windows application developed by Microsoft&rsquo;s Security Engineering team — the same team that invented STRIDE. It provides a graphical DFD editor and automatically generates a list of potential threats for each element using a built-in threat template library.</p>
+<p><strong>Download:</strong> <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a>
+<strong>Platform:</strong> Windows only
+<strong>Cost:</strong> Free</p>
+<hr>
+<h2 id="key-features">Key features</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DFD editor</td>
+					<td>Visual drag-and-drop diagram builder</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Automatically suggests threats per element based on STRIDE</td>
+			</tr>
+			<tr>
+					<td>Built-in templates</td>
+					<td>Azure, generic web app, IoT, and custom templates</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>100+ pre-built threats with mitigations</td>
+			</tr>
+			<tr>
+					<td>SDL integration</td>
+					<td>Built for Microsoft&rsquo;s Security Development Lifecycle</td>
+			</tr>
+			<tr>
+					<td>Report export</td>
+					<td>HTML and CSV reports</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation">Installation</h2>
+<ol>
+<li>Go to → <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a></li>
+<li>Download the installer (Windows only)</li>
+<li>Run <code>ThreatModelingTool.msi</code></li>
+<li>Launch from Start menu</li>
+</ol>
+<p>For non-Windows users, use <a href="/wiki/tools/threat-dragon/">OWASP Threat Dragon</a> or <a href="/wiki/tools/threagile/">Threagile</a> instead.</p>
+<hr>
+<h2 id="quickstart">Quickstart</h2>
+<h3 id="step-1--create-a-new-model">Step 1 — Create a new model</h3>
+<p>File → New → give it a name</p>
+<h3 id="step-2--draw-your-dfd">Step 2 — Draw your DFD</h3>
+<p>Drag from the stencil panel:</p>
+<ul>
+<li><strong>Browser / Generic External Interactor</strong> — external entities</li>
+<li><strong>Generic Process / Web Application</strong> — your services</li>
+<li><strong>Generic Data Store / SQL Database</strong> — databases</li>
+<li><strong>Flow</strong> — connect elements with arrows</li>
+<li><strong>Boundary</strong> — draw trust boundaries as boxes around groups</li>
+</ul>
+<h3 id="step-3--generate-threats">Step 3 — Generate threats</h3>
+<p>Go to <strong>View → Analysis View</strong> (or press F5).
+The tool automatically generates threats for every element and data flow. Each threat includes:</p>
+<ul>
+<li>Threat category (STRIDE)</li>
+<li>Threat title and description</li>
+<li>Suggested mitigation</li>
+<li>Priority (High / Medium / Low)</li>
+</ul>
+<h3 id="step-4--review-and-mitigate">Step 4 — Review and mitigate</h3>
+<p>For each generated threat, set the state:</p>
+<ul>
+<li><strong>Mitigated</strong> — add your mitigation text</li>
+<li><strong>Not Applicable</strong> — explain why it does not apply</li>
+<li><strong>Needs Investigation</strong> — flag for follow-up</li>
+</ul>
+<h3 id="step-5--export-report">Step 5 — Export report</h3>
+<p>View → Reports → Generate Full Report → saves as HTML</p>
+<hr>
+<h2 id="microsoft-tmt-vs-owasp-threat-dragon">Microsoft TMT vs OWASP Threat Dragon</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Microsoft TMT</th>
+					<th>OWASP Threat Dragon</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Platform</td>
+					<td>Windows only</td>
+					<td>Web + Desktop + Docker</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>No</td>
+					<td>Yes</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Extensive (Azure-focused)</td>
+					<td>Basic</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Yes</td>
+					<td>Partial</td>
+			</tr>
+			<tr>
+					<td>Git integration</td>
+					<td>No</td>
+					<td>Yes (GitHub)</td>
+			</tr>
+			<tr>
+					<td>Report quality</td>
+					<td>Excellent</td>
+					<td>Good</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Windows / Azure teams</td>
+					<td>Cross-platform teams</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/wiki/tools/threagile/">
+    <span class="ref-label">Tool</span>Threagile — TM as YAML
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/02-stride-methodology/">
+    <span class="ref-label">Post</span>STRIDE Practitioner's Guide
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,385 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>AWS Security Baseline | Security Engineering Wiki</title><meta name=keywords content="AWS,cloud-security,IAM,S3,CloudTrail,GuardDuty,CIS-benchmark"><meta name=description content="AWS security baseline — IAM hardening, S3 security, VPC design, CloudTrail, GuardDuty, Security Hub, and CIS AWS Benchmark controls."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/cloud-security/aws-baseline/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/cloud-security/aws-baseline/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/cloud-security/aws-baseline/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/cloud-security/aws-baseline/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="AWS Security Baseline"><meta property="og:description" content="AWS security baseline — IAM hardening, S3 security, VPC design, CloudTrail, GuardDuty, Security Hub, and CIS AWS Benchmark controls."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="AWS Security Baseline"><meta name=twitter:description content="AWS security baseline — IAM hardening, S3 security, VPC design, CloudTrail, GuardDuty, Security Hub, and CIS AWS Benchmark controls."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Cloud Security","item":"https://logan23info.github.io/wiki/cloud-security/"},{"@type":"ListItem","position":3,"name":"AWS Security Baseline","item":"https://logan23info.github.io/wiki/cloud-security/aws-baseline/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/cloud-security/>Cloud Security</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">AWS Security Baseline</h1><div class=post-description>AWS security baseline — IAM hardening, S3 security, VPC design, CloudTrail, GuardDuty, Security Hub, and CIS AWS Benchmark controls.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>8 min</span>&nbsp;·&nbsp;<span>1557 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#overview aria-label=Overview>Overview</a></li><li><a href=#1-identity--access-management-iam aria-label="1. Identity & Access Management (IAM)">1. Identity & Access Management (IAM)</a><ul><li><a href=#root-account-protection aria-label="Root account protection">Root account protection</a></li><li><a href=#iam-password-policy aria-label="IAM password policy">IAM password policy</a></li><li><a href=#iam-users-and-roles--least-privilege aria-label="IAM users and roles — least privilege">IAM users and roles — least privilege</a></li><li><a href=#opentofu--iam-least-privilege aria-label="OpenTofu — IAM least privilege">OpenTofu — IAM least privilege</a></li></ul></li><li><a href=#2-s3-security aria-label="2. S3 Security">2. S3 Security</a></li><li><a href=#3-vpc-security aria-label="3. VPC Security">3. VPC Security</a></li><li><a href=#4-cloudtrail--audit-logging aria-label="4. CloudTrail — Audit logging">4. CloudTrail — Audit logging</a></li><li><a href=#5-guardduty--security-hub aria-label="5. GuardDuty & Security Hub">5. GuardDuty & Security Hub</a></li><li><a href=#aws-security-baseline-checklist aria-label="AWS Security Baseline Checklist">AWS Security Baseline Checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=overview>Overview<a hidden class=anchor aria-hidden=true href=#overview>#</a></h2><p>AWS is the world&rsquo;s largest cloud platform. Misconfigurations in AWS are responsible for some of the largest data breaches in history — Capital One (100M records), Twitch (125GB source code), and countless others. This baseline covers the CIS AWS Foundations Benchmark v3.0 controls with practical implementation guidance.</p><p><strong>Automated check:</strong> Run Prowler against your account:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pip install prowler
+</span></span><span class=line><span class=cl>prowler aws --compliance cis_aws_2.0
+</span></span></code></pre></div><hr><h2 id=1-identity--access-management-iam>1. Identity & Access Management (IAM)<a hidden class=anchor aria-hidden=true href=#1-identity--access-management-iam>#</a></h2><p>IAM is the most critical AWS security domain. Every breach starts with a credential or a misconfigured role.</p><h3 id=root-account-protection>Root account protection<a hidden class=anchor aria-hidden=true href=#root-account-protection>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check root account MFA status</span>
+</span></span><span class=line><span class=cl>aws iam get-account-summary <span class=p>|</span> jq <span class=s1>&#39;.AccountMFAEnabled&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Expected: 1 (MFA enabled)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check for root access keys — should return empty</span>
+</span></span><span class=line><span class=cl>aws iam list-access-keys --user-name root 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=c1># Expected: error — root has no programmatic access keys</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># List active root access keys (should be none)</span>
+</span></span><span class=line><span class=cl>aws iam get-account-summary <span class=p>|</span> jq <span class=s1>&#39;.AccountAccessKeysPresent&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Expected: 0</span>
+</span></span></code></pre></div><p><strong>Root account rules:</strong></p><ul><li>Enable MFA on root — hardware MFA key preferred</li><li>Delete all root access keys — use IAM roles instead</li><li>Lock root credentials in a password manager accessible only to 2+ people</li><li>Set billing alerts on root account — detect unexpected charges</li></ul><h3 id=iam-password-policy>IAM password policy<a hidden class=anchor aria-hidden=true href=#iam-password-policy>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Set strong password policy</span>
+</span></span><span class=line><span class=cl>aws iam update-account-password-policy <span class=se>\
+</span></span></span><span class=line><span class=cl>  --minimum-password-length <span class=m>14</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --require-symbols <span class=se>\
+</span></span></span><span class=line><span class=cl>  --require-numbers <span class=se>\
+</span></span></span><span class=line><span class=cl>  --require-uppercase-characters <span class=se>\
+</span></span></span><span class=line><span class=cl>  --require-lowercase-characters <span class=se>\
+</span></span></span><span class=line><span class=cl>  --allow-users-to-change-password <span class=se>\
+</span></span></span><span class=line><span class=cl>  --max-password-age <span class=m>90</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --password-reuse-prevention <span class=m>24</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --hard-expiry
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify policy</span>
+</span></span><span class=line><span class=cl>aws iam get-account-password-policy
+</span></span></code></pre></div><h3 id=iam-users-and-roles--least-privilege>IAM users and roles — least privilege<a hidden class=anchor aria-hidden=true href=#iam-users-and-roles--least-privilege>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Find users with admin access</span>
+</span></span><span class=line><span class=cl>aws iam list-users <span class=p>|</span> jq -r <span class=s1>&#39;.Users[].UserName&#39;</span> <span class=p>|</span> <span class=k>while</span> <span class=nb>read</span> user<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nv>policies</span><span class=o>=</span><span class=k>$(</span>aws iam list-attached-user-policies --user-name <span class=s2>&#34;</span><span class=nv>$user</span><span class=s2>&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    jq -r <span class=s1>&#39;.AttachedPolicies[].PolicyName&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$policies</span><span class=s2>&#34;</span> <span class=p>|</span> grep -q <span class=s2>&#34;AdministratorAccess&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ADMIN USER: </span><span class=nv>$user</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Find unused access keys (not used in 90 days)</span>
+</span></span><span class=line><span class=cl>aws iam generate-credential-report
+</span></span><span class=line><span class=cl>aws iam get-credential-report --output text --query Content <span class=p>|</span> base64 -d <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  awk -F, <span class=s1>&#39;NR&gt;1 {
+</span></span></span><span class=line><span class=cl><span class=s1>    if ($9 != &#34;N/A&#34; &amp;&amp; $9 != &#34;no_information&#34;) {
+</span></span></span><span class=line><span class=cl><span class=s1>      cmd = &#34;date -d &#34; $9 &#34; +%s&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>      cmd | getline last_used
+</span></span></span><span class=line><span class=cl><span class=s1>      close(cmd)
+</span></span></span><span class=line><span class=cl><span class=s1>      now = systime()
+</span></span></span><span class=line><span class=cl><span class=s1>      days = (now - last_used) / 86400
+</span></span></span><span class=line><span class=cl><span class=s1>      if (days &gt; 90) print &#34;UNUSED KEY (&#34;, days, &#34;days):&#34;, $1
+</span></span></span><span class=line><span class=cl><span class=s1>    }
+</span></span></span><span class=line><span class=cl><span class=s1>  }&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Enforce MFA for all console access</span>
+</span></span><span class=line><span class=cl><span class=c1># Attach this policy to all IAM groups/users</span>
+</span></span><span class=line><span class=cl>cat &gt; require-mfa-policy.json <span class=s>&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s>{
+</span></span></span><span class=line><span class=cl><span class=s>  &#34;Version&#34;: &#34;2012-10-17&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>  &#34;Statement&#34;: [
+</span></span></span><span class=line><span class=cl><span class=s>    {
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Sid&#34;: &#34;AllowViewAccountInfo&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Effect&#34;: &#34;Allow&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Action&#34;: [&#34;iam:GetAccountPasswordPolicy&#34;, &#34;iam:ListVirtualMFADevices&#34;],
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Resource&#34;: &#34;*&#34;
+</span></span></span><span class=line><span class=cl><span class=s>    },
+</span></span></span><span class=line><span class=cl><span class=s>    {
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Sid&#34;: &#34;AllowManageOwnMFA&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Effect&#34;: &#34;Allow&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Action&#34;: [&#34;iam:CreateVirtualMFADevice&#34;, &#34;iam:EnableMFADevice&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>                 &#34;iam:GetUser&#34;, &#34;iam:ListMFADevices&#34;, &#34;iam:ResyncMFADevice&#34;],
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Resource&#34;: [&#34;arn:aws:iam::*:mfa/${aws:username}&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>                   &#34;arn:aws:iam::*:user/${aws:username}&#34;]
+</span></span></span><span class=line><span class=cl><span class=s>    },
+</span></span></span><span class=line><span class=cl><span class=s>    {
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Sid&#34;: &#34;DenyAllExceptListedIfNoMFA&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Effect&#34;: &#34;Deny&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;NotAction&#34;: [&#34;iam:CreateVirtualMFADevice&#34;, &#34;iam:EnableMFADevice&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>                    &#34;iam:GetUser&#34;, &#34;iam:ListMFADevices&#34;, &#34;iam:ListVirtualMFADevices&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>                    &#34;iam:ResyncMFADevice&#34;, &#34;sts:GetSessionToken&#34;],
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Resource&#34;: &#34;*&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>      &#34;Condition&#34;: {&#34;BoolIfExists&#34;: {&#34;aws:MultiFactorAuthPresent&#34;: &#34;false&#34;}}
+</span></span></span><span class=line><span class=cl><span class=s>    }
+</span></span></span><span class=line><span class=cl><span class=s>  ]
+</span></span></span><span class=line><span class=cl><span class=s>}
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></div><h3 id=opentofu--iam-least-privilege>OpenTofu — IAM least privilege<a hidden class=anchor aria-hidden=true href=#opentofu--iam-least-privilege>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/iam.tf
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Service role for Lambda — only what it needs
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_iam_role&#34; &#34;payment_processor&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span> <span class=o>=</span> <span class=s2>&#34;payment-processor-role&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  assume_role_policy</span> <span class=o>=</span> <span class=k>jsonencode</span><span class=p>(</span>{
+</span></span><span class=line><span class=cl><span class=n>    Version</span> <span class=o>=</span> <span class=s2>&#34;2012-10-17&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    Statement</span> <span class=o>=</span> <span class=p>[</span>{
+</span></span><span class=line><span class=cl><span class=n>      Effect</span>    <span class=o>=</span> <span class=s2>&#34;Allow&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      Principal</span> <span class=o>=</span><span class=n> { Service</span> <span class=o>=</span> <span class=s2>&#34;lambda.amazonaws.com&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>      Action</span>    <span class=o>=</span> <span class=s2>&#34;sts:AssumeRole&#34;</span>
+</span></span><span class=line><span class=cl>    }<span class=p>]</span>
+</span></span><span class=line><span class=cl>  }<span class=p>)</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_iam_role_policy&#34; &#34;payment_processor&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span> <span class=o>=</span> <span class=s2>&#34;payment-processor-policy&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  role</span> <span class=o>=</span> <span class=k>aws_iam_role</span><span class=p>.</span><span class=k>payment_processor</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  policy</span> <span class=o>=</span> <span class=k>jsonencode</span><span class=p>(</span>{
+</span></span><span class=line><span class=cl><span class=n>    Version</span> <span class=o>=</span> <span class=s2>&#34;2012-10-17&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    Statement</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      {
+</span></span><span class=line><span class=cl><span class=n>        Effect</span>   <span class=o>=</span> <span class=s2>&#34;Allow&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>        Action</span>   <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;logs:CreateLogGroup&#34;, &#34;logs:CreateLogStream&#34;, &#34;logs:PutLogEvents&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>        Resource</span> <span class=o>=</span> <span class=s2>&#34;arn:aws:logs:*:*:log-group:/aws/lambda/payment-processor:*&#34;</span>
+</span></span><span class=line><span class=cl>      }<span class=p>,</span>
+</span></span><span class=line><span class=cl>      {
+</span></span><span class=line><span class=cl><span class=n>        Effect</span>   <span class=o>=</span> <span class=s2>&#34;Allow&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>        Action</span>   <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;secretsmanager:GetSecretValue&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>        Resource</span> <span class=o>=</span> <span class=s2>&#34;arn:aws:secretsmanager:us-east-1:${data.aws_caller_identity.current.account_id}:secret:prod/payment/*&#34;</span>
+</span></span><span class=line><span class=cl>      }<span class=p>,</span>
+</span></span><span class=line><span class=cl>      {
+</span></span><span class=line><span class=cl><span class=n>        Effect</span>   <span class=o>=</span> <span class=s2>&#34;Allow&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>        Action</span>   <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;sqs:ReceiveMessage&#34;, &#34;sqs:DeleteMessage&#34;, &#34;sqs:GetQueueAttributes&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>        Resource</span> <span class=o>=</span> <span class=k>aws_sqs_queue</span><span class=p>.</span><span class=k>payment_queue</span><span class=p>.</span><span class=k>arn</span>
+</span></span><span class=line><span class=cl>      }<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>      # NO s3:*, NO iam:*, NO ec2:* — only what&#39;s needed
+</span></span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>  }<span class=p>)</span>
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=2-s3-security>2. S3 Security<a hidden class=anchor aria-hidden=true href=#2-s3-security>#</a></h2><p>S3 misconfigurations are the most common cause of AWS data breaches.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Find all public buckets in your account</span>
+</span></span><span class=line><span class=cl>aws s3api list-buckets --query <span class=s1>&#39;Buckets[].Name&#39;</span> --output text <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  tr <span class=s1>&#39;\t&#39;</span> <span class=s1>&#39;\n&#39;</span> <span class=p>|</span> <span class=k>while</span> <span class=nb>read</span> bucket<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nv>acl</span><span class=o>=</span><span class=k>$(</span>aws s3api get-bucket-acl --bucket <span class=s2>&#34;</span><span class=nv>$bucket</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>      jq -r <span class=s1>&#39;.Grants[].Grantee.URI // empty&#39;</span> <span class=p>|</span> grep -c <span class=s2>&#34;AllUsers&#34;</span> <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>policy</span><span class=o>=</span><span class=k>$(</span>aws s3api get-bucket-policy-status --bucket <span class=s2>&#34;</span><span class=nv>$bucket</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>      jq -r <span class=s1>&#39;.PolicyStatus.IsPublic&#39;</span> <span class=o>||</span> <span class=nb>echo</span> <span class=nb>false</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$acl</span><span class=s2>&#34;</span> -gt <span class=m>0</span> <span class=o>]</span> <span class=o>||</span> <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$policy</span><span class=s2>&#34;</span> <span class=o>=</span> <span class=s2>&#34;true&#34;</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>      <span class=nb>echo</span> <span class=s2>&#34;PUBLIC BUCKET: </span><span class=nv>$bucket</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>  <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Block public access at account level — prevent all future public buckets</span>
+</span></span><span class=line><span class=cl>aws s3control put-public-access-block <span class=se>\
+</span></span></span><span class=line><span class=cl>  --account-id <span class=k>$(</span>aws sts get-caller-identity --query Account --output text<span class=k>)</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --public-access-block-configuration <span class=se>\
+</span></span></span><span class=line><span class=cl>    <span class=nv>BlockPublicAcls</span><span class=o>=</span>true,IgnorePublicAcls<span class=o>=</span>true,BlockPublicPolicy<span class=o>=</span>true,RestrictPublicBuckets<span class=o>=</span><span class=nb>true</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/s3.tf — secure S3 bucket template
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span> <span class=o>=</span> <span class=s2>&#34;${var.project}-data-${random_id.suffix.hex}&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  tags</span>   <span class=o>=</span><span class=n> { Environment</span> <span class=o>=</span><span class=n> &#34;production&#34;, Classification</span> <span class=o>=</span> <span class=s2>&#34;confidential&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Block all public access
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_public_access_block&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span>                  <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  block_public_acls</span>       <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>  block_public_policy</span>     <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>  ignore_public_acls</span>      <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>  restrict_public_buckets</span> <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Encryption — customer-managed KMS key
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_server_side_encryption_configuration&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span> <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>  <span class=k>rule</span> {
+</span></span><span class=line><span class=cl>    <span class=k>apply_server_side_encryption_by_default</span> {
+</span></span><span class=line><span class=cl><span class=n>      sse_algorithm</span>     <span class=o>=</span> <span class=s2>&#34;aws:kms&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      kms_master_key_id</span> <span class=o>=</span> <span class=k>aws_kms_key</span><span class=p>.</span><span class=k>s3</span><span class=p>.</span><span class=k>arn</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl><span class=n>    bucket_key_enabled</span> <span class=o>=</span> <span class=kt>true</span><span class=c1>  # reduces KMS API costs
+</span></span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Versioning — enables recovery from accidental deletion
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_versioning&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span> <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  versioning_configuration { status</span> <span class=o>=</span> <span class=s2>&#34;Enabled&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Enforce HTTPS — deny all HTTP requests
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_policy&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span> <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  policy</span> <span class=o>=</span> <span class=k>jsonencode</span><span class=p>(</span>{
+</span></span><span class=line><span class=cl><span class=n>    Version</span> <span class=o>=</span> <span class=s2>&#34;2012-10-17&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    Statement</span> <span class=o>=</span> <span class=p>[</span>{
+</span></span><span class=line><span class=cl><span class=n>      Sid</span>       <span class=o>=</span> <span class=s2>&#34;DenyHTTP&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      Effect</span>    <span class=o>=</span> <span class=s2>&#34;Deny&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      Principal</span> <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      Action</span>    <span class=o>=</span> <span class=s2>&#34;s3:*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      Resource</span>  <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;${aws_s3_bucket.data.arn}&#34;, &#34;${aws_s3_bucket.data.arn}/*&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>      Condition</span> <span class=o>=</span><span class=n> { Bool</span> <span class=o>=</span><span class=n> { &#34;aws:SecureTransport&#34;</span> <span class=o>=</span> <span class=s2>&#34;false&#34;</span> } }
+</span></span><span class=line><span class=cl>    }<span class=p>]</span>
+</span></span><span class=line><span class=cl>  }<span class=p>)</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Access logging
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_logging&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span>        <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  target_bucket</span> <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>access_logs</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  target_prefix</span> <span class=o>=</span> <span class=s2>&#34;s3-access-logs/${aws_s3_bucket.data.id}/&#34;</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Lifecycle — expire old data
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_s3_bucket_lifecycle_configuration&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  bucket</span> <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>data</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>  <span class=k>rule</span> {
+</span></span><span class=line><span class=cl><span class=n>    id</span>     <span class=o>=</span> <span class=s2>&#34;expire-old-versions&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    status</span> <span class=o>=</span> <span class=s2>&#34;Enabled&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>filter</span> {}
+</span></span><span class=line><span class=cl><span class=n>    noncurrent_version_expiration { noncurrent_days</span> <span class=o>=</span> <span class=m>30</span> }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=3-vpc-security>3. VPC Security<a hidden class=anchor aria-hidden=true href=#3-vpc-security>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/vpc.tf — secure VPC baseline
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_vpc&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  cidr_block</span>           <span class=o>=</span> <span class=s2>&#34;10.0.0.0/16&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  enable_dns_hostnames</span> <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>  enable_dns_support</span>   <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>  tags</span>                 <span class=o>=</span><span class=n> { Name</span> <span class=o>=</span> <span class=s2>&#34;${var.project}-vpc&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Public subnets — only for load balancers, NAT gateways
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_subnet&#34; &#34;public&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  count</span>                   <span class=o>=</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=n>  vpc_id</span>                  <span class=o>=</span> <span class=k>aws_vpc</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  cidr_block</span>              <span class=o>=</span> <span class=s2>&#34;10.0.${count.index}.0/24&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  availability_zone</span>       <span class=o>=</span> <span class=k>data</span><span class=p>.</span><span class=k>aws_availability_zones</span><span class=p>.</span><span class=k>available</span><span class=p>.</span><span class=k>names</span><span class=p>[</span><span class=k>count</span><span class=p>.</span><span class=k>index</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>  map_public_ip_on_launch</span> <span class=o>=</span> <span class=kt>false</span><span class=c1>  # never auto-assign public IPs
+</span></span></span><span class=line><span class=cl><span class=n>  tags</span>                    <span class=o>=</span><span class=n> { Name</span> <span class=o>=</span><span class=n> &#34;${var.project}-public-${count.index}&#34;, Tier</span> <span class=o>=</span> <span class=s2>&#34;public&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Private subnets — for all application workloads
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_subnet&#34; &#34;private&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  count</span>             <span class=o>=</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=n>  vpc_id</span>            <span class=o>=</span> <span class=k>aws_vpc</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  cidr_block</span>        <span class=o>=</span> <span class=s2>&#34;10.0.${count.index + 10}.0/24&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  availability_zone</span> <span class=o>=</span> <span class=k>data</span><span class=p>.</span><span class=k>aws_availability_zones</span><span class=p>.</span><span class=k>available</span><span class=p>.</span><span class=k>names</span><span class=p>[</span><span class=k>count</span><span class=p>.</span><span class=k>index</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>  tags</span>              <span class=o>=</span><span class=n> { Name</span> <span class=o>=</span><span class=n> &#34;${var.project}-private-${count.index}&#34;, Tier</span> <span class=o>=</span> <span class=s2>&#34;private&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># VPC Flow Logs — capture all network traffic metadata
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_flow_log&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  vpc_id</span>          <span class=o>=</span> <span class=k>aws_vpc</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  traffic_type</span>    <span class=o>=</span> <span class=s2>&#34;ALL&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  iam_role_arn</span>    <span class=o>=</span> <span class=k>aws_iam_role</span><span class=p>.</span><span class=k>flow_log</span><span class=p>.</span><span class=k>arn</span>
+</span></span><span class=line><span class=cl><span class=n>  log_destination</span> <span class=o>=</span> <span class=k>aws_cloudwatch_log_group</span><span class=p>.</span><span class=k>flow_log</span><span class=p>.</span><span class=k>arn</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Security group — deny all by default
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_security_group&#34; &#34;app&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>        <span class=o>=</span> <span class=s2>&#34;${var.project}-app-sg&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  description</span> <span class=o>=</span> <span class=s2>&#34;Application security group — deny all by default&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  vpc_id</span>      <span class=o>=</span> <span class=k>aws_vpc</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>id</span><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>  # No ingress rules by default — add explicitly
+</span></span></span><span class=line><span class=cl>  <span class=k>egress</span> {
+</span></span><span class=line><span class=cl><span class=n>    description</span> <span class=o>=</span> <span class=s2>&#34;HTTPS to internet (for AWS APIs)&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    from_port</span>   <span class=o>=</span> <span class=m>443</span>
+</span></span><span class=line><span class=cl><span class=n>    to_port</span>     <span class=o>=</span> <span class=m>443</span>
+</span></span><span class=line><span class=cl><span class=n>    protocol</span>    <span class=o>=</span> <span class=s2>&#34;tcp&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    cidr_blocks</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;0.0.0.0/0&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  }<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>  # NEVER add: cidr_blocks = [&#34;0.0.0.0/0&#34;] to ingress rules
+</span></span></span><span class=line><span class=cl><span class=c1>  # NEVER allow port 22 (SSH) or 3389 (RDP) from 0.0.0.0/0
+</span></span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=4-cloudtrail--audit-logging>4. CloudTrail — Audit logging<a hidden class=anchor aria-hidden=true href=#4-cloudtrail--audit-logging>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Verify CloudTrail is enabled in all regions</span>
+</span></span><span class=line><span class=cl>aws cloudtrail describe-trails --include-shadow-trails <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  jq <span class=s1>&#39;.trailList[] | {name: .Name, multiRegion: .IsMultiRegionTrail, logValidation: .LogFileValidationEnabled}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check trail is actually logging</span>
+</span></span><span class=line><span class=cl>aws cloudtrail get-trail-status --name your-trail-name <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  jq <span class=s1>&#39;{logging: .IsLogging, lastDelivery: .LatestDeliveryTime}&#39;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/cloudtrail.tf
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_cloudtrail&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                          <span class=o>=</span> <span class=s2>&#34;${var.project}-trail&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  s3_bucket_name</span>                <span class=o>=</span> <span class=k>aws_s3_bucket</span><span class=p>.</span><span class=k>cloudtrail</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>  include_global_service_events</span> <span class=o>=</span> <span class=kt>true</span><span class=c1>   # IAM, STS, CloudFront events
+</span></span></span><span class=line><span class=cl><span class=n>  is_multi_region_trail</span>         <span class=o>=</span> <span class=kt>true</span><span class=c1>   # ALL regions — not just us-east-1
+</span></span></span><span class=line><span class=cl><span class=n>  enable_log_file_validation</span>    <span class=o>=</span> <span class=kt>true</span><span class=c1>   # detect log tampering
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>event_selector</span> {
+</span></span><span class=line><span class=cl><span class=n>    read_write_type</span>           <span class=o>=</span> <span class=s2>&#34;All&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    include_management_events</span> <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>data_resource</span> {
+</span></span><span class=line><span class=cl><span class=n>      type</span>   <span class=o>=</span> <span class=s2>&#34;AWS::S3::Object&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>      values</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;arn:aws:s3&#34;</span><span class=p>]</span><span class=c1>   # log all S3 object-level events
+</span></span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  cloud_watch_logs_group_arn</span> <span class=o>=</span> <span class=s2>&#34;${aws_cloudwatch_log_group.cloudtrail.arn}:*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  cloud_watch_logs_role_arn</span>  <span class=o>=</span> <span class=k>aws_iam_role</span><span class=p>.</span><span class=k>cloudtrail_cloudwatch</span><span class=p>.</span><span class=k>arn</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  tags</span> <span class=o>=</span><span class=n> { Name</span> <span class=o>=</span> <span class=s2>&#34;${var.project}-trail&#34;</span> }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># CloudWatch Alarms for critical events
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_cloudwatch_metric_alarm&#34; &#34;root_login&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  alarm_name</span>          <span class=o>=</span> <span class=s2>&#34;root-account-login&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  alarm_description</span>   <span class=o>=</span> <span class=s2>&#34;Alert on root account console login&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  metric_name</span>         <span class=o>=</span> <span class=s2>&#34;RootAccountUsage&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  namespace</span>           <span class=o>=</span> <span class=s2>&#34;CloudTrailMetrics&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  statistic</span>           <span class=o>=</span> <span class=s2>&#34;Sum&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  period</span>              <span class=o>=</span> <span class=m>60</span>
+</span></span><span class=line><span class=cl><span class=n>  evaluation_periods</span>  <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=n>  threshold</span>           <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=n>  comparison_operator</span> <span class=o>=</span> <span class=s2>&#34;GreaterThanOrEqualToThreshold&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  alarm_actions</span>       <span class=o>=</span> <span class=p>[</span><span class=k>aws_sns_topic</span><span class=p>.</span><span class=k>security_alerts</span><span class=p>.</span><span class=k>arn</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=5-guardduty--security-hub>5. GuardDuty & Security Hub<a hidden class=anchor aria-hidden=true href=#5-guardduty--security-hub>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/detective-controls.tf
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># GuardDuty — threat detection
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_guardduty_detector&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  enable</span> <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl>  <span class=k>datasources</span> {
+</span></span><span class=line><span class=cl><span class=n>    s3_logs { enable</span> <span class=o>=</span> <span class=kt>true</span> }
+</span></span><span class=line><span class=cl><span class=n>    kubernetes { audit_logs { enable</span> <span class=o>=</span> <span class=kt>true</span> } }
+</span></span><span class=line><span class=cl>    <span class=k>malware_protection</span> {
+</span></span><span class=line><span class=cl><span class=n>      scan_ec2_instance_with_findings { ebs_volumes { enable</span> <span class=o>=</span> <span class=kt>true</span> } }
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Security Hub — aggregate findings from all services
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_securityhub_account&#34; &#34;main&#34;</span> {}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_securityhub_standards_subscription&#34; &#34;cis&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  depends_on</span>    <span class=o>=</span> <span class=p>[</span><span class=k>aws_securityhub_account</span><span class=p>.</span><span class=k>main</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>  standards_arn</span> <span class=o>=</span> <span class=s2>&#34;arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.4.0&#34;</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;aws_securityhub_standards_subscription&#34; &#34;aws_foundational&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  depends_on</span>    <span class=o>=</span> <span class=p>[</span><span class=k>aws_securityhub_account</span><span class=p>.</span><span class=k>main</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>  standards_arn</span> <span class=o>=</span> <span class=s2>&#34;arn:aws:securityhub:us-east-1::standards/aws-foundational-security-best-practices/v/1.0.0&#34;</span>
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=aws-security-baseline-checklist>AWS Security Baseline Checklist<a hidden class=anchor aria-hidden=true href=#aws-security-baseline-checklist>#</a></h2><pre tabindex=0><code>IAM
+□ Root account MFA enabled (hardware key)
+□ No root access keys exist
+□ MFA required for all console users
+□ Password policy: 14+ chars, 90-day rotation
+□ No wildcard (*) permissions in IAM policies
+□ Access keys rotated every 90 days
+□ Unused access keys (&gt;90 days) removed
+□ IAM Access Analyzer enabled
+
+S3
+□ Account-level S3 Block Public Access enabled
+□ No public buckets (verified with Prowler)
+□ All buckets encrypted (SSE-KMS preferred)
+□ All buckets with versioning enabled
+□ S3 access logging enabled
+□ HTTPS enforced via bucket policy
+
+Network
+□ VPC Flow Logs enabled for all VPCs
+□ No security group with 0.0.0.0/0 on port 22/3389
+□ All workloads in private subnets
+□ NACLs configured for defence in depth
+
+Logging
+□ CloudTrail enabled in ALL regions
+□ CloudTrail log file validation enabled
+□ CloudTrail logs ship to S3 with MFA delete
+□ CloudWatch Alarms for root login, config changes
+
+Detection
+□ GuardDuty enabled in all regions
+□ Security Hub enabled with CIS benchmark
+□ AWS Config enabled with conformance packs
+□ Macie enabled for S3 PII discovery
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/cloud-security/cloud-misconfig-top10/><span class=ref-label>Cloud</span>Cloud Misconfiguration Top 10</a>
+<a class=ref-card href=/wiki/cloud-security/gcp-baseline/><span class=ref-label>Cloud</span>GCP Security Baseline</a>
+<a class=ref-card href=/wiki/cloud-security/azure-baseline/><span class=ref-label>Cloud</span>Azure Security Baseline</a>
+<a class=ref-card href=/wiki/cloud-security/cloud-threat-model/><span class=ref-label>Cloud</span>Cloud Threat Model Template</a>
+<a class=ref-card href=/wiki/secure-architecture/secrets-management/><span class=ref-label>Architecture</span>Secrets Management</a>
+<a class=ref-card href=/wiki/zero-trust/><span class=ref-label>Wiki</span>Zero Trust Architecture</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/aws/>AWS</a></li><li><a href=https://logan23info.github.io/tags/cloud-security/>Cloud-Security</a></li><li><a href=https://logan23info.github.io/tags/iam/>IAM</a></li><li><a href=https://logan23info.github.io/tags/s3/>S3</a></li><li><a href=https://logan23info.github.io/tags/cloudtrail/>CloudTrail</a></li><li><a href=https://logan23info.github.io/tags/guardduty/>GuardDuty</a></li><li><a href=https://logan23info.github.io/tags/cis-benchmark/>CIS-Benchmark</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

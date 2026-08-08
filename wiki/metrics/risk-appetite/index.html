@@ -1,0 +1,135 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Risk Appetite | Security Engineering Wiki</title><meta name=keywords content="metrics,risk-appetite,risk-management,governance,risk-tolerance"><meta name=description content="Defining and operationalising security risk appetite — appetite vs tolerance, risk statements, and turning appetite into engineering decisions."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/metrics/risk-appetite/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/metrics/risk-appetite/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/metrics/risk-appetite/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/metrics/risk-appetite/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Risk Appetite"><meta property="og:description" content="Defining and operationalising security risk appetite — appetite vs tolerance, risk statements, and turning appetite into engineering decisions."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Risk Appetite"><meta name=twitter:description content="Defining and operationalising security risk appetite — appetite vs tolerance, risk statements, and turning appetite into engineering decisions."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Security Metrics \u0026 KPIs","item":"https://logan23info.github.io/wiki/metrics/"},{"@type":"ListItem","position":3,"name":"Risk Appetite","item":"https://logan23info.github.io/wiki/metrics/risk-appetite/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/metrics/>Security Metrics & KPIs</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Risk Appetite</h1><div class=post-description>Defining and operationalising security risk appetite — appetite vs tolerance, risk statements, and turning appetite into engineering decisions.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>690 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#what-is-risk-appetite aria-label="What is risk appetite?">What is risk appetite?</a></li><li><a href=#why-it-matters-for-engineers aria-label="Why it matters for engineers">Why it matters for engineers</a></li><li><a href=#risk-appetite-statements aria-label="Risk appetite statements">Risk appetite statements</a></li><li><a href=#appetite-levels aria-label="Appetite levels">Appetite levels</a></li><li><a href=#operationalising-risk-appetite aria-label="Operationalising risk appetite">Operationalising risk appetite</a></li><li><a href=#risk-acceptance-process aria-label="Risk acceptance process">Risk acceptance process</a></li><li><a href=#risk-appetite-checklist aria-label="Risk appetite checklist">Risk appetite checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=what-is-risk-appetite>What is risk appetite?<a hidden class=anchor aria-hidden=true href=#what-is-risk-appetite>#</a></h2><p>Risk appetite is the amount and type of risk an organisation is willing to accept in pursuit of its objectives. It is the boundary that turns &ldquo;how much security is enough?&rdquo; from an endless debate into a defined threshold.</p><pre tabindex=0><code>Risk Appetite  — how much risk we WANT to take (strategic, set by the board)
+Risk Tolerance — how much we can DEVIATE from appetite before acting (operational)
+Risk Capacity  — the maximum risk we could survive (absolute limit)
+
+Appetite &lt; Tolerance &lt; Capacity
+</code></pre><hr><h2 id=why-it-matters-for-engineers>Why it matters for engineers<a hidden class=anchor aria-hidden=true href=#why-it-matters-for-engineers>#</a></h2><p>Without a defined risk appetite, every security decision becomes subjective. With one, decisions become objective:</p><pre tabindex=0><code>Without appetite:
+  &#34;Should we accept this vulnerability?&#34; → endless debate
+
+With appetite:
+  &#34;Our appetite says: no critical vulnerabilities on internet-facing
+   systems for more than 24 hours. This one is critical and internet-facing.
+   Therefore we must fix it within 24 hours or take the system offline.&#34;
+   → clear, objective decision
+</code></pre><hr><h2 id=risk-appetite-statements>Risk appetite statements<a hidden class=anchor aria-hidden=true href=#risk-appetite-statements>#</a></h2><p>Good risk appetite statements are specific and measurable:</p><pre tabindex=0><code>DATA PROTECTION
+&#34;We have NO appetite for loss of customer personal data. We will invest
+to keep the likelihood of a material data breach below [X]% per year.&#34;
+
+AVAILABILITY
+&#34;We have LOW appetite for service downtime. Our target is 99.95% uptime;
+we tolerate up to 99.9% before escalation.&#34;
+
+VULNERABILITIES
+&#34;We have NO appetite for critical vulnerabilities on internet-facing
+systems remaining unpatched beyond 24 hours.&#34;
+
+THIRD PARTIES
+&#34;We have MODERATE appetite for third-party risk where the vendor holds
+no customer data, and LOW appetite where they process personal data.&#34;
+
+INNOVATION
+&#34;We have HIGHER appetite for risk in internal experimental tools and
+LOWER appetite in customer-facing production systems.&#34;
+</code></pre><hr><h2 id=appetite-levels>Appetite levels<a hidden class=anchor aria-hidden=true href=#appetite-levels>#</a></h2><pre tabindex=0><code>NONE / AVERSE
+  We will not accept this risk under any normal circumstances.
+  Example: knowingly shipping known-exploited vulnerabilities.
+
+LOW / MINIMAL
+  We accept minimal risk, prioritising safety over speed/cost.
+  Example: production systems handling payment data.
+
+MODERATE / CAUTIOUS
+  We accept measured risk with appropriate controls.
+  Example: internal business systems.
+
+HIGH / OPEN
+  We accept higher risk to enable speed and innovation.
+  Example: internal experimental/prototype tools.
+</code></pre><hr><h2 id=operationalising-risk-appetite>Operationalising risk appetite<a hidden class=anchor aria-hidden=true href=#operationalising-risk-appetite>#</a></h2><p>Turn appetite into concrete engineering thresholds:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># risk-appetite-operational.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>internet_facing_systems</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>appetite</span><span class=p>:</span><span class=w> </span><span class=l>low</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>thresholds</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>critical_vuln_max_age_hours</span><span class=p>:</span><span class=w> </span><span class=m>24</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>high_vuln_max_age_days</span><span class=p>:</span><span class=w> </span><span class=m>7</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mfa_required</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>encryption_required</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>penetration_test_frequency</span><span class=p>:</span><span class=w> </span><span class=l>annual</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>breach_action</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Escalate to CISO; may take system offline&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>customer_data_systems</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>appetite</span><span class=p>:</span><span class=w> </span><span class=l>none </span><span class=w> </span><span class=c># for data loss</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>thresholds</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>encryption_at_rest</span><span class=p>:</span><span class=w> </span><span class=l>mandatory</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>access_reviews</span><span class=p>:</span><span class=w> </span><span class=l>quarterly</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>dlp_required</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>max_data_retention_days</span><span class=p>:</span><span class=w> </span><span class=l>per_policy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>breach_action</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Immediate escalation to CISO and DPO&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>internal_tools</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>appetite</span><span class=p>:</span><span class=w> </span><span class=l>moderate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>thresholds</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>critical_vuln_max_age_days</span><span class=p>:</span><span class=w> </span><span class=m>7</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mfa_required</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>breach_action</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Track and remediate in normal sprint cycle&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>experimental_prototypes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>appetite</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>thresholds</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>no_production_data</span><span class=p>:</span><span class=w> </span><span class=l>mandatory</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>isolated_environment</span><span class=p>:</span><span class=w> </span><span class=l>mandatory</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>breach_action</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Document; contain to prototype environment&#34;</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=risk-acceptance-process>Risk acceptance process<a hidden class=anchor aria-hidden=true href=#risk-acceptance-process>#</a></h2><p>When a risk exceeds appetite but cannot be immediately fixed:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># risk-acceptance-record.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>risk_id</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;RA-2026-042&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Legacy API uses TLS 1.1 — cannot upgrade until Q3 client migration&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>risk_score</span><span class=p>:</span><span class=w> </span><span class=m>12</span><span class=w>   </span><span class=c># high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>appetite_breach</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Exceeds &#39;low appetite&#39; for internet-facing systems&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>business_justification</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>  Upgrading now would break 200 enterprise clients on legacy integrations.
+</span></span></span><span class=line><span class=cl><span class=sd>  Migration plan in progress, completion Q3.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>compensating_controls</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;WAF rule blocking known TLS 1.1 exploits&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;Enhanced monitoring on this endpoint&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;IP allowlist limiting access to known clients&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>accepted_by</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;CISO&#34;</span><span class=w>          </span><span class=c># must be senior enough for the risk level</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>accepted_date</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-08-05&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>review_date</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-09-05&#34;</span><span class=w>     </span><span class=c># risk acceptance is time-boxed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>expiry</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-10-01&#34;</span><span class=w>          </span><span class=c># hard deadline — must be resolved by Q3</span><span class=w>
+</span></span></span></code></pre></div><p><strong>Key principle:</strong> Risk acceptance is always time-boxed, documented, and signed off at a level appropriate to the risk. It is never permanent and never informal.</p><hr><h2 id=risk-appetite-checklist>Risk appetite checklist<a hidden class=anchor aria-hidden=true href=#risk-appetite-checklist>#</a></h2><pre tabindex=0><code>Definition
+□ Board-approved risk appetite statement exists
+□ Appetite defined per domain (data, availability, vulnerabilities, third parties)
+□ Appetite statements are specific and measurable
+□ Difference between appetite, tolerance, and capacity understood
+
+Operationalisation
+□ Appetite translated into concrete engineering thresholds
+□ Thresholds embedded in policy and automated where possible
+□ Teams know the appetite for their systems
+□ Breaching appetite triggers a defined action
+
+Governance
+□ Risk acceptance process documented
+□ Risk acceptances are time-boxed and signed off appropriately
+□ Compensating controls required for accepted risks
+□ Risk register tracks all acceptances with review dates
+□ Appetite reviewed annually and after major changes
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/metrics/security-kpis/><span class=ref-label>Metrics</span>Security KPIs</a>
+<a class=ref-card href=/wiki/metrics/board-reporting/><span class=ref-label>Metrics</span>Board Reporting</a>
+<a class=ref-card href=/wiki/dread/><span class=ref-label>Framework</span>DREAD — risk scoring</a>
+<a class=ref-card href=/wiki/templates/threat-register/><span class=ref-label>Template</span>Threat Register</a>
+<a class=ref-card href=/wiki/advisory-assurance/advisory-assurance/><span class=ref-label>Assurance</span>Advisory & Assurance</a>
+<a class=ref-card href=/wiki/compliance/dora/><span class=ref-label>Compliance</span>DORA — risk management</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/metrics/>Metrics</a></li><li><a href=https://logan23info.github.io/tags/risk-appetite/>Risk-Appetite</a></li><li><a href=https://logan23info.github.io/tags/risk-management/>Risk-Management</a></li><li><a href=https://logan23info.github.io/tags/governance/>Governance</a></li><li><a href=https://logan23info.github.io/tags/risk-tolerance/>Risk-Tolerance</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

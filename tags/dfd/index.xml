@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DFD on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/dfd/</link>
+    <description>Recent content in DFD on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/dfd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Data Flow Diagram (DFD) Guide</title>
+      <link>https://logan23info.github.io/wiki/templates/dfd/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/templates/dfd/</guid>
+      <description>How to draw a Data Flow Diagram for threat modelling — notation, examples, and free tools.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-a-dfd">What is a DFD?</h2>
+<p>A Data Flow Diagram (DFD) maps how data moves through your system. It is the foundational artefact for threat modelling — every threat is found by examining each component and each data flow in the diagram.</p>
+<hr>
+<h2 id="dfd-notation">DFD notation</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Symbol</th>
+					<th>Meaning</th>
+					<th>Example</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Rectangle</td>
+					<td><strong>External entity</strong> — outside your control</td>
+					<td>User browser, third-party API</td>
+			</tr>
+			<tr>
+					<td>Rounded rectangle / circle</td>
+					<td><strong>Process</strong> — your code</td>
+					<td>Auth service, API gateway</td>
+			</tr>
+			<tr>
+					<td>Two parallel lines</td>
+					<td><strong>Data store</strong> — persisted data</td>
+					<td>PostgreSQL, Redis, S3 bucket</td>
+			</tr>
+			<tr>
+					<td>Arrow</td>
+					<td><strong>Data flow</strong> — data in motion</td>
+					<td>HTTPS request, gRPC call, queue message</td>
+			</tr>
+			<tr>
+					<td>Dashed line</td>
+					<td><strong>Trust boundary</strong> — where privilege changes</td>
+					<td>Internet ↔ DMZ, DMZ ↔ internal network</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="example-dfd--web-application">Example DFD — Web application</h2>
+<pre tabindex="0"><code>[User Browser]
+      |
+      | HTTPS (JWT in Authorization header)
+      |
+[Load Balancer / WAF]  ·····trust boundary·····
+      |
+      | HTTP
+      |
+[API Gateway]
+      |──────────────────────────────┐
+      |                              |
+      | gRPC                         | gRPC
+      |                              |
+[Auth Service]              [Order Service]
+      |                              |
+      | SQL (TLS)                    | SQL (TLS)
+      |                              |
+[PostgreSQL: users]      [PostgreSQL: orders]
+
+
+[Auth Service] ──Redis PubSub──► [Notification Service]
+                                          |
+                                          | SMTP
+                                          |
+                                    [Email Provider]
+                                    (External entity)
+</code></pre><hr>
+<h2 id="threat-modelling-from-the-dfd">Threat modelling from the DFD</h2>
+<p>For each element, ask the relevant STRIDE questions:</p>
+<table>
+	<thead>
+			<tr>
+					<th>DFD element</th>
+					<th>STRIDE categories to check</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Every <strong>data flow crossing a trust boundary</strong></td>
+					<td>Spoofing (who sent this?), Tampering (was it modified?), Info Disclosure (can it be read?)</td>
+			</tr>
+			<tr>
+					<td>Every <strong>process</strong></td>
+					<td>All 6 STRIDE categories</td>
+			</tr>
+			<tr>
+					<td>Every <strong>data store</strong></td>
+					<td>Tampering, Repudiation, Info Disclosure, DoS</td>
+			</tr>
+			<tr>
+					<td>Every <strong>external entity</strong></td>
+					<td>Spoofing, Repudiation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="free-dfd-tools">Free DFD tools</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Notes</th>
+					<th>Link</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OWASP Threat Dragon</td>
+					<td>DFD + STRIDE built in</td>
+					<td>threatdragon.com</td>
+			</tr>
+			<tr>
+					<td>draw.io / diagrams.net</td>
+					<td>Free, web-based, export to XML</td>
+					<td>diagrams.net</td>
+			</tr>
+			<tr>
+					<td>Excalidraw</td>
+					<td>Fast whiteboard-style DFDs</td>
+					<td>excalidraw.com</td>
+			</tr>
+			<tr>
+					<td>Mermaid</td>
+					<td>Code-based diagrams, renders in GitHub</td>
+					<td>mermaid.js.org</td>
+			</tr>
+			<tr>
+					<td>Lucidchart</td>
+					<td>Professional, free tier</td>
+					<td>lucidchart.com</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="dfd-in-mermaid-renders-in-github-markdown">DFD in Mermaid (renders in GitHub markdown)</h3>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TD
+    A[User Browser] --&gt;|HTTPS| B[API Gateway]
+    B --&gt;|gRPC| C[Auth Service]
+    B --&gt;|gRPC| D[Order Service]
+    C --&gt;|SQL TLS| E[(PostgreSQL: users)]
+    D --&gt;|SQL TLS| F[(PostgreSQL: orders)]
+    C --&gt;|Redis PubSub| G[Notification Service]
+    G --&gt;|SMTP| H[Email Provider]
+
+    style B fill:#6366f1,color:#fff
+    style C fill:#6366f1,color:#fff
+    style D fill:#6366f1,color:#fff
+</code></pre><div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE — Apply to your DFD
+  </a>
+  <a class="ref-card" href="/wiki/templates/threat-register/">
+    <span class="ref-label">Template</span>Threat Register Template
+  </a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/">
+    <span class="ref-label">Post</span>Introduction to Threat Modelling
+  </a>
+  <a class="ref-card" href="/wiki/attack-trees/">
+    <span class="ref-label">Wiki</span>Attack Trees
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>OWASP Threat Dragon</title>
+      <link>https://logan23info.github.io/wiki/tools/threat-dragon/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/threat-dragon/</guid>
+      <description>Complete guide to OWASP Threat Dragon — the free, open-source threat modelling tool for creating DFDs and running STRIDE analysis.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-owasp-threat-dragon">What is OWASP Threat Dragon?</h2>
+<p>OWASP Threat Dragon is a free, open-source threat modelling tool that lets you draw data flow diagrams (DFDs) and run STRIDE analysis against each component. It is part of the OWASP (Open Web Application Security Project) toolset and is available as a web app, desktop app, and Docker container.</p>
+<p><strong>Website:</strong> <a href="https://owasp.org/www-project-threat-dragon/">https://owasp.org/www-project-threat-dragon/</a>
+<strong>GitHub:</strong> <a href="https://github.com/OWASP/threat-dragon">https://github.com/OWASP/threat-dragon</a></p>
+<hr>
+<h2 id="key-features">Key features</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Visual DFD editor</td>
+					<td>Drag-and-drop diagram builder with all DFD elements</td>
+			</tr>
+			<tr>
+					<td>STRIDE per element</td>
+					<td>Automated STRIDE checklist per process, data store, and data flow</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Built-in threats with descriptions and mitigations</td>
+			</tr>
+			<tr>
+					<td>JSON export</td>
+					<td>Store threat model as code in your Git repo</td>
+			</tr>
+			<tr>
+					<td>GitHub integration</td>
+					<td>Load and save models directly from GitHub repos</td>
+			</tr>
+			<tr>
+					<td>Report generation</td>
+					<td>Export threat model as PDF or HTML report</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>Free forever, no vendor lock-in</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation-options">Installation options</h2>
+<h3 id="option-1--web-app-no-install">Option 1 — Web app (no install)</h3>
+<p>Go to: <a href="https://www.threatdragon.com">https://www.threatdragon.com</a></p>
+<p>Log in with GitHub → your threat models are saved as JSON files in a GitHub repo.</p>
+<h3 id="option-2--desktop-app">Option 2 — Desktop app</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Download from GitHub releases</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># https://github.com/OWASP/threat-dragon/releases</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Mac</span>
+</span></span><span class="line"><span class="cl">brew install --cask owasp-threat-dragon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Linux (AppImage)</span>
+</span></span><span class="line"><span class="cl">chmod +x threat-dragon-*.AppImage
+</span></span><span class="line"><span class="cl">./threat-dragon-*.AppImage
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows: download the .exe installer from GitHub releases</span>
+</span></span></code></pre></div><h3 id="option-3--docker">Option 3 — Docker</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Pull and run</span>
+</span></span><span class="line"><span class="cl">docker pull owasp/threat-dragon:latest
+</span></span><span class="line"><span class="cl">docker run -it --rm <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -p 3000:3000 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -e <span class="nv">NODE_ENV</span><span class="o">=</span>production <span class="se">\
+</span></span></span><span class="line"><span class="cl">  owasp/threat-dragon:latest
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Open http://localhost:3000</span>
+</span></span></code></pre></div><hr>
+<h2 id="quickstart-walkthrough">Quickstart walkthrough</h2>
+<h3 id="step-1--create-a-new-model">Step 1 — Create a new model</h3>
+<ol>
+<li>Open Threat Dragon (web or desktop)</li>
+<li>Click <strong>&ldquo;New Model&rdquo;</strong></li>
+<li>Name it: <code>auth-service-threat-model</code></li>
+<li>Add metadata: owner, description, reviewer</li>
+</ol>
+<h3 id="step-2--draw-your-dfd">Step 2 — Draw your DFD</h3>
+<p>Use the left panel to drag elements onto the canvas:</p>
+<ul>
+<li><strong>Actor</strong> (external entity) — drag for User, Third-party API</li>
+<li><strong>Process</strong> (rounded box) — drag for each service</li>
+<li><strong>Data Store</strong> (parallel lines) — drag for each database</li>
+<li><strong>Data Flow</strong> (arrow) — connect elements</li>
+<li><strong>Trust Boundary</strong> (dashed box) — surround internal components</li>
+</ul>
+<h3 id="step-3--add-threats-per-element">Step 3 — Add threats per element</h3>
+<p>Click any process or data flow → click <strong>&ldquo;Edit Threats&rdquo;</strong> → the STRIDE checklist appears. For each relevant category:</p>
+<ol>
+<li>Click <strong>&ldquo;Add Threat&rdquo;</strong></li>
+<li>Fill in: Title, Description, STRIDE category, Severity (Critical/High/Medium/Low)</li>
+<li>Add mitigation text</li>
+<li>Set status: Open / Mitigated / Not Applicable</li>
+</ol>
+<h3 id="step-4--export">Step 4 — Export</h3>
+<ul>
+<li><strong>JSON</strong> → commit to your Git repo alongside the code</li>
+<li><strong>PDF report</strong> → share with stakeholders</li>
+<li><strong>PNG</strong> → embed in Confluence/Notion</li>
+</ul>
+<hr>
+<h2 id="storing-threat-models-as-code">Storing threat models as code</h2>
+<p>Threat Dragon saves models as JSON. Commit this to your repo:</p>
+<pre tabindex="0"><code>your-repo/
+├── src/
+├── infra/
+└── threat-models/
+    ├── auth-service.json          ← Threat Dragon model
+    ├── payment-service.json
+    └── api-gateway.json
+</code></pre><p>Add a GitHub Actions step to validate models on every PR:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Validate threat models</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    for f in threat-models/*.json; do
+</span></span></span><span class="line"><span class="cl"><span class="sd">      python3 -c &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">import json, sys</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">with open(&#39;$f&#39;) as f</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">model = json.load(f)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Check for open critical threats</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">diagrams = model.get(&#39;detail&#39;, {}).get(&#39;diagrams&#39;, [])</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">open_critical = []</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">for diagram in diagrams</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">for cell in diagram.get(&#39;cells&#39;, [])</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">for threat in cell.get(&#39;threats&#39;, [])</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">if threat.get(&#39;status&#39;) == &#39;Open&#39; and threat.get(&#39;severity&#39;) == &#39;Critical&#39;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="l">open_critical.append(threat.get(&#39;title&#39;, &#39;Unknown&#39;))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">if open_critical</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">print(f&#39;BLOCKED in $f</span><span class="p">:</span><span class="w"> </span><span class="nt">Open Critical threats</span><span class="p">:</span><span class="w"> </span>{<span class="l">open_critical}&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">sys.exit(1)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">print(f&#39;OK</span><span class="p">:</span><span class="w"> </span><span class="l">$f&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">done</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="threat-dragon-vs-microsoft-tmt">Threat Dragon vs Microsoft TMT</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>OWASP Threat Dragon</th>
+					<th>Microsoft TMT</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cost</td>
+					<td>Free</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Platform</td>
+					<td>Web + Desktop + Docker</td>
+					<td>Windows only</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>Yes</td>
+					<td>No</td>
+			</tr>
+			<tr>
+					<td>Git integration</td>
+					<td>Yes (GitHub)</td>
+					<td>No</td>
+			</tr>
+			<tr>
+					<td>STRIDE support</td>
+					<td>Yes</td>
+					<td>Yes</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Basic</td>
+					<td>Extensive</td>
+			</tr>
+			<tr>
+					<td>Report quality</td>
+					<td>Good</td>
+					<td>Excellent</td>
+			</tr>
+			<tr>
+					<td>Active development</td>
+					<td>Yes</td>
+					<td>Limited</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Cross-platform teams</td>
+					<td>Windows / Azure-focused teams</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/ms-tmt/">
+    <span class="ref-label">Tool</span>Microsoft Threat Modelling Tool
+  </a>
+  <a class="ref-card" href="/wiki/tools/threagile/">
+    <span class="ref-label">Tool</span>Threagile — TM as YAML
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/">
+    <span class="ref-label">Post</span>Introduction to Threat Modelling
+  </a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/">
+    <span class="ref-label">Post</span>Threat Modelling in DevSecOps
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

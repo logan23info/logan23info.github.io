@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>STRIDE on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/stride/</link>
+    <description>Recent content in STRIDE on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/stride/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>STRIDE: The Practitioner&#39;s Guide</title>
+      <link>https://logan23info.github.io/posts/02-stride-methodology/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/02-stride-methodology/</guid>
+      <description>A complete walkthrough of STRIDE with worked examples on a real Auth Service.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-stride">What is STRIDE?</h2>
+<p>STRIDE is a threat categorisation framework developed at Microsoft in 1999. It gives you a checklist of threat types to apply systematically to each component and data flow in your system.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Threat</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>S</strong></td>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Can an attacker pretend to be someone else?</td>
+			</tr>
+			<tr>
+					<td><strong>T</strong></td>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Can an attacker modify data or code?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can an attacker deny having done something?</td>
+			</tr>
+			<tr>
+					<td><strong>I</strong></td>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Can an attacker read data they should not?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can an attacker make the system unavailable?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>Can an attacker gain permissions they should not have?</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stride-by-element-type">STRIDE by element type</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="worked-example-auth-service">Worked example: Auth Service</h2>
+<h3 id="spoofing">Spoofing</h3>
+<ul>
+<li>JWT replay via stolen token</li>
+<li><strong>Mitigation:</strong> Short-lived JWTs (15 min), validate exp claim, rotate signing keys</li>
+</ul>
+<h3 id="tampering">Tampering</h3>
+<ul>
+<li>alg:none JWT forgery — remove signature, set algorithm to none</li>
+<li><strong>Mitigation:</strong> Whitelist allowed algorithms explicitly in jwt.verify()</li>
+</ul>
+<h3 id="repudiation">Repudiation</h3>
+<ul>
+<li>No audit log for password resets or login events</li>
+<li><strong>Mitigation:</strong> Structured auth event logging to tamper-evident store</li>
+</ul>
+<h3 id="information-disclosure">Information Disclosure</h3>
+<ul>
+<li>User enumeration via different error messages for valid vs invalid usernames</li>
+<li><strong>Mitigation:</strong> Return generic error messages to clients always</li>
+</ul>
+<h3 id="denial-of-service">Denial of Service</h3>
+<ul>
+<li>Credential stuffing exhausts database connection pool</li>
+<li><strong>Mitigation:</strong> Rate limiting per IP and account, connection pool limits</li>
+</ul>
+<h3 id="elevation-of-privilege">Elevation of Privilege</h3>
+<ul>
+<li>JWT role claim trusted without server-side validation</li>
+<li><strong>Mitigation:</strong> Always validate roles server-side from the database on every request</li>
+</ul>
+<hr>
+<h2 id="threat-register-output">Threat register output</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>Category</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>Spoofing</td>
+					<td>High</td>
+					<td>Short TTL + rotation</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>alg:none forgery</td>
+					<td>Tampering</td>
+					<td>Critical</td>
+					<td>Whitelist algorithms</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>Repudiation</td>
+					<td>Medium</td>
+					<td>Auth event logging</td>
+			</tr>
+			<tr>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>Info Disclosure</td>
+					<td>Medium</td>
+					<td>Generic errors</td>
+			</tr>
+			<tr>
+					<td>T-05</td>
+					<td>Credential stuffing</td>
+					<td>DoS</td>
+					<td>High</td>
+					<td>Rate limiting</td>
+			</tr>
+			<tr>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>EoP</td>
+					<td>Critical</td>
+					<td>Server-side validation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-scoring-your-findings">Next: scoring your findings</h2>
+<p>Use <a href="/posts/03-dread-scoring/">DREAD</a> to score and prioritise which threats to fix first.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Microsoft Threat Modelling Tool</title>
+      <link>https://logan23info.github.io/wiki/tools/ms-tmt/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/tools/ms-tmt/</guid>
+      <description>Guide to the Microsoft Threat Modelling Tool — the classic free STRIDE-based DFD tool from the team that invented STRIDE.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-the-microsoft-threat-modelling-tool">What is the Microsoft Threat Modelling Tool?</h2>
+<p>The Microsoft Threat Modelling Tool (TMT) is a free Windows application developed by Microsoft&rsquo;s Security Engineering team — the same team that invented STRIDE. It provides a graphical DFD editor and automatically generates a list of potential threats for each element using a built-in threat template library.</p>
+<p><strong>Download:</strong> <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a>
+<strong>Platform:</strong> Windows only
+<strong>Cost:</strong> Free</p>
+<hr>
+<h2 id="key-features">Key features</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DFD editor</td>
+					<td>Visual drag-and-drop diagram builder</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Automatically suggests threats per element based on STRIDE</td>
+			</tr>
+			<tr>
+					<td>Built-in templates</td>
+					<td>Azure, generic web app, IoT, and custom templates</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>100+ pre-built threats with mitigations</td>
+			</tr>
+			<tr>
+					<td>SDL integration</td>
+					<td>Built for Microsoft&rsquo;s Security Development Lifecycle</td>
+			</tr>
+			<tr>
+					<td>Report export</td>
+					<td>HTML and CSV reports</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="installation">Installation</h2>
+<ol>
+<li>Go to → <a href="https://aka.ms/threatmodelingtool">https://aka.ms/threatmodelingtool</a></li>
+<li>Download the installer (Windows only)</li>
+<li>Run <code>ThreatModelingTool.msi</code></li>
+<li>Launch from Start menu</li>
+</ol>
+<p>For non-Windows users, use <a href="/wiki/tools/threat-dragon/">OWASP Threat Dragon</a> or <a href="/wiki/tools/threagile/">Threagile</a> instead.</p>
+<hr>
+<h2 id="quickstart">Quickstart</h2>
+<h3 id="step-1--create-a-new-model">Step 1 — Create a new model</h3>
+<p>File → New → give it a name</p>
+<h3 id="step-2--draw-your-dfd">Step 2 — Draw your DFD</h3>
+<p>Drag from the stencil panel:</p>
+<ul>
+<li><strong>Browser / Generic External Interactor</strong> — external entities</li>
+<li><strong>Generic Process / Web Application</strong> — your services</li>
+<li><strong>Generic Data Store / SQL Database</strong> — databases</li>
+<li><strong>Flow</strong> — connect elements with arrows</li>
+<li><strong>Boundary</strong> — draw trust boundaries as boxes around groups</li>
+</ul>
+<h3 id="step-3--generate-threats">Step 3 — Generate threats</h3>
+<p>Go to <strong>View → Analysis View</strong> (or press F5).
+The tool automatically generates threats for every element and data flow. Each threat includes:</p>
+<ul>
+<li>Threat category (STRIDE)</li>
+<li>Threat title and description</li>
+<li>Suggested mitigation</li>
+<li>Priority (High / Medium / Low)</li>
+</ul>
+<h3 id="step-4--review-and-mitigate">Step 4 — Review and mitigate</h3>
+<p>For each generated threat, set the state:</p>
+<ul>
+<li><strong>Mitigated</strong> — add your mitigation text</li>
+<li><strong>Not Applicable</strong> — explain why it does not apply</li>
+<li><strong>Needs Investigation</strong> — flag for follow-up</li>
+</ul>
+<h3 id="step-5--export-report">Step 5 — Export report</h3>
+<p>View → Reports → Generate Full Report → saves as HTML</p>
+<hr>
+<h2 id="microsoft-tmt-vs-owasp-threat-dragon">Microsoft TMT vs OWASP Threat Dragon</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Feature</th>
+					<th>Microsoft TMT</th>
+					<th>OWASP Threat Dragon</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Platform</td>
+					<td>Windows only</td>
+					<td>Web + Desktop + Docker</td>
+			</tr>
+			<tr>
+					<td>Open source</td>
+					<td>No</td>
+					<td>Yes</td>
+			</tr>
+			<tr>
+					<td>Threat library</td>
+					<td>Extensive (Azure-focused)</td>
+					<td>Basic</td>
+			</tr>
+			<tr>
+					<td>Auto threat generation</td>
+					<td>Yes</td>
+					<td>Partial</td>
+			</tr>
+			<tr>
+					<td>Git integration</td>
+					<td>No</td>
+					<td>Yes (GitHub)</td>
+			</tr>
+			<tr>
+					<td>Report quality</td>
+					<td>Excellent</td>
+					<td>Good</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Windows / Azure teams</td>
+					<td>Cross-platform teams</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/tools/threat-dragon/">
+    <span class="ref-label">Tool</span>OWASP Threat Dragon
+  </a>
+  <a class="ref-card" href="/wiki/tools/threagile/">
+    <span class="ref-label">Tool</span>Threagile — TM as YAML
+  </a>
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE Reference
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/02-stride-methodology/">
+    <span class="ref-label">Post</span>STRIDE Practitioner's Guide
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/stride/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/stride/</guid>
+      <description>Quick reference card for the STRIDE threat categorisation framework.</description>
+      <content:encoded><![CDATA[<h2 id="categories">Categories</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Category</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+					<th>Common examples</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Who are you, really?</td>
+					<td>Fake JWT, ARP spoofing, phishing</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Has this been modified?</td>
+					<td>SQL injection, MITM, log tampering</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can you prove who did it?</td>
+					<td>Missing audit logs, log deletion</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Who can read this?</td>
+					<td>Insecure S3, verbose errors</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can it be made unavailable?</td>
+					<td>Credential stuffing, regex DoS</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>What can you do that you shouldn&rsquo;t?</td>
+					<td>IDOR, JWT role claim</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="which-categories-apply-to-which-elements">Which categories apply to which elements</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="standard-mitigations">Standard mitigations</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Strong authentication, MFA, signed tokens</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Digital signatures, input validation, parameterised queries</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Tamper-evident audit logging</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Encryption, least privilege, data masking</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Rate limiting, circuit breakers, auto-scaling</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Least privilege, server-side authorisation, RBAC</td>
+			</tr>
+	</tbody>
+</table>
+<p>See the <a href="/posts/02-stride-methodology/">STRIDE deep-dive post</a> for a full worked example.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Framework</span>DREAD — Risk Scoring</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Full Methodology</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/wiki/templates/threat-register/"><span class="ref-label">Template</span>Threat Register</a>
+  <a class="ref-card" href="/posts/02-stride-methodology/"><span class="ref-label">Post</span>STRIDE Deep-Dive</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

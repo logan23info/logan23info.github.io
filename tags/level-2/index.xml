@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Level-2 on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/level-2/</link>
+    <description>Recent content in Level-2 on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/level-2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attack Surface Management (ASM)</title>
+      <link>https://logan23info.github.io/wiki/asm/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/asm/</guid>
+      <description>Complete guide to Attack Surface Management — continuous discovery, inventory, and risk scoring of every externally exposed asset.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-attack-surface-management">What is Attack Surface Management?</h2>
+<p>Attack Surface Management (ASM) is the continuous process of discovering, inventorying, classifying, and monitoring every asset an organisation exposes to the internet — including assets the organisation may not know it has.</p>
+<p>Where threat modelling is a <strong>design-time</strong> activity (what could go wrong?), ASM is <strong>runtime</strong> (what is actually exposed right now?).</p>
+<p>The attack surface includes:</p>
+<ul>
+<li>Web applications and APIs</li>
+<li>Cloud storage buckets and databases</li>
+<li>Subdomains and DNS records</li>
+<li>SSL/TLS certificates and their expiry dates</li>
+<li>Open ports and running services</li>
+<li>Third-party SaaS integrations</li>
+<li>Shadow IT — systems deployed without IT&rsquo;s knowledge</li>
+</ul>
+<hr>
+<h2 id="why-asm-matters">Why ASM matters</h2>
+<h3 id="the-shadow-it-problem">The shadow IT problem</h3>
+<p>In a 2023 survey, organisations discovered an average of <strong>30% more internet-facing assets</strong> than they had in their official inventory. Every untracked asset is a potential entry point an attacker can find — and an organisation can&rsquo;t defend what it doesn&rsquo;t know exists.</p>
+<h3 id="the-speed-problem">The speed problem</h3>
+<p>Attackers scan the entire internet continuously. Tools like Shodan and Censys index new exposures within <strong>hours</strong> of them appearing. The average organisation takes <strong>days to weeks</strong> to discover a new exposure through manual processes. ASM closes this gap.</p>
+<h3 id="the-third-party-problem">The third-party problem</h3>
+<p>Your attack surface includes your suppliers, partners, and SaaS providers. A breach at a third party can expose your data and systems — as demonstrated by the SolarWinds supply chain attack, which compromised thousands of organisations through a single vendor update.</p>
+<hr>
+<h2 id="the-asm-process">The ASM process</h2>
+<pre tabindex="0"><code>Discover → Inventory → Classify → Prioritise → Monitor → Remediate
+    ↑                                                          |
+    └──────────────────── continuous loop ─────────────────────┘
+</code></pre><h3 id="1-discovery">1. Discovery</h3>
+<p>Enumerate all assets associated with your organisation using:</p>
+<ul>
+<li><strong>DNS enumeration</strong> — subdomains, MX records, TXT records</li>
+<li><strong>Certificate transparency logs</strong> — every SSL certificate issued for your domains</li>
+<li><strong>ASN (Autonomous System Number) lookup</strong> — IP ranges registered to your organisation</li>
+<li><strong>Reverse IP lookup</strong> — all domains hosted on your IP addresses</li>
+<li><strong>Search engine dorking</strong> — Google/Bing queries that surface exposed assets</li>
+<li><strong>Port scanning</strong> — open services on discovered IP ranges</li>
+</ul>
+<p><strong>Tools:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Subdomain enumeration</span>
+</span></span><span class="line"><span class="cl">subfinder -d example.com -o subdomains.txt
+</span></span><span class="line"><span class="cl">amass enum -d example.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Certificate transparency</span>
+</span></span><span class="line"><span class="cl">curl <span class="s2">&#34;https://crt.sh/?q=%.example.com&amp;output=json&#34;</span> <span class="p">|</span> jq <span class="s1">&#39;.[].name_value&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Port scanning</span>
+</span></span><span class="line"><span class="cl">nmap -sV -p- --open &lt;IP_RANGE&gt;
+</span></span></code></pre></div><h3 id="2-inventory">2. Inventory</h3>
+<p>Build a structured asset register:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">asset</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;asset-001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;api.example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;203.0.113.42&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;web-application&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;payments-team&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">discovered</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-01&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">last_seen</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;HTTPS&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">certificate_expiry</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-12-01&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tags</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;internet-facing&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;handles-pii&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;pci-scope&#34;</span><span class="w">
+</span></span></span></code></pre></div><h3 id="3-classify">3. Classify</h3>
+<p>Rate each asset by sensitivity and business criticality:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Classification</th>
+					<th>Description</th>
+					<th>Example</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Critical</td>
+					<td>Directly handles sensitive data or auth</td>
+					<td>Payment API, SSO endpoint</td>
+			</tr>
+			<tr>
+					<td>High</td>
+					<td>Supports critical systems</td>
+					<td>Internal admin portal</td>
+			</tr>
+			<tr>
+					<td>Medium</td>
+					<td>Business function, limited data</td>
+					<td>Marketing site</td>
+			</tr>
+			<tr>
+					<td>Low</td>
+					<td>Minimal business impact</td>
+					<td>Static documentation</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="4-prioritise">4. Prioritise</h3>
+<p>Score each exposure by combining asset criticality with vulnerability severity:</p>
+<pre tabindex="0"><code>Risk score = Asset criticality × Vulnerability severity × Exploitability
+</code></pre><p>A critical-severity vulnerability on a low-criticality asset may rank lower than a medium-severity vulnerability on a payment API.</p>
+<h3 id="5-monitor">5. Monitor</h3>
+<p>Set up continuous monitoring for:</p>
+<ul>
+<li>New subdomains appearing (possible shadow IT or typosquatting)</li>
+<li>SSL certificate expiry (within 30 days)</li>
+<li>New open ports on known assets</li>
+<li>Changes to DNS records</li>
+<li>New vulnerabilities in services you run</li>
+</ul>
+<h3 id="6-remediate">6. Remediate</h3>
+<p>For each finding, route to the owning team with:</p>
+<ul>
+<li>Asset details and discovery method</li>
+<li>Risk score and business impact</li>
+<li>Recommended remediation steps</li>
+<li>SLA based on severity (Critical: 24h, High: 7 days, Medium: 30 days)</li>
+</ul>
+<hr>
+<h2 id="asm-tooling">ASM tooling</h2>
+<h3 id="open-source-tools">Open source tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+					<th>Cost</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Subfinder</td>
+					<td>Subdomain discovery</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Amass</td>
+					<td>Attack surface mapping</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Shodan CLI</td>
+					<td>Internet-wide scanning data</td>
+					<td>Free tier</td>
+			</tr>
+			<tr>
+					<td>Nuclei</td>
+					<td>Vulnerability scanning at scale</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>httpx</td>
+					<td>HTTP probe and response analysis</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Nmap</td>
+					<td>Port scanning and service detection</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>theHarvester</td>
+					<td>OSINT gathering</td>
+					<td>Free</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="commercial-asm-platforms">Commercial ASM platforms</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Strengths</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Microsoft Defender EASM</td>
+					<td>Deep Azure integration, continuous monitoring</td>
+			</tr>
+			<tr>
+					<td>Censys ASM</td>
+					<td>Best discovery coverage, certificate data</td>
+			</tr>
+			<tr>
+					<td>Tenable ASM</td>
+					<td>Integrates with vulnerability management</td>
+			</tr>
+			<tr>
+					<td>CyCognito</td>
+					<td>Strong third-party/subsidiary discovery</td>
+			</tr>
+			<tr>
+					<td>Palo Alto Cortex Xpanse</td>
+					<td>Enterprise-grade, XSOAR integration</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="asm-in-a-devsecops-pipeline">ASM in a DevSecOps pipeline</h2>
+<p>Integrate ASM into CI/CD so new exposures are caught before they reach production:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .github/workflows/asm-scan.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ASM — Attack Surface Scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0 6 * * *&#39;</span><span class="w">    </span><span class="c"># daily at 06:00</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">main]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">surface-scan</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install tools</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enumerate subdomains</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">subfinder -d ${{ vars.TARGET_DOMAIN }} -o subdomains.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Probe live hosts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">httpx -l subdomains.txt -o live-hosts.txt -status-code -title</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run vulnerability scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">nuclei -l live-hosts.txt -severity critical,high -o nuclei-findings.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Upload results</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">asm-results</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">            subdomains.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            live-hosts.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            nuclei-findings.json</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="advanced-asm-concepts">Advanced ASM concepts</h2>
+<h3 id="continuous-threat-exposure-management-ctem">Continuous Threat Exposure Management (CTEM)</h3>
+<p>CTEM (coined by Gartner) extends ASM into a five-stage programme:</p>
+<ol>
+<li><strong>Scoping</strong> — define what is in scope for exposure management</li>
+<li><strong>Discovery</strong> — find all assets and vulnerabilities</li>
+<li><strong>Prioritisation</strong> — rank by exploitability and business impact</li>
+<li><strong>Validation</strong> — verify exploitability with red team or automated tools</li>
+<li><strong>Mobilisation</strong> — route findings to owners with SLAs</li>
+</ol>
+<h3 id="attack-path-analysis">Attack Path Analysis</h3>
+<p>Beyond individual asset exposure, model how an attacker could chain multiple exposures together:</p>
+<pre tabindex="0"><code>Exposed Jenkins CI server
+  → Steal AWS credentials from build logs
+    → Access S3 bucket containing customer PII
+      → Exfiltrate 2M customer records
+</code></pre><p>Each step alone might be low severity. The chain is critical. Tools like XM Cyber and Skybox Security automate attack path analysis across your full environment.</p>
+<h3 id="external-vs-internal-attack-surface">External vs Internal attack surface</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Surface</th>
+					<th>Definition</th>
+					<th>Tools</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External</td>
+					<td>Internet-facing assets</td>
+					<td>Censys, Shodan, ASM platforms</td>
+			</tr>
+			<tr>
+					<td>Internal</td>
+					<td>Assets on corporate network</td>
+					<td>Rumble, Nmap, vulnerability scanners</td>
+			</tr>
+			<tr>
+					<td>Cloud</td>
+					<td>Cloud resources (S3, RDS, etc.)</td>
+					<td>Prowler, ScoutSuite, CloudSploit</td>
+			</tr>
+			<tr>
+					<td>Third-party</td>
+					<td>Supplier and partner exposure</td>
+					<td>BitSight, SecurityScorecard</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="integration-with-threat-modelling">Integration with threat modelling</h3>
+<p>ASM findings should feed directly back into threat models:</p>
+<ul>
+<li>A newly discovered exposed admin portal → adds an entry point to the DFD</li>
+<li>An expired SSL certificate on a payment endpoint → maps to STRIDE Information Disclosure</li>
+<li>A shadow IT database → triggers a new threat modelling session for that system</li>
+</ul>
+<p>This creates a continuous loop: threat models define what to look for, ASM finds real exposures, findings update threat models.</p>
+<hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mean Time to Discover (MTTD)</td>
+					<td>&lt; 4 hours for new internet-facing assets</td>
+			</tr>
+			<tr>
+					<td>Mean Time to Remediate Critical</td>
+					<td>&lt; 24 hours</td>
+			</tr>
+			<tr>
+					<td>Unknown asset ratio</td>
+					<td>&lt; 5% of total inventory</td>
+			</tr>
+			<tr>
+					<td>Certificate expiry coverage</td>
+					<td>100% alerted 30 days before expiry</td>
+			</tr>
+			<tr>
+					<td>Third-party coverage</td>
+					<td>100% of tier-1 suppliers monitored</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Security Engineering Maturity Ladder</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — Level 3</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — feeds into ASM findings</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Wiki</span>Zero Trust Architecture</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

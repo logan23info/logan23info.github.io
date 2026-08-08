@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Devsecops on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/categories/devsecops/</link>
+    <description>Recent content in Devsecops on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/categories/devsecops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Threat Modelling in DevSecOps Pipelines</title>
+      <link>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</guid>
+      <description>How to integrate threat modelling into your CI/CD pipeline so security is a gate, not an afterthought.</description>
+      <content:encoded><![CDATA[<h2 id="the-problem-with-point-in-time-threat-modelling">The problem with point-in-time threat modelling</h2>
+<p>Most organisations treat threat modelling as an annual exercise. By the next quarter the system has changed enough that the report is obsolete. DevSecOps flips this — security reviews happen continuously, at the pace of engineering.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-pipeline">Where threat modelling fits in the pipeline</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Pipeline stage</th>
+					<th>Security activity</th>
+					<th>Threat modelling touchpoint</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Plan / design</td>
+					<td>Architecture review</td>
+					<td>Full threat model for new features</td>
+			</tr>
+			<tr>
+					<td>Code</td>
+					<td>Pre-commit hooks</td>
+					<td>STRIDE checklist for the component</td>
+			</tr>
+			<tr>
+					<td>Build</td>
+					<td>SAST, dependency scanning</td>
+					<td>Checks against threat register</td>
+			</tr>
+			<tr>
+					<td>Test</td>
+					<td>DAST, fuzzing</td>
+					<td>Attack scenarios from threat model</td>
+			</tr>
+			<tr>
+					<td>Release</td>
+					<td>Security gate</td>
+					<td>Unmitigated critical threats block release</td>
+			</tr>
+			<tr>
+					<td>Deploy</td>
+					<td>IaC scanning (Checkov)</td>
+					<td>Infrastructure threat model validated</td>
+			</tr>
+			<tr>
+					<td>Monitor</td>
+					<td>SIEM, anomaly detection</td>
+					<td>Threat model informs detection rules</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="pattern-1--threat-model-as-code">Pattern 1 — Threat model as code</h2>
+<p>Store your threat model as YAML alongside your code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;auth-service&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_reviewed</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">threats</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-01</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">spoofing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;JWT replay attack using stolen token&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">8.4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">mitigated</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mitigation</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;15-minute TTL enforced, refresh token rotation&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-02</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">tampering</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;alg:none JWT forgery&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">9.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">open</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;team-auth&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">due</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-09&#34;</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-2--security-gate-in-github-actions">Pattern 2 — Security gate in GitHub Actions</h2>
+<p>Block deployments if open Critical threats exist:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Check for open critical threats</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    python3 - &lt;&lt; &#39;PYEOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="sd">    import yaml, sys
+</span></span></span><span class="line"><span class="cl"><span class="sd">    with open(&#34;threat-model.yml&#34;) as f:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        model = yaml.safe_load(f)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    open_critical = [
+</span></span></span><span class="line"><span class="cl"><span class="sd">        t for t in model.get(&#34;threats&#34;, [])
+</span></span></span><span class="line"><span class="cl"><span class="sd">        if t.get(&#34;status&#34;) == &#34;open&#34; and t.get(&#34;dread_score&#34;, 0) &gt;= 9.0
+</span></span></span><span class="line"><span class="cl"><span class="sd">    ]
+</span></span></span><span class="line"><span class="cl"><span class="sd">    if open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        print(&#34;BLOCKED: Open critical threats found:&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        for t in open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">            print(f&#34;  [{t[&#39;id&#39;]}] {t[&#39;description&#39;]} (DREAD: {t[&#39;dread_score&#39;]})&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        sys.exit(1)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    print(&#34;Security gate passed.&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    PYEOF</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-3--iac-scanning-with-checkov">Pattern 3 — IaC scanning with Checkov</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run Checkov on infra</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">bridgecrewio/checkov-action@v12</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l">infra/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l">terraform</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">soft_fail</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span></code></pre></div><p>Checkov maps IaC misconfigurations directly to STRIDE categories — an S3 bucket without encryption is Information Disclosure, an open security group is Elevation of Privilege.</p>
+<hr>
+<h2 id="realistic-cadence">Realistic cadence</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Trigger</th>
+					<th>Activity</th>
+					<th>Time</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New service or major feature</td>
+					<td>Full STRIDE threat model</td>
+					<td>60–90 min</td>
+			</tr>
+			<tr>
+					<td>PR touching auth/payments/PII</td>
+					<td>STRIDE checklist review</td>
+					<td>15 min</td>
+			</tr>
+			<tr>
+					<td>Every sprint</td>
+					<td>Review open threat register items</td>
+					<td>20 min</td>
+			</tr>
+			<tr>
+					<td>Quarterly</td>
+					<td>Full PASTA review for tier-1 services</td>
+					<td>Half day</td>
+			</tr>
+			<tr>
+					<td>Post-incident</td>
+					<td>Threat model update to reflect attacker path</td>
+					<td>30 min</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-level-climbing-the-maturity-ladder">Next level: climbing the maturity ladder</h2>
+<p>Once threat modelling is embedded in your pipeline, you are ready to climb:</p>
+<ul>
+<li><strong><a href="/wiki/asm/">Level 2: Attack Surface Management</a></strong> — discover what is actually exposed</li>
+<li><strong><a href="/wiki/red-teaming/">Level 3: Red Teaming</a></strong> — prove whether your mitigations work</li>
+<li><strong><a href="/wiki/purple-teaming/">Level 4: Purple Teaming</a></strong> — validate whether you can detect attacks</li>
+<li><strong><a href="/wiki/threat-intelligence/">Level 5: Threat Intelligence</a></strong> — make your threat models attacker-realistic</li>
+<li><strong><a href="/wiki/zero-trust/">Level 6: Zero Trust</a></strong> — eliminate entire threat categories architecturally</li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

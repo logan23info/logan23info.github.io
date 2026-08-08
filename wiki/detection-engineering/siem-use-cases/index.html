@@ -1,0 +1,280 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>SIEM Use Case Library | Security Engineering Wiki</title><meta name=keywords content="SIEM,detection,use-cases,ATT&amp;CK,alerts"><meta name=description content="50+ SIEM use cases across authentication, network, endpoint, cloud, and insider threat — each with MITRE ATT&amp;CK mapping, log source, query logic, and severity."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/detection-engineering/siem-use-cases/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/detection-engineering/siem-use-cases/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/detection-engineering/siem-use-cases/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/detection-engineering/siem-use-cases/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="SIEM Use Case Library"><meta property="og:description" content="50+ SIEM use cases across authentication, network, endpoint, cloud, and insider threat — each with MITRE ATT&amp;CK mapping, log source, query logic, and severity."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="SIEM Use Case Library"><meta name=twitter:description content="50+ SIEM use cases across authentication, network, endpoint, cloud, and insider threat — each with MITRE ATT&amp;CK mapping, log source, query logic, and severity."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Detection Engineering","item":"https://logan23info.github.io/wiki/detection-engineering/"},{"@type":"ListItem","position":3,"name":"SIEM Use Case Library","item":"https://logan23info.github.io/wiki/detection-engineering/siem-use-cases/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/detection-engineering/>Detection Engineering</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">SIEM Use Case Library</h1><div class=post-description>50+ SIEM use cases across authentication, network, endpoint, cloud, and insider threat — each with MITRE ATT&amp;CK mapping, log source, query logic, and severity.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>8 min</span>&nbsp;·&nbsp;<span>1685 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#how-to-use-this-library aria-label="How to use this library">How to use this library</a></li><li><a href=#domain-1--authentication--identity aria-label="Domain 1 — Authentication & Identity">Domain 1 — Authentication & Identity</a><ul><li><a href=#uc-auth-01-brute-force-login-attack aria-label="UC-AUTH-01: Brute Force Login Attack">UC-AUTH-01: Brute Force Login Attack</a></li><li><a href=#uc-auth-02-credential-stuffing-many-usernames-one-ip aria-label="UC-AUTH-02: Credential Stuffing (Many Usernames, One IP)">UC-AUTH-02: Credential Stuffing (Many Usernames, One IP)</a></li><li><a href=#uc-auth-03-successful-login-after-multiple-failures aria-label="UC-AUTH-03: Successful Login After Multiple Failures">UC-AUTH-03: Successful Login After Multiple Failures</a></li><li><a href=#uc-auth-04-login-from-new-country aria-label="UC-AUTH-04: Login From New Country">UC-AUTH-04: Login From New Country</a></li><li><a href=#uc-auth-05-mfa-bypass--fatigue-attack aria-label="UC-AUTH-05: MFA Bypass / Fatigue Attack">UC-AUTH-05: MFA Bypass / Fatigue Attack</a></li><li><a href=#uc-auth-06-impossible-travel aria-label="UC-AUTH-06: Impossible Travel">UC-AUTH-06: Impossible Travel</a></li><li><a href=#uc-auth-07-admin-account-created-outside-business-hours aria-label="UC-AUTH-07: Admin Account Created Outside Business Hours">UC-AUTH-07: Admin Account Created Outside Business Hours</a></li><li><a href=#uc-auth-08-service-account-interactive-login aria-label="UC-AUTH-08: Service Account Interactive Login">UC-AUTH-08: Service Account Interactive Login</a></li></ul></li><li><a href=#domain-2--privilege-escalation--lateral-movement aria-label="Domain 2 — Privilege Escalation & Lateral Movement">Domain 2 — Privilege Escalation & Lateral Movement</a><ul><li><a href=#uc-priv-01-new-local-administrator-added aria-label="UC-PRIV-01: New Local Administrator Added">UC-PRIV-01: New Local Administrator Added</a></li><li><a href=#uc-priv-02-lsass-memory-access aria-label="UC-PRIV-02: LSASS Memory Access">UC-PRIV-02: LSASS Memory Access</a></li><li><a href=#uc-priv-03-pass-the-hash-lateral-movement aria-label="UC-PRIV-03: Pass-the-Hash (Lateral Movement)">UC-PRIV-03: Pass-the-Hash (Lateral Movement)</a></li><li><a href=#uc-priv-04-kerberoasting aria-label="UC-PRIV-04: Kerberoasting">UC-PRIV-04: Kerberoasting</a></li><li><a href=#uc-priv-05-remote-service-execution-psexec--wmi aria-label="UC-PRIV-05: Remote Service Execution (PsExec / WMI)">UC-PRIV-05: Remote Service Execution (PsExec / WMI)</a></li></ul></li><li><a href=#domain-3--command--control--network aria-label="Domain 3 — Command & Control / Network">Domain 3 — Command & Control / Network</a><ul><li><a href=#uc-net-01-dns-over-https-doh-beaconing aria-label="UC-NET-01: DNS over HTTPS (DoH) Beaconing">UC-NET-01: DNS over HTTPS (DoH) Beaconing</a></li><li><a href=#uc-net-02-long-dns-ttl--dns-tunneling aria-label="UC-NET-02: Long DNS TTL / DNS Tunneling">UC-NET-02: Long DNS TTL / DNS Tunneling</a></li><li><a href=#uc-net-03-beaconing--regular-outbound-intervals aria-label="UC-NET-03: Beaconing — Regular Outbound Intervals">UC-NET-03: Beaconing — Regular Outbound Intervals</a></li><li><a href=#uc-net-04-large-outbound-data-transfer aria-label="UC-NET-04: Large Outbound Data Transfer">UC-NET-04: Large Outbound Data Transfer</a></li></ul></li><li><a href=#domain-4--endpoint--process aria-label="Domain 4 — Endpoint & Process">Domain 4 — Endpoint & Process</a><ul><li><a href=#uc-proc-01-living-off-the-land-binary-abuse aria-label="UC-PROC-01: Living-off-the-Land Binary Abuse">UC-PROC-01: Living-off-the-Land Binary Abuse</a></li><li><a href=#uc-proc-02-powershell-encoded-command aria-label="UC-PROC-02: PowerShell Encoded Command">UC-PROC-02: PowerShell Encoded Command</a></li><li><a href=#uc-proc-03-script-interpreter-spawned-by-office-application aria-label="UC-PROC-03: Script Interpreter Spawned by Office Application">UC-PROC-03: Script Interpreter Spawned by Office Application</a></li></ul></li><li><a href=#domain-5--cloud--infrastructure aria-label="Domain 5 — Cloud & Infrastructure">Domain 5 — Cloud & Infrastructure</a><ul><li><a href=#uc-cloud-01-aws-root-account-login aria-label="UC-CLOUD-01: AWS Root Account Login">UC-CLOUD-01: AWS Root Account Login</a></li><li><a href=#uc-cloud-02-iam-policy-attached-to-user-privilege-escalation aria-label="UC-CLOUD-02: IAM Policy Attached to User (Privilege Escalation)">UC-CLOUD-02: IAM Policy Attached to User (Privilege Escalation)</a></li><li><a href=#uc-cloud-03-aws-s3-bucket-made-public aria-label="UC-CLOUD-03: AWS S3 Bucket Made Public">UC-CLOUD-03: AWS S3 Bucket Made Public</a></li><li><a href=#uc-cloud-04-ec2-instance-metadata-service-accessed-ssrf-indicator aria-label="UC-CLOUD-04: EC2 Instance Metadata Service Accessed (SSRF Indicator)">UC-CLOUD-04: EC2 Instance Metadata Service Accessed (SSRF Indicator)</a></li><li><a href=#uc-cloud-05-unusual-api-call-volume-reconnaissance aria-label="UC-CLOUD-05: Unusual API Call Volume (Reconnaissance)">UC-CLOUD-05: Unusual API Call Volume (Reconnaissance)</a></li></ul></li><li><a href=#domain-6--insider-threat aria-label="Domain 6 — Insider Threat">Domain 6 — Insider Threat</a><ul><li><a href=#uc-insider-01-bulk-file-download aria-label="UC-INSIDER-01: Bulk File Download">UC-INSIDER-01: Bulk File Download</a></li><li><a href=#uc-insider-02-access-to-sensitive-data-outside-normal-hours aria-label="UC-INSIDER-02: Access to Sensitive Data Outside Normal Hours">UC-INSIDER-02: Access to Sensitive Data Outside Normal Hours</a></li><li><a href=#uc-insider-03-corporate-data-sent-to-personal-email--cloud aria-label="UC-INSIDER-03: Corporate Data Sent to Personal Email / Cloud">UC-INSIDER-03: Corporate Data Sent to Personal Email / Cloud</a></li></ul></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=how-to-use-this-library>How to use this library<a hidden class=anchor aria-hidden=true href=#how-to-use-this-library>#</a></h2><p>Each use case includes:</p><ul><li><strong>ATT&amp;CK technique</strong> — links to MITRE ATT&amp;CK for full technique detail</li><li><strong>Log source</strong> — what must be enabled and ingested for this to work</li><li><strong>Detection logic</strong> — pseudocode query adaptable to any SIEM</li><li><strong>Severity</strong> — Critical / High / Medium / Low</li><li><strong>False positive risk</strong> — how noisy this rule is likely to be</li></ul><p>Use these as a starting point. Every environment is different — tune thresholds and conditions to match your baseline before deploying.</p><hr><h2 id=domain-1--authentication--identity>Domain 1 — Authentication & Identity<a hidden class=anchor aria-hidden=true href=#domain-1--authentication--identity>#</a></h2><h3 id=uc-auth-01-brute-force-login-attack>UC-AUTH-01: Brute Force Login Attack<a hidden class=anchor aria-hidden=true href=#uc-auth-01-brute-force-login-attack>#</a></h3><p><strong>ATT&amp;CK:</strong> T1110 — Brute Force
+<strong>Log source:</strong> Authentication logs (Active Directory, Okta, Azure AD, application logs)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;authentication_failure&#34;
+  GROUP BY source_ip, username
+  WHERE count(*) &gt; 10
+  WITHIN 5 minutes
+  → alert with source_ip, username, failure_count
+
+Tuning:
+  Exclude: known vulnerability scanners, load balancers
+  Threshold: adjust based on baseline — start high, tune down
+</code></pre><hr><h3 id=uc-auth-02-credential-stuffing-many-usernames-one-ip>UC-AUTH-02: Credential Stuffing (Many Usernames, One IP)<a hidden class=anchor aria-hidden=true href=#uc-auth-02-credential-stuffing-many-usernames-one-ip>#</a></h3><p><strong>ATT&amp;CK:</strong> T1110.004 — Credential Stuffing
+<strong>Log source:</strong> Authentication logs, WAF logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;authentication_failure&#34;
+  GROUP BY source_ip
+  WHERE count(DISTINCT username) &gt; 20
+  WITHIN 10 minutes
+  → alert: credential stuffing pattern
+
+Key differentiator from brute force:
+  Brute force = many passwords, one username
+  Credential stuffing = many usernames, one IP
+</code></pre><hr><h3 id=uc-auth-03-successful-login-after-multiple-failures>UC-AUTH-03: Successful Login After Multiple Failures<a hidden class=anchor aria-hidden=true href=#uc-auth-03-successful-login-after-multiple-failures>#</a></h3><p><strong>ATT&amp;CK:</strong> T1110 — Brute Force (successful)
+<strong>Log source:</strong> Authentication logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  SEQUENCE WITHIN 30 minutes:
+    1. auth_failure WHERE username = X AND count &gt; 5
+    2. auth_success WHERE username = X
+  → alert: possible successful brute force
+</code></pre><hr><h3 id=uc-auth-04-login-from-new-country>UC-AUTH-04: Login From New Country<a hidden class=anchor aria-hidden=true href=#uc-auth-04-login-from-new-country>#</a></h3><p><strong>ATT&amp;CK:</strong> T1078 — Valid Accounts
+<strong>Log source:</strong> Authentication logs with GeoIP enrichment
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  event = &#34;auth_success&#34;
+  WHERE country NOT IN user_baseline_countries(username, 90_days)
+  AND country NOT IN [approved_travel_countries]
+  → alert: first-time country login for user
+
+Enrichment needed: GeoIP database, user travel calendar (optional)
+</code></pre><hr><h3 id=uc-auth-05-mfa-bypass--fatigue-attack>UC-AUTH-05: MFA Bypass / Fatigue Attack<a hidden class=anchor aria-hidden=true href=#uc-auth-05-mfa-bypass--fatigue-attack>#</a></h3><p><strong>ATT&amp;CK:</strong> T1621 — MFA Request Generation
+<strong>Log source:</strong> MFA provider logs (Okta, Duo, Azure MFA)
+<strong>Severity:</strong> Critical</p><pre tabindex=0><code>Detection logic:
+  event = &#34;mfa_push_sent&#34;
+  GROUP BY username
+  WHERE count(*) &gt; 5
+  WITHIN 10 minutes
+  → alert: possible MFA fatigue attack
+
+Also detect:
+  event = &#34;mfa_denied_by_user&#34; followed by &#34;mfa_approved&#34;
+  within 2 minutes (user approved after denying = possible fatigue)
+</code></pre><hr><h3 id=uc-auth-06-impossible-travel>UC-AUTH-06: Impossible Travel<a hidden class=anchor aria-hidden=true href=#uc-auth-06-impossible-travel>#</a></h3><p><strong>ATT&amp;CK:</strong> T1078 — Valid Accounts
+<strong>Log source:</strong> Authentication logs with GeoIP
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  SEQUENCE for same username:
+    1. auth_success from country=A, timestamp=T1
+    2. auth_success from country=B, timestamp=T2
+  WHERE distance(A, B) / time_diff(T1, T2) &gt; 900 km/h
+  → alert: physically impossible travel (account sharing or compromise)
+</code></pre><hr><h3 id=uc-auth-07-admin-account-created-outside-business-hours>UC-AUTH-07: Admin Account Created Outside Business Hours<a hidden class=anchor aria-hidden=true href=#uc-auth-07-admin-account-created-outside-business-hours>#</a></h3><p><strong>ATT&amp;CK:</strong> T1136 — Create Account
+<strong>Log source:</strong> Active Directory / Entra ID / AWS IAM logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;user_created&#34; OR event = &#34;group_member_added&#34;
+  WHERE target_group IN [admin_groups]
+  AND hour(timestamp) NOT BETWEEN 8 AND 18
+  AND day_of_week(timestamp) NOT IN [Monday..Friday]
+  → alert: after-hours privileged account change
+</code></pre><hr><h3 id=uc-auth-08-service-account-interactive-login>UC-AUTH-08: Service Account Interactive Login<a hidden class=anchor aria-hidden=true href=#uc-auth-08-service-account-interactive-login>#</a></h3><p><strong>ATT&amp;CK:</strong> T1078.003 — Local Accounts
+<strong>Log source:</strong> Windows Security Event Log (Event ID 4624)
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  event_id = 4624  (successful logon)
+  WHERE account_name LIKE &#34;svc_%&#34; OR account_name LIKE &#34;sa_%&#34;
+  AND logon_type IN [2, 10]  (interactive or remote interactive)
+  → alert: service account used for interactive login (should use type 5 only)
+</code></pre><hr><h2 id=domain-2--privilege-escalation--lateral-movement>Domain 2 — Privilege Escalation & Lateral Movement<a hidden class=anchor aria-hidden=true href=#domain-2--privilege-escalation--lateral-movement>#</a></h2><h3 id=uc-priv-01-new-local-administrator-added>UC-PRIV-01: New Local Administrator Added<a hidden class=anchor aria-hidden=true href=#uc-priv-01-new-local-administrator-added>#</a></h3><p><strong>ATT&amp;CK:</strong> T1098 — Account Manipulation
+<strong>Log source:</strong> Windows Security Event Log (Event ID 4732)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event_id = 4732  (member added to security-enabled local group)
+  WHERE group_name = &#34;Administrators&#34;
+  → alert: local admin group modified
+</code></pre><hr><h3 id=uc-priv-02-lsass-memory-access>UC-PRIV-02: LSASS Memory Access<a hidden class=anchor aria-hidden=true href=#uc-priv-02-lsass-memory-access>#</a></h3><p><strong>ATT&amp;CK:</strong> T1003.001 — LSASS Memory
+<strong>Log source:</strong> EDR (Sysmon Event ID 10, CrowdStrike, Defender)
+<strong>Severity:</strong> Critical</p><pre tabindex=0><code>Detection logic:
+  event = &#34;process_access&#34;
+  WHERE target_process = &#34;lsass.exe&#34;
+  AND source_process NOT IN [known_legitimate_processes]
+  AND granted_access IN [&#34;0x1010&#34;, &#34;0x1438&#34;, &#34;0x143a&#34;, &#34;0x1fffff&#34;]
+  → alert: LSASS memory access — possible credential dumping
+</code></pre><hr><h3 id=uc-priv-03-pass-the-hash-lateral-movement>UC-PRIV-03: Pass-the-Hash (Lateral Movement)<a hidden class=anchor aria-hidden=true href=#uc-priv-03-pass-the-hash-lateral-movement>#</a></h3><p><strong>ATT&amp;CK:</strong> T1550.002 — Pass the Hash
+<strong>Log source:</strong> Windows Security Event Log (Event ID 4624)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event_id = 4624
+  WHERE logon_type = 3  (network logon)
+  AND auth_package = &#34;NTLM&#34;
+  AND account_domain = &#34;-&#34;  (no domain = NTLM hash auth)
+  AND logon_process = &#34;NtLmSsp&#34;
+  AND target_host != source_host
+  → alert: NTLM pass-the-hash pattern
+</code></pre><hr><h3 id=uc-priv-04-kerberoasting>UC-PRIV-04: Kerberoasting<a hidden class=anchor aria-hidden=true href=#uc-priv-04-kerberoasting>#</a></h3><p><strong>ATT&amp;CK:</strong> T1558.003 — Kerberoasting
+<strong>Log source:</strong> Windows Security Event Log (Event ID 4769)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event_id = 4769  (Kerberos service ticket request)
+  WHERE ticket_encryption_type = &#34;0x17&#34;  (RC4 — weak, used by Kerberoasting tools)
+  AND account_name NOT IN [known_service_accounts]
+  GROUP BY source_ip
+  WHERE count(*) &gt; 5 WITHIN 1 minute
+  → alert: Kerberoasting attempt — bulk RC4 ticket requests
+</code></pre><hr><h3 id=uc-priv-05-remote-service-execution-psexec--wmi>UC-PRIV-05: Remote Service Execution (PsExec / WMI)<a hidden class=anchor aria-hidden=true href=#uc-priv-05-remote-service-execution-psexec--wmi>#</a></h3><p><strong>ATT&amp;CK:</strong> T1021.002 — SMB/Windows Admin Shares
+<strong>Log source:</strong> Windows Security Event Log, Sysmon
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;service_created&#34;
+  WHERE service_name LIKE &#34;PSEXESVC%&#34; OR service_path LIKE &#34;%\admin$\%&#34;
+  OR (
+    event_id = 4688  (process creation)
+    WHERE parent_process = &#34;WmiPrvSE.exe&#34;
+    AND new_process IN [&#34;cmd.exe&#34;, &#34;powershell.exe&#34;, &#34;wscript.exe&#34;]
+  )
+  → alert: remote execution via PsExec or WMI
+</code></pre><hr><h2 id=domain-3--command--control--network>Domain 3 — Command & Control / Network<a hidden class=anchor aria-hidden=true href=#domain-3--command--control--network>#</a></h2><h3 id=uc-net-01-dns-over-https-doh-beaconing>UC-NET-01: DNS over HTTPS (DoH) Beaconing<a hidden class=anchor aria-hidden=true href=#uc-net-01-dns-over-https-doh-beaconing>#</a></h3><p><strong>ATT&amp;CK:</strong> T1071.004 — DNS (C2)
+<strong>Log source:</strong> Network proxy logs, DNS logs
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  destination_port = 443
+  AND destination_domain IN [&#34;dns.google&#34;, &#34;cloudflare-dns.com&#34;, &#34;1.1.1.1&#34;]
+  GROUP BY source_ip
+  WHERE count(*) &gt; 100 WITHIN 1 hour
+  → alert: unusual DoH traffic volume — possible C2 tunnel
+</code></pre><hr><h3 id=uc-net-02-long-dns-ttl--dns-tunneling>UC-NET-02: Long DNS TTL / DNS Tunneling<a hidden class=anchor aria-hidden=true href=#uc-net-02-long-dns-ttl--dns-tunneling>#</a></h3><p><strong>ATT&amp;CK:</strong> T1071.004 — DNS
+<strong>Log source:</strong> DNS server logs
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  event = &#34;dns_query&#34;
+  WHERE LENGTH(query_name) &gt; 50  (long subdomain = data in DNS)
+  OR count(DISTINCT query_name UNDER same_domain) &gt; 200 WITHIN 1 hour
+  → alert: possible DNS tunneling (data exfiltration via DNS)
+</code></pre><hr><h3 id=uc-net-03-beaconing--regular-outbound-intervals>UC-NET-03: Beaconing — Regular Outbound Intervals<a hidden class=anchor aria-hidden=true href=#uc-net-03-beaconing--regular-outbound-intervals>#</a></h3><p><strong>ATT&amp;CK:</strong> T1071 — Application Layer Protocol
+<strong>Log source:</strong> Proxy logs, firewall logs, network flow
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  GROUP BY source_ip, destination_ip
+  CALCULATE std_deviation(time_between_connections)
+  WHERE std_deviation &lt; 30 seconds  (very regular = automated)
+  AND count(*) &gt; 20 WITHIN 1 hour
+  AND destination NOT IN [known_good_domains]
+  → alert: regular beaconing pattern — possible C2
+</code></pre><hr><h3 id=uc-net-04-large-outbound-data-transfer>UC-NET-04: Large Outbound Data Transfer<a hidden class=anchor aria-hidden=true href=#uc-net-04-large-outbound-data-transfer>#</a></h3><p><strong>ATT&amp;CK:</strong> T1041 — Exfiltration Over C2 Channel
+<strong>Log source:</strong> Firewall/proxy logs with bytes transferred
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  GROUP BY source_ip, destination_ip
+  WHERE SUM(bytes_out) &gt; 500MB WITHIN 1 hour
+  AND destination NOT IN [approved_cloud_services, backup_destinations]
+  AND destination NOT IN [CDN_ranges]
+  → alert: large outbound transfer to unknown destination
+</code></pre><hr><h2 id=domain-4--endpoint--process>Domain 4 — Endpoint & Process<a hidden class=anchor aria-hidden=true href=#domain-4--endpoint--process>#</a></h2><h3 id=uc-proc-01-living-off-the-land-binary-abuse>UC-PROC-01: Living-off-the-Land Binary Abuse<a hidden class=anchor aria-hidden=true href=#uc-proc-01-living-off-the-land-binary-abuse>#</a></h3><p><strong>ATT&amp;CK:</strong> T1218 — System Binary Proxy Execution
+<strong>Log source:</strong> EDR, Sysmon (Event ID 1)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;process_created&#34;
+  WHERE process_name IN [
+    &#34;certutil.exe&#34;, &#34;regsvr32.exe&#34;, &#34;rundll32.exe&#34;, &#34;mshta.exe&#34;,
+    &#34;wscript.exe&#34;, &#34;cscript.exe&#34;, &#34;bitsadmin.exe&#34;, &#34;odbcconf.exe&#34;
+  ]
+  AND (
+    command_line CONTAINS &#34;http&#34; OR
+    command_line CONTAINS &#34;urlcache&#34; OR
+    command_line CONTAINS &#34;.ps1&#34; OR
+    parent_process NOT IN [known_legitimate_parents]
+  )
+  → alert: LOLBin abuse — possible malware execution
+</code></pre><hr><h3 id=uc-proc-02-powershell-encoded-command>UC-PROC-02: PowerShell Encoded Command<a hidden class=anchor aria-hidden=true href=#uc-proc-02-powershell-encoded-command>#</a></h3><p><strong>ATT&amp;CK:</strong> T1059.001 — PowerShell
+<strong>Log source:</strong> Windows Event Log 4688, PowerShell logs (4103, 4104)
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;process_created&#34;
+  WHERE process_name = &#34;powershell.exe&#34;
+  AND (
+    command_line CONTAINS &#34;-EncodedCommand&#34; OR
+    command_line CONTAINS &#34;-enc &#34; OR
+    command_line CONTAINS &#34;-e &#34; AND LENGTH(base64_block) &gt; 100
+  )
+  → alert: PowerShell encoded command — obfuscation indicator
+</code></pre><hr><h3 id=uc-proc-03-script-interpreter-spawned-by-office-application>UC-PROC-03: Script Interpreter Spawned by Office Application<a hidden class=anchor aria-hidden=true href=#uc-proc-03-script-interpreter-spawned-by-office-application>#</a></h3><p><strong>ATT&amp;CK:</strong> T1566.001 — Phishing with Attachment
+<strong>Log source:</strong> EDR, Sysmon
+<strong>Severity:</strong> Critical</p><pre tabindex=0><code>Detection logic:
+  event = &#34;process_created&#34;
+  WHERE parent_process IN [&#34;WINWORD.EXE&#34;, &#34;EXCEL.EXE&#34;, &#34;POWERPNT.EXE&#34;, &#34;OUTLOOK.EXE&#34;]
+  AND child_process IN [&#34;cmd.exe&#34;, &#34;powershell.exe&#34;, &#34;wscript.exe&#34;, &#34;mshta.exe&#34;,
+                        &#34;cmstp.exe&#34;, &#34;regsvr32.exe&#34;]
+  → alert: Office application spawned script interpreter — malicious macro
+</code></pre><hr><h2 id=domain-5--cloud--infrastructure>Domain 5 — Cloud & Infrastructure<a hidden class=anchor aria-hidden=true href=#domain-5--cloud--infrastructure>#</a></h2><h3 id=uc-cloud-01-aws-root-account-login>UC-CLOUD-01: AWS Root Account Login<a hidden class=anchor aria-hidden=true href=#uc-cloud-01-aws-root-account-login>#</a></h3><p><strong>ATT&amp;CK:</strong> T1078.004 — Cloud Accounts
+<strong>Log source:</strong> AWS CloudTrail
+<strong>Severity:</strong> Critical</p><pre tabindex=0><code>Detection logic:
+  source = cloudtrail
+  WHERE userIdentity.type = &#34;Root&#34;
+  AND eventName = &#34;ConsoleLogin&#34;
+  → alert immediately: root account console login
+
+No tuning needed — root login is always anomalous
+</code></pre><hr><h3 id=uc-cloud-02-iam-policy-attached-to-user-privilege-escalation>UC-CLOUD-02: IAM Policy Attached to User (Privilege Escalation)<a hidden class=anchor aria-hidden=true href=#uc-cloud-02-iam-policy-attached-to-user-privilege-escalation>#</a></h3><p><strong>ATT&amp;CK:</strong> T1098.003 — Additional Cloud Credentials
+<strong>Log source:</strong> AWS CloudTrail
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  source = cloudtrail
+  WHERE eventName IN [&#34;AttachUserPolicy&#34;, &#34;AttachGroupPolicy&#34;, &#34;AttachRolePolicy&#34;,
+                      &#34;PutUserPolicy&#34;, &#34;PutGroupPolicy&#34;, &#34;PutRolePolicy&#34;]
+  AND requestParameters.policyArn CONTAINS &#34;AdministratorAccess&#34;
+  → alert: admin policy attached
+
+Also detect:
+  eventName = &#34;CreatePolicyVersion&#34; (new version may escalate privileges)
+</code></pre><hr><h3 id=uc-cloud-03-aws-s3-bucket-made-public>UC-CLOUD-03: AWS S3 Bucket Made Public<a hidden class=anchor aria-hidden=true href=#uc-cloud-03-aws-s3-bucket-made-public>#</a></h3><p><strong>ATT&amp;CK:</strong> T1530 — Data from Cloud Storage
+<strong>Log source:</strong> AWS CloudTrail
+<strong>Severity:</strong> Critical</p><pre tabindex=0><code>Detection logic:
+  source = cloudtrail
+  WHERE eventName IN [&#34;PutBucketAcl&#34;, &#34;PutBucketPolicy&#34;]
+  AND (
+    requestParameters CONTAINS &#34;AllUsers&#34; OR
+    requestParameters CONTAINS &#34;AuthenticatedUsers&#34; OR
+    requestParameters.bucketPolicy CONTAINS &#39;&#34;Principal&#34;:&#34;*&#34;&#39;
+  )
+  → alert immediately: S3 bucket policy allows public access
+</code></pre><hr><h3 id=uc-cloud-04-ec2-instance-metadata-service-accessed-ssrf-indicator>UC-CLOUD-04: EC2 Instance Metadata Service Accessed (SSRF Indicator)<a hidden class=anchor aria-hidden=true href=#uc-cloud-04-ec2-instance-metadata-service-accessed-ssrf-indicator>#</a></h3><p><strong>ATT&amp;CK:</strong> T1552.005 — Cloud Instance Metadata API
+<strong>Log source:</strong> VPC Flow Logs, application logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  source = vpc_flow_logs OR application_proxy_logs
+  WHERE destination_ip = &#34;169.254.169.254&#34;
+  AND destination_port = 80
+  AND source NOT IN [known_monitoring_agents]
+  → alert: metadata service accessed — possible SSRF
+</code></pre><hr><h3 id=uc-cloud-05-unusual-api-call-volume-reconnaissance>UC-CLOUD-05: Unusual API Call Volume (Reconnaissance)<a hidden class=anchor aria-hidden=true href=#uc-cloud-05-unusual-api-call-volume-reconnaissance>#</a></h3><p><strong>ATT&amp;CK:</strong> T1526 — Cloud Service Discovery
+<strong>Log source:</strong> AWS CloudTrail, GCP Audit Logs
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  source = cloudtrail
+  WHERE eventName IN [&#34;ListBuckets&#34;, &#34;DescribeInstances&#34;, &#34;ListUsers&#34;,
+                      &#34;GetCallerIdentity&#34;, &#34;ListRoles&#34;, &#34;DescribeSecurityGroups&#34;]
+  GROUP BY userIdentity.arn
+  WHERE count(*) &gt; 50 WITHIN 5 minutes
+  → alert: enumeration / reconnaissance activity
+</code></pre><hr><h2 id=domain-6--insider-threat>Domain 6 — Insider Threat<a hidden class=anchor aria-hidden=true href=#domain-6--insider-threat>#</a></h2><h3 id=uc-insider-01-bulk-file-download>UC-INSIDER-01: Bulk File Download<a hidden class=anchor aria-hidden=true href=#uc-insider-01-bulk-file-download>#</a></h3><p><strong>ATT&amp;CK:</strong> T1005 — Data from Local System
+<strong>Log source:</strong> DLP, SharePoint/OneDrive logs, proxy logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;file_download&#34; OR event = &#34;file_copy&#34;
+  GROUP BY username
+  WHERE count(*) &gt; 100 WITHIN 1 hour
+  OR total_bytes &gt; 1GB WITHIN 1 hour
+  → alert: bulk data download — possible exfiltration or resignation
+</code></pre><hr><h3 id=uc-insider-02-access-to-sensitive-data-outside-normal-hours>UC-INSIDER-02: Access to Sensitive Data Outside Normal Hours<a hidden class=anchor aria-hidden=true href=#uc-insider-02-access-to-sensitive-data-outside-normal-hours>#</a></h3><p><strong>ATT&amp;CK:</strong> T1078 — Valid Accounts
+<strong>Log source:</strong> Application audit logs, DLP
+<strong>Severity:</strong> Medium</p><pre tabindex=0><code>Detection logic:
+  event = &#34;data_access&#34;
+  WHERE data_classification IN [&#34;restricted&#34;, &#34;confidential&#34;]
+  AND hour(timestamp) NOT BETWEEN 7 AND 20
+  AND username NOT IN [known_night_shift_workers]
+  → alert: sensitive data access outside business hours
+</code></pre><hr><h3 id=uc-insider-03-corporate-data-sent-to-personal-email--cloud>UC-INSIDER-03: Corporate Data Sent to Personal Email / Cloud<a hidden class=anchor aria-hidden=true href=#uc-insider-03-corporate-data-sent-to-personal-email--cloud>#</a></h3><p><strong>ATT&amp;CK:</strong> T1567 — Exfiltration to Web Service
+<strong>Log source:</strong> Email gateway, proxy/DLP logs
+<strong>Severity:</strong> High</p><pre tabindex=0><code>Detection logic:
+  event = &#34;email_sent&#34;
+  WHERE recipient_domain IN [personal_email_domains]  # gmail.com, yahoo.com, etc.
+  AND (attachment_count &gt; 0 OR body_size &gt; 10KB)
+  AND sender_domain = corporate_domain
+  → alert: corporate data to personal email
+
+OR:
+  event = &#34;file_upload&#34;
+  WHERE destination IN [&#34;dropbox.com&#34;, &#34;wetransfer.com&#34;, &#34;mega.nz&#34;]
+  AND NOT destination IN [approved_cloud_services]
+  → alert: upload to unapproved cloud storage
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/detection-engineering/sigma-rules/><span class=ref-label>Detection</span>Sigma Rule Writing Guide</a>
+<a class=ref-card href=/wiki/detection-engineering/alert-fatigue/><span class=ref-label>Detection</span>Alert Fatigue Guide</a>
+<a class=ref-card href=/wiki/detection-engineering/soc-playbooks/><span class=ref-label>Detection</span>SOC Playbook Templates</a>
+<a class=ref-card href=/wiki/detection-engineering/detection-metrics/><span class=ref-label>Detection</span>Detection Coverage Metrics</a>
+<a class=ref-card href=/wiki/purple-teaming/><span class=ref-label>Wiki</span>Purple Teaming</a>
+<a class=ref-card href=/wiki/threat-intelligence/><span class=ref-label>Wiki</span>Threat Intelligence</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/siem/>SIEM</a></li><li><a href=https://logan23info.github.io/tags/detection/>Detection</a></li><li><a href=https://logan23info.github.io/tags/use-cases/>Use-Cases</a></li><li><a href=https://logan23info.github.io/tags/attck/>ATT&amp;CK</a></li><li><a href=https://logan23info.github.io/tags/alerts/>Alerts</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

@@ -1,0 +1,377 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Kubernetes Security Hardening | Security Engineering Wiki</title><meta name=keywords content="Kubernetes,K8s,RBAC,network-policy,pod-security,admission-controllers,architecture"><meta name=description content="Complete Kubernetes security hardening guide — RBAC, network policies, pod security standards, admission controllers, secrets encryption, and cluster hardening."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Kubernetes Security Hardening"><meta property="og:description" content="Complete Kubernetes security hardening guide — RBAC, network policies, pod security standards, admission controllers, secrets encryption, and cluster hardening."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Kubernetes Security Hardening"><meta name=twitter:description content="Complete Kubernetes security hardening guide — RBAC, network policies, pod security standards, admission controllers, secrets encryption, and cluster hardening."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Secure Architecture Patterns","item":"https://logan23info.github.io/wiki/secure-architecture/"},{"@type":"ListItem","position":3,"name":"Kubernetes Security Hardening","item":"https://logan23info.github.io/wiki/secure-architecture/kubernetes-security/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/secure-architecture/>Secure Architecture Patterns</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Kubernetes Security Hardening</h1><div class=post-description>Complete Kubernetes security hardening guide — RBAC, network policies, pod security standards, admission controllers, secrets encryption, and cluster hardening.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>1303 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#kubernetes-threat-model aria-label="Kubernetes threat model">Kubernetes threat model</a></li><li><a href=#pattern-1--rbac-role-based-access-control aria-label="Pattern 1 — RBAC (Role-Based Access Control)">Pattern 1 — RBAC (Role-Based Access Control)</a><ul><li><a href=#rbac-audit--find-overprivileged-accounts aria-label="RBAC audit — find overprivileged accounts">RBAC audit — find overprivileged accounts</a></li><li><a href=#service-account-hardening aria-label="Service account hardening">Service account hardening</a></li></ul></li><li><a href=#pattern-2--network-policies aria-label="Pattern 2 — Network Policies">Pattern 2 — Network Policies</a></li><li><a href=#pattern-3--pod-security-standards aria-label="Pattern 3 — Pod Security Standards">Pattern 3 — Pod Security Standards</a></li><li><a href=#pattern-4--admission-controllers aria-label="Pattern 4 — Admission Controllers">Pattern 4 — Admission Controllers</a></li><li><a href=#pattern-5--etcd-encryption-at-rest aria-label="Pattern 5 — etcd encryption at rest">Pattern 5 — etcd encryption at rest</a></li><li><a href=#pattern-6--cluster-hardening aria-label="Pattern 6 — Cluster hardening">Pattern 6 — Cluster hardening</a></li><li><a href=#kubernetes-security-checklist aria-label="Kubernetes security checklist">Kubernetes security checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=kubernetes-threat-model>Kubernetes threat model<a hidden class=anchor aria-hidden=true href=#kubernetes-threat-model>#</a></h2><p>Kubernetes has a large attack surface. Understanding the threat model is the starting point:</p><pre tabindex=0><code>External attacker
+    │
+    ▼
+[Ingress / API Server]  ← auth bypass, CVEs
+    │
+    ▼
+[Pod / Container]       ← container escape, privilege escalation
+    │
+    ├──► [etcd]         ← unencrypted secrets, direct access
+    ├──► [kubelet]      ← unauthenticated API, exec into pods
+    ├──► [RBAC]         ← overprivileged service accounts
+    ├──► [Network]      ← lateral movement between pods
+    └──► [Supply chain] ← malicious images, helm charts
+</code></pre><p>The four highest-risk areas: <strong>RBAC misconfiguration, missing network policies, privileged pods, and unencrypted etcd secrets.</strong></p><hr><h2 id=pattern-1--rbac-role-based-access-control>Pattern 1 — RBAC (Role-Based Access Control)<a hidden class=anchor aria-hidden=true href=#pattern-1--rbac-role-based-access-control>#</a></h2><p>RBAC controls what Kubernetes API actions each identity can perform. The most common mistake is wildcard permissions.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># WRONG — wildcard permissions (cluster-admin equivalent)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRole</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>dangerous-role</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>apiGroups</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;*&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;*&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>verbs</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;*&#34;</span><span class=p>]</span><span class=w>              </span><span class=c># DO NOT do this</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># RIGHT — least privilege for a deployment controller</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Role</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>deployment-manager</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>apiGroups</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;apps&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;deployments&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>verbs</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;get&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;list&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;watch&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;create&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;update&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;patch&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>apiGroups</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;pods&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>verbs</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;get&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;list&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;watch&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># No delete, no secrets, no cluster-level access</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>RoleBinding</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>deployment-manager-binding</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>subjects</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>ci-deployer</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>roleRef</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Role</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>deployment-manager</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>apiGroup</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io</span><span class=w>
+</span></span></span></code></pre></div><h3 id=rbac-audit--find-overprivileged-accounts>RBAC audit — find overprivileged accounts<a hidden class=anchor aria-hidden=true href=#rbac-audit--find-overprivileged-accounts>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Find all cluster-admin bindings</span>
+</span></span><span class=line><span class=cl>kubectl get clusterrolebindings -o json <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  jq <span class=s1>&#39;.items[] | select(.roleRef.name==&#34;cluster-admin&#34;) | 
+</span></span></span><span class=line><span class=cl><span class=s1>      {name:.metadata.name, subjects:.subjects}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Find service accounts that can exec into pods</span>
+</span></span><span class=line><span class=cl>kubectl auth can-i create pods/exec --as<span class=o>=</span>system:serviceaccount:production:payment-service
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Enumerate all permissions for a service account</span>
+</span></span><span class=line><span class=cl>kubectl auth can-i --list <span class=se>\
+</span></span></span><span class=line><span class=cl>  --as<span class=o>=</span>system:serviceaccount:production:payment-service
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Use rakkess for visual permission matrix</span>
+</span></span><span class=line><span class=cl>kubectl-rakkess --sa production:payment-service
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Use rbac-police to find privilege escalation paths</span>
+</span></span><span class=line><span class=cl>rbac-police <span class=nb>eval</span> --cluster
+</span></span></code></pre></div><h3 id=service-account-hardening>Service account hardening<a hidden class=anchor aria-hidden=true href=#service-account-hardening>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Disable auto-mounting of service account tokens (default is true)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>automountServiceAccountToken</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>   </span><span class=c># opt-out at SA level</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># Only mount where explicitly needed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>serviceAccountName</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>automountServiceAccountToken</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>   </span><span class=c># also disable at pod level</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=pattern-2--network-policies>Pattern 2 — Network Policies<a hidden class=anchor aria-hidden=true href=#pattern-2--network-policies>#</a></h2><p>By default, all pods can communicate with all other pods. Network Policies are Kubernetes&rsquo;s firewall — they define which pods can talk to which.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Default deny all ingress and egress — start with zero trust</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>NetworkPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>default-deny-all</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>podSelector</span><span class=p>:</span><span class=w> </span>{}<span class=w>        </span><span class=c># applies to ALL pods in namespace</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>policyTypes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Ingress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Egress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># Allow payment-service to receive from order-service only</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>NetworkPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service-ingress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>podSelector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>policyTypes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Ingress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>ingress</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>from</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>podSelector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>order-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>namespaceSelector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># Allow payment-service egress to database and external payment gateway only</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>NetworkPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service-egress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>podSelector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>policyTypes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Egress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>egress</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>to</span><span class=p>:</span><span class=w>                              </span><span class=c># internal database</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>podSelector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>postgres</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>5432</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>to</span><span class=p>:</span><span class=w>                              </span><span class=c># external payment gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>ipBlock</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>cidr</span><span class=p>:</span><span class=w> </span><span class=m>203.0.113.0</span><span class=l>/24</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>to</span><span class=p>:</span><span class=w>                              </span><span class=c># DNS resolution</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>namespaceSelector</span><span class=p>:</span><span class=w> </span>{}<span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>UDP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>53</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Verify network policy is working</span>
+</span></span><span class=line><span class=cl>kubectl <span class=nb>exec</span> -n production deploy/attacker-pod -- <span class=se>\
+</span></span></span><span class=line><span class=cl>  curl -s --max-time <span class=m>3</span> http://payment-service:8080/health
+</span></span><span class=line><span class=cl><span class=c1># Expected: connection timeout (blocked by NetworkPolicy)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Visualise network policies</span>
+</span></span><span class=line><span class=cl>kubectl-np-viewer -n production
+</span></span></code></pre></div><hr><h2 id=pattern-3--pod-security-standards>Pattern 3 — Pod Security Standards<a hidden class=anchor aria-hidden=true href=#pattern-3--pod-security-standards>#</a></h2><p>Pod Security Standards (PSS) replaced PodSecurityPolicy in K8s 1.25. Three levels:</p><table><thead><tr><th>Level</th><th>Description</th><th>When to use</th></tr></thead><tbody><tr><td><strong>Privileged</strong></td><td>No restrictions</td><td>Node-level system components only</td></tr><tr><td><strong>Baseline</strong></td><td>Minimal restrictions</td><td>General workloads</td></tr><tr><td><strong>Restricted</strong></td><td>Strongly restricted</td><td>Sensitive workloads, default target</td></tr></tbody></table><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Enforce restricted standard on a namespace</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Namespace</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>pod-security.kubernetes.io/enforce</span><span class=p>:</span><span class=w> </span><span class=l>restricted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>pod-security.kubernetes.io/enforce-version</span><span class=p>:</span><span class=w> </span><span class=l>latest</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>pod-security.kubernetes.io/audit</span><span class=p>:</span><span class=w> </span><span class=l>restricted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>pod-security.kubernetes.io/warn</span><span class=p>:</span><span class=w> </span><span class=l>restricted</span><span class=w>
+</span></span></span></code></pre></div><p>What the <strong>restricted</strong> standard requires:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># A pod that complies with restricted standard</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>runAsNonRoot</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>runAsUser</span><span class=p>:</span><span class=w> </span><span class=m>10001</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>seccompProfile</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>RuntimeDefault</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>app</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>allowPrivilegeEscalation</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>readOnlyRootFilesystem</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>capabilities</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>drop</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;ALL&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>runAsNonRoot</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=pattern-4--admission-controllers>Pattern 4 — Admission Controllers<a hidden class=anchor aria-hidden=true href=#pattern-4--admission-controllers>#</a></h2><p>Admission controllers validate and mutate requests to the Kubernetes API before they are persisted. Use them to enforce security policies:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># OPA Gatekeeper — policy as code</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># Constraint Template: require all containers to have resource limits</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>templates.gatekeeper.sh/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ConstraintTemplate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>k8srequiredresources</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>crd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>names</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>K8sRequiredResources</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>targets</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>target</span><span class=p>:</span><span class=w> </span><span class=l>admission.k8s.gatekeeper.sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>rego</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>        package k8srequiredresources
+</span></span></span><span class=line><span class=cl><span class=sd>        violation[{&#34;msg&#34;: msg}] {
+</span></span></span><span class=line><span class=cl><span class=sd>          container := input.review.object.spec.containers[_]
+</span></span></span><span class=line><span class=cl><span class=sd>          not container.resources.limits.memory
+</span></span></span><span class=line><span class=cl><span class=sd>          msg := sprintf(&#34;Container %v has no memory limit&#34;, [container.name])
+</span></span></span><span class=line><span class=cl><span class=sd>        }
+</span></span></span><span class=line><span class=cl><span class=sd>        violation[{&#34;msg&#34;: msg}] {
+</span></span></span><span class=line><span class=cl><span class=sd>          container := input.review.object.spec.containers[_]
+</span></span></span><span class=line><span class=cl><span class=sd>          not container.resources.limits.cpu
+</span></span></span><span class=line><span class=cl><span class=sd>          msg := sprintf(&#34;Container %v has no CPU limit&#34;, [container.name])
+</span></span></span><span class=line><span class=cl><span class=sd>        }</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># Apply the constraint to all namespaces</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>constraints.gatekeeper.sh/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>K8sRequiredResources</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>require-resource-limits</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>match</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kinds</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>apiGroups</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>kinds</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;Pod&#34;</span><span class=p>]</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Kyverno — simpler policy syntax</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>kyverno.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>disallow-privileged-containers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>validationFailureAction</span><span class=p>:</span><span class=w> </span><span class=l>Enforce</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>check-privileged</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>match</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>any</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>kinds</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=l>Pod]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>validate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>message</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Privileged containers are not allowed&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>pattern</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=nt>=(securityContext)</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                  </span><span class=nt>=(privileged)</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;false&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>require-non-root</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>match</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>any</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>kinds</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=l>Pod]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>validate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>message</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Containers must not run as root&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>pattern</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>runAsNonRoot</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=pattern-5--etcd-encryption-at-rest>Pattern 5 — etcd encryption at rest<a hidden class=anchor aria-hidden=true href=#pattern-5--etcd-encryption-at-rest>#</a></h2><p>etcd stores all Kubernetes secrets in plaintext by default. Enable encryption:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># /etc/kubernetes/encryption-config.yaml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apiserver.config.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>EncryptionConfiguration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>secrets</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>configmaps</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>providers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>aescbc</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>keys</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>key1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>secret</span><span class=p>:</span><span class=w> </span><span class=l>&lt;base64-encoded-32-byte-key&gt;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>identity</span><span class=p>:</span><span class=w> </span>{}<span class=w>         </span><span class=c># fallback for unencrypted reads during migration</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Apply to kube-apiserver</span>
+</span></span><span class=line><span class=cl><span class=c1># In /etc/kubernetes/manifests/kube-apiserver.yaml add:</span>
+</span></span><span class=line><span class=cl><span class=c1># --encryption-provider-config=/etc/kubernetes/encryption-config.yaml</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify all existing secrets are encrypted</span>
+</span></span><span class=line><span class=cl>kubectl get secrets --all-namespaces -o json <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  kubectl replace -f -    <span class=c1># re-encrypt all existing secrets</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify encryption is active — should return encrypted value</span>
+</span></span><span class=line><span class=cl><span class=nv>ETCDCTL_API</span><span class=o>=</span><span class=m>3</span> etcdctl <span class=se>\
+</span></span></span><span class=line><span class=cl>  --cacert<span class=o>=</span>/etc/kubernetes/pki/etcd/ca.crt <span class=se>\
+</span></span></span><span class=line><span class=cl>  --cert<span class=o>=</span>/etc/kubernetes/pki/etcd/server.crt <span class=se>\
+</span></span></span><span class=line><span class=cl>  --key<span class=o>=</span>/etc/kubernetes/pki/etcd/server.key <span class=se>\
+</span></span></span><span class=line><span class=cl>  get /registry/secrets/production/my-secret <span class=p>|</span> hexdump -C <span class=p>|</span> head
+</span></span><span class=line><span class=cl><span class=c1># Should show: k8s:enc:aescbc: prefix — not plaintext</span>
+</span></span></code></pre></div><hr><h2 id=pattern-6--cluster-hardening>Pattern 6 — Cluster hardening<a hidden class=anchor aria-hidden=true href=#pattern-6--cluster-hardening>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># CIS Kubernetes Benchmark — automated check</span>
+</span></span><span class=line><span class=cl>kube-bench run --targets master,node,etcd,policies
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Key hardening steps:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 1. Disable anonymous auth on API server</span>
+</span></span><span class=line><span class=cl><span class=c1># --anonymous-auth=false</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. Enable audit logging</span>
+</span></span><span class=line><span class=cl><span class=c1># --audit-log-path=/var/log/kubernetes/audit.log</span>
+</span></span><span class=line><span class=cl><span class=c1># --audit-log-maxage=30</span>
+</span></span><span class=line><span class=cl><span class=c1># --audit-log-maxsize=100</span>
+</span></span><span class=line><span class=cl><span class=c1># --audit-policy-file=/etc/kubernetes/audit-policy.yaml</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. Restrict API server access to known CIDRs</span>
+</span></span><span class=line><span class=cl><span class=c1># --authorization-mode=Node,RBAC  (not AlwaysAllow)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 4. Disable insecure port</span>
+</span></span><span class=line><span class=cl><span class=c1># --insecure-port=0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 5. Kubelet security</span>
+</span></span><span class=line><span class=cl><span class=c1># --anonymous-auth=false</span>
+</span></span><span class=line><span class=cl><span class=c1># --authorization-mode=Webhook</span>
+</span></span><span class=line><span class=cl><span class=c1># --read-only-port=0</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Audit policy — log sensitive operations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>audit.k8s.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Policy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>level</span><span class=p>:</span><span class=w> </span><span class=l>RequestResponse</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>group</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;secrets&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;configmaps&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>level</span><span class=p>:</span><span class=w> </span><span class=l>Metadata</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>group</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;pods&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;services&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>level</span><span class=p>:</span><span class=w> </span><span class=l>Request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>verbs</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;create&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;update&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;patch&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;delete&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>level</span><span class=p>:</span><span class=w> </span><span class=l>None</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>group</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;events&#34;</span><span class=p>]</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=kubernetes-security-checklist>Kubernetes security checklist<a hidden class=anchor aria-hidden=true href=#kubernetes-security-checklist>#</a></h2><pre tabindex=0><code>RBAC
+□ No wildcard (*) permissions in any Role or ClusterRole
+□ cluster-admin binding count reviewed — minimised
+□ Service accounts have automountServiceAccountToken: false by default
+□ Each workload has a dedicated service account with minimal permissions
+□ RBAC reviewed quarterly
+
+Network
+□ Default deny NetworkPolicy applied to all namespaces
+□ Explicit allow policies for each service-to-service communication
+□ No pod-to-pod communication allowed outside defined policies
+□ mTLS enforced between all services (Istio/Linkerd)
+
+Pod Security
+□ Pod Security Standard: restricted enforced on all production namespaces
+□ No privileged containers
+□ No hostPID, hostNetwork, hostIPC
+□ readOnlyRootFilesystem: true
+□ ALL capabilities dropped
+□ runAsNonRoot enforced
+□ Resource limits set on all containers
+
+Admission Control
+□ OPA Gatekeeper or Kyverno enforcing policies
+□ Image registry allowlist enforced
+□ Image signature verification enforced (Cosign)
+□ Resource limits required
+
+Secrets &amp; etcd
+□ etcd encryption at rest enabled
+□ etcd access restricted to API server only
+□ Secrets managed via external secrets manager (Vault / AWS SM)
+
+Cluster hardening
+□ Anonymous auth disabled
+□ Audit logging enabled and shipped to SIEM
+□ CIS Benchmark score &gt; 90%
+□ kube-bench run quarterly
+□ Kubernetes version within 2 minor versions of latest
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/secure-architecture/container-security/><span class=ref-label>Architecture</span>Container Security</a>
+<a class=ref-card href=/wiki/secure-architecture/microservices/><span class=ref-label>Architecture</span>Microservices Security</a>
+<a class=ref-card href=/wiki/secure-architecture/secrets-management/><span class=ref-label>Architecture</span>Secrets Management</a>
+<a class=ref-card href=/wiki/zero-trust/><span class=ref-label>Wiki</span>Zero Trust Architecture</a>
+<a class=ref-card href=/wiki/supply-chain/><span class=ref-label>Wiki</span>Supply Chain Security</a>
+<a class=ref-card href=/wiki/advisory-assurance/tooe/><span class=ref-label>Assurance</span>Test of Operating Effectiveness</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/kubernetes/>Kubernetes</a></li><li><a href=https://logan23info.github.io/tags/k8s/>K8s</a></li><li><a href=https://logan23info.github.io/tags/rbac/>RBAC</a></li><li><a href=https://logan23info.github.io/tags/network-policy/>Network-Policy</a></li><li><a href=https://logan23info.github.io/tags/pod-security/>Pod-Security</a></li><li><a href=https://logan23info.github.io/tags/admission-controllers/>Admission-Controllers</a></li><li><a href=https://logan23info.github.io/tags/architecture/>Architecture</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

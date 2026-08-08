@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Attack-Trees on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/attack-trees/</link>
+    <description>Recent content in Attack-Trees on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/attack-trees/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attack Trees — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/attack-trees/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/attack-trees/</guid>
+      <description>How to build and use attack trees to map all paths an attacker could take.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-an-attack-tree">What is an attack tree?</h2>
+<p>An attack tree maps all the ways an attacker could achieve a specific goal. Root = attacker goal. Branches = sub-goals. Leaves = individual attack steps.</p>
+<h2 id="and-vs-or-nodes">AND vs OR nodes</h2>
+<ul>
+<li><strong>OR-node</strong> — any single child path is enough for the attacker to succeed</li>
+<li><strong>AND-node</strong> — all child steps must succeed (multi-step attack chain)</li>
+</ul>
+<h2 id="example-gain-admin-access">Example: Gain admin access</h2>
+<pre tabindex="0"><code>GOAL: Gain admin access
+├── [OR] Compromise admin credentials
+│   ├── Phishing attack on admin user
+│   ├── Credential stuffing with leaked lists
+│   └── Brute force weak admin password
+├── [OR] Exploit application vulnerability
+│   ├── SQL injection → extract + crack password hashes
+│   └── IDOR on admin endpoint (missing auth check)
+└── [OR] Compromise infrastructure
+    ├── [AND] Exploit vulnerable dependency
+    │   ├── Identify outdated package via public scan
+    │   └── Use public exploit for that CVE
+    └── Steal developer session token
+</code></pre><h2 id="scoring-paths">Scoring paths</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Path</th>
+					<th>Attacker cost</th>
+					<th>Probability</th>
+					<th>Priority to mitigate</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Phishing admin</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>IDOR missing auth</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>Brute force</td>
+					<td>Low</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>CVE exploit</td>
+					<td>Medium</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Steal dev session</td>
+					<td>High</td>
+					<td>Low</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="when-to-use-attack-trees">When to use attack trees</h2>
+<ul>
+<li>You have a specific high-value asset to protect</li>
+<li>Preparing penetration test or red team scope</li>
+<li>Communicating risk to non-technical stakeholders</li>
+<li>Stage VI of PASTA methodology</li>
+</ul>
+<h2 id="free-tools">Free tools</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>draw.io / diagrams.net</td>
+					<td>Visual, free, export to XML</td>
+			</tr>
+			<tr>
+					<td>OWASP Threat Dragon</td>
+					<td>Integrated with DFD threat modelling</td>
+			</tr>
+			<tr>
+					<td>Plain Markdown/ASCII</td>
+					<td>Version-controllable in Git</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE Reference</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Stage VI uses attack trees</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming</a>
+  <a class="ref-card" href="/wiki/templates/dfd/"><span class="ref-label">Template</span>Data Flow Diagram Guide</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/"><span class="ref-label">Post</span>Intro to Threat Modelling</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

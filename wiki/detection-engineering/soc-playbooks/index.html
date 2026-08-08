@@ -1,0 +1,290 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>SOC Playbook Templates | Security Engineering Wiki</title><meta name=keywords content="SOC,playbooks,incident-response,detection-engineering,triage"><meta name=description content="SOC response playbooks for the most common alert types — brute force, phishing, malware, data exfiltration, ransomware, and cloud account compromise."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/detection-engineering/soc-playbooks/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/detection-engineering/soc-playbooks/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/detection-engineering/soc-playbooks/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/detection-engineering/soc-playbooks/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="SOC Playbook Templates"><meta property="og:description" content="SOC response playbooks for the most common alert types — brute force, phishing, malware, data exfiltration, ransomware, and cloud account compromise."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="SOC Playbook Templates"><meta name=twitter:description content="SOC response playbooks for the most common alert types — brute force, phishing, malware, data exfiltration, ransomware, and cloud account compromise."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Detection Engineering","item":"https://logan23info.github.io/wiki/detection-engineering/"},{"@type":"ListItem","position":3,"name":"SOC Playbook Templates","item":"https://logan23info.github.io/wiki/detection-engineering/soc-playbooks/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/detection-engineering/>Detection Engineering</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">SOC Playbook Templates</h1><div class=post-description>SOC response playbooks for the most common alert types — brute force, phishing, malware, data exfiltration, ransomware, and cloud account compromise.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>10 min</span>&nbsp;·&nbsp;<span>2113 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#what-is-a-soc-playbook aria-label="What is a SOC playbook?">What is a SOC playbook?</a></li><li><a href=#playbook-template-structure aria-label="Playbook template structure">Playbook template structure</a></li><li><a href=#playbook-1--brute-force--credential-stuffing aria-label="Playbook 1 — Brute Force / Credential Stuffing">Playbook 1 — Brute Force / Credential Stuffing</a><ul><li><a href=#triage-5-minutes aria-label="Triage (5 minutes)">Triage (5 minutes)</a></li><li><a href=#investigation-10-minutes aria-label="Investigation (10 minutes)">Investigation (10 minutes)</a></li><li><a href=#containment-5-minutes aria-label="Containment (5 minutes)">Containment (5 minutes)</a></li><li><a href=#remediation aria-label=Remediation>Remediation</a></li><li><a href=#evidence-to-collect aria-label="Evidence to collect">Evidence to collect</a></li><li><a href=#escalation-criteria aria-label="Escalation criteria">Escalation criteria</a></li></ul></li><li><a href=#playbook-2--phishing-email-reported aria-label="Playbook 2 — Phishing Email Reported">Playbook 2 — Phishing Email Reported</a><ul><li><a href=#triage-5-minutes-1 aria-label="Triage (5 minutes)">Triage (5 minutes)</a></li><li><a href=#investigation-15-minutes aria-label="Investigation (15 minutes)">Investigation (15 minutes)</a></li><li><a href=#containment-10-minutes aria-label="Containment (10 minutes)">Containment (10 minutes)</a></li><li><a href=#evidence-to-collect-1 aria-label="Evidence to collect">Evidence to collect</a></li><li><a href=#escalation-criteria-1 aria-label="Escalation criteria">Escalation criteria</a></li></ul></li><li><a href=#playbook-3--suspicious-process--malware-indicator aria-label="Playbook 3 — Suspicious Process / Malware Indicator">Playbook 3 — Suspicious Process / Malware Indicator</a><ul><li><a href=#triage-5-minutes-2 aria-label="Triage (5 minutes)">Triage (5 minutes)</a></li><li><a href=#investigation-20-minutes aria-label="Investigation (20 minutes)">Investigation (20 minutes)</a></li><li><a href=#containment-immediate aria-label="Containment (immediate)">Containment (immediate)</a></li><li><a href=#evidence-to-collect-2 aria-label="Evidence to collect">Evidence to collect</a></li></ul></li><li><a href=#playbook-4--data-exfiltration-alert aria-label="Playbook 4 — Data Exfiltration Alert">Playbook 4 — Data Exfiltration Alert</a><ul><li><a href=#triage-5-minutes-3 aria-label="Triage (5 minutes)">Triage (5 minutes)</a></li><li><a href=#investigation-20-minutes-1 aria-label="Investigation (20 minutes)">Investigation (20 minutes)</a></li><li><a href=#containment aria-label=Containment>Containment</a></li><li><a href=#escalation-criteria-2 aria-label="Escalation criteria">Escalation criteria</a></li></ul></li><li><a href=#playbook-5--cloud-account-compromise aria-label="Playbook 5 — Cloud Account Compromise">Playbook 5 — Cloud Account Compromise</a><ul><li><a href=#triage-5-minutes-4 aria-label="Triage (5 minutes)">Triage (5 minutes)</a></li><li><a href=#investigation-15-minutes-1 aria-label="Investigation (15 minutes)">Investigation (15 minutes)</a></li><li><a href=#containment-immediate-1 aria-label="Containment (immediate)">Containment (immediate)</a></li><li><a href=#evidence-to-collect-3 aria-label="Evidence to collect">Evidence to collect</a></li></ul></li><li><a href=#playbook-index aria-label="Playbook index">Playbook index</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=what-is-a-soc-playbook>What is a SOC playbook?<a hidden class=anchor aria-hidden=true href=#what-is-a-soc-playbook>#</a></h2><p>A SOC playbook is a documented, step-by-step procedure that a SOC analyst follows when a specific alert type fires. Good playbooks mean:</p><ul><li>Consistent response regardless of which analyst is on duty</li><li>Junior analysts can handle complex alerts</li><li>Response time decreases — no thinking, just executing</li><li>Evidence is collected systematically — useful for later forensics</li></ul><p>Every detection rule should have a linked playbook. If an alert fires and the analyst doesn&rsquo;t know what to do — the playbook is missing.</p><hr><h2 id=playbook-template-structure>Playbook template structure<a hidden class=anchor aria-hidden=true href=#playbook-template-structure>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>playbook_id</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;PB-001&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>title</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Brute Force Login Attack&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2.1&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>last_updated</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-08-05&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>author</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;SOC Team&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>linked_detection_rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;UC-AUTH-01&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;sigma/brute-force-login.yml&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>linked_attack_techniques</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;T1110&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=s2>&#34;T1110.004&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>severity</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>estimated_time</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;20–40 minutes&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>trigger</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>  Alert fires when &gt; 20 failed login attempts from a single IP
+</span></span></span><span class=line><span class=cl><span class=sd>  within a 5-minute window.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>triage_steps</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>investigation_steps</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>containment_steps</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>remediation_steps</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>escalation_criteria</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>evidence_to_collect</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>closure_criteria</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=playbook-1--brute-force--credential-stuffing>Playbook 1 — Brute Force / Credential Stuffing<a hidden class=anchor aria-hidden=true href=#playbook-1--brute-force--credential-stuffing>#</a></h2><p><strong>Alert:</strong> Multiple failed authentication attempts
+<strong>ATT&amp;CK:</strong> T1110, T1110.004
+<strong>Severity:</strong> High
+<strong>SLA:</strong> Acknowledge within 1 hour, contain within 4 hours</p><h3 id=triage-5-minutes>Triage (5 minutes)<a hidden class=anchor aria-hidden=true href=#triage-5-minutes>#</a></h3><pre tabindex=0><code>□ 1. Confirm alert is not from a known scanner or automated tool
+       → Check source IP against known tool list
+       → Check if IP is internal (pen test / red team activity?)
+
+□ 2. Check the targeted account
+       → Is it a real user account or a honeypot?
+       → Is it a privileged account (admin, service account)?
+       → Is it an account that exists (user enumeration vs brute force)?
+
+□ 3. Check if any attempt succeeded
+       → Search for auth_success from same IP within ±30 minutes
+       → If successful login found → ESCALATE IMMEDIATELY → Playbook PB-003
+</code></pre><h3 id=investigation-10-minutes>Investigation (10 minutes)<a hidden class=anchor aria-hidden=true href=#investigation-10-minutes>#</a></h3><pre tabindex=0><code>□ 4. Profile the source IP
+       → GeoIP lookup — expected country?
+       → Threat intel check (VirusTotal, AbuseIPDB)
+       → Is this a Tor exit node or VPN?
+       → How many accounts were targeted (stuffing vs single-account brute force)?
+
+□ 5. Determine attack type
+       → Many IPs, one account = distributed brute force
+       → One IP, many accounts = credential stuffing
+       → One IP, one account = targeted brute force
+
+□ 6. Review account activity
+       → Any successful logins before the attack started?
+       → Any suspicious activity in the 24 hours before alert?
+       → Is the account currently locked?
+</code></pre><h3 id=containment-5-minutes>Containment (5 minutes)<a hidden class=anchor aria-hidden=true href=#containment-5-minutes>#</a></h3><pre tabindex=0><code>□ 7. Block source IP at WAF / firewall (if external)
+       → Document IP, timestamp, and reason for block
+       → Set block expiry (24 hours for first offence, permanent after 3)
+
+□ 8. Lock affected account if targeted single account
+       → Notify user via secondary channel (phone or manager)
+       → Do NOT email the potentially compromised account
+
+□ 9. Force password reset if any successful login occurred
+</code></pre><h3 id=remediation>Remediation<a hidden class=anchor aria-hidden=true href=#remediation>#</a></h3><pre tabindex=0><code>□ 10. Review rate limiting configuration — is threshold appropriate?
+□ 11. Check if MFA is enabled on targeted account — if not, raise ticket
+□ 12. Review whether CAPTCHA is implemented on login endpoint
+□ 13. Add IP to threat intel blocklist for future correlation
+</code></pre><h3 id=evidence-to-collect>Evidence to collect<a hidden class=anchor aria-hidden=true href=#evidence-to-collect>#</a></h3><pre tabindex=0><code>□ Source IP(s) and request timestamps
+□ List of targeted usernames
+□ Number of attempts and time range
+□ Threat intel report for source IP
+□ Screenshot of alert and SIEM query
+□ Firewall block rule reference
+</code></pre><h3 id=escalation-criteria>Escalation criteria<a hidden class=anchor aria-hidden=true href=#escalation-criteria>#</a></h3><pre tabindex=0><code>Escalate to Incident Response if:
+  → Any successful login during or after the attack
+  → Target is a privileged account (admin, C-suite, finance)
+  → Attack originated from an APT-linked IP
+  → More than 1,000 accounts targeted (data breach risk)
+</code></pre><hr><h2 id=playbook-2--phishing-email-reported>Playbook 2 — Phishing Email Reported<a hidden class=anchor aria-hidden=true href=#playbook-2--phishing-email-reported>#</a></h2><p><strong>Alert:</strong> User reports suspicious email / email gateway detection
+<strong>ATT&amp;CK:</strong> T1566.001, T1566.002
+<strong>Severity:</strong> High (Critical if executive targeted)
+<strong>SLA:</strong> Acknowledge within 15 minutes</p><h3 id=triage-5-minutes-1>Triage (5 minutes)<a hidden class=anchor aria-hidden=true href=#triage-5-minutes-1>#</a></h3><pre tabindex=0><code>□ 1. Retrieve the email sample safely
+       → Pull from email gateway quarantine — DO NOT open attachment directly
+       → Use sandbox environment for any URL or attachment analysis
+
+□ 2. Quick assessment
+       → Is the sender spoofing a known domain?
+       → Does the email contain a link or attachment?
+       → Has anyone clicked the link or opened the attachment?
+       → How many recipients received this email?
+</code></pre><h3 id=investigation-15-minutes>Investigation (15 minutes)<a hidden class=anchor aria-hidden=true href=#investigation-15-minutes>#</a></h3><pre tabindex=0><code>□ 3. Analyse the email
+       → Extract all URLs from email body and attachments
+       → Check URLs against VirusTotal, URLScan.io
+       → Extract file attachments — check hashes against VirusTotal
+       → Check sender domain registration date (new domain = suspicious)
+       → Review email headers — trace routing path
+
+□ 4. Check for clicks / execution
+       → Search proxy logs for connections to extracted URLs
+         from all recipients in past 24 hours
+       → Search EDR for any file execution matching attachment hashes
+       → Search for any new processes spawned from Outlook/mail client
+
+□ 5. Scope the campaign
+       → Search email gateway for similar emails (same sender, same subject, same URL domain)
+       → Identify all recipients organisation-wide
+</code></pre><h3 id=containment-10-minutes>Containment (10 minutes)<a hidden class=anchor aria-hidden=true href=#containment-10-minutes>#</a></h3><pre tabindex=0><code>□ 6. Remove email from all inboxes
+       → Use email gateway admin console to search and delete
+       → Purge from sent items and deleted items
+
+□ 7. Block malicious indicators at gateway
+       → Block sender domain / email address
+       → Block URLs at web proxy
+       → Block file hashes in EDR
+
+□ 8. Isolate any machines that clicked/executed
+       → If EDR shows execution: quarantine endpoint immediately
+       → Notify user and their manager
+       → Collect forensic image before remediation
+</code></pre><h3 id=evidence-to-collect-1>Evidence to collect<a hidden class=anchor aria-hidden=true href=#evidence-to-collect-1>#</a></h3><pre tabindex=0><code>□ Original email (EML format) from quarantine
+□ Full email headers
+□ List of all recipients
+□ URL scan reports (VirusTotal, URLScan)
+□ File hash analysis (if attachment)
+□ Proxy log entries showing any clicks
+□ EDR logs from any affected endpoints
+□ Timeline of events
+</code></pre><h3 id=escalation-criteria-1>Escalation criteria<a hidden class=anchor aria-hidden=true href=#escalation-criteria-1>#</a></h3><pre tabindex=0><code>Escalate to Incident Response if:
+  → Any user clicked the link or opened the attachment
+  → Any EDR alert for malicious execution on a recipient&#39;s machine
+  → Target is an executive or privileged user
+  → Campaign appears targeted (spear phishing) rather than bulk
+</code></pre><hr><h2 id=playbook-3--suspicious-process--malware-indicator>Playbook 3 — Suspicious Process / Malware Indicator<a hidden class=anchor aria-hidden=true href=#playbook-3--suspicious-process--malware-indicator>#</a></h2><p><strong>Alert:</strong> EDR detection, malicious process, or malware IOC match
+<strong>ATT&amp;CK:</strong> T1059, T1055, T1003 (varies)
+<strong>Severity:</strong> Critical
+<strong>SLA:</strong> Acknowledge within 15 minutes, contain within 1 hour</p><h3 id=triage-5-minutes-2>Triage (5 minutes)<a hidden class=anchor aria-hidden=true href=#triage-5-minutes-2>#</a></h3><pre tabindex=0><code>□ 1. Assess severity
+       → Is the file executing or just detected?
+       → What process spawned it?
+       → What user context is it running in (user vs admin)?
+       → Is the host a critical asset (server, C-suite, finance)?
+
+□ 2. Check EDR for lateral movement
+       → Has this host made any unusual network connections?
+       → Has it accessed other hosts on the network?
+       → Has it written any new files to unusual locations?
+</code></pre><h3 id=investigation-20-minutes>Investigation (20 minutes)<a hidden class=anchor aria-hidden=true href=#investigation-20-minutes>#</a></h3><pre tabindex=0><code>□ 3. Collect host forensics via EDR
+       → Running processes at time of detection
+       → Network connections (established and listening)
+       → Recently created files
+       → Recently modified registry keys
+       → Scheduled tasks and startup items
+
+□ 4. Analyse the malicious file
+       → Submit hash to VirusTotal, Hybrid Analysis, Any.run
+       → Check if it matches any known malware family
+       → Extract IOCs: C2 IPs, domains, file paths, registry keys
+
+□ 5. Determine scope
+       → Search EDR for same file hash across all endpoints
+       → Search for C2 IP/domain in proxy and firewall logs
+       → Check for lateral movement from infected host
+</code></pre><h3 id=containment-immediate>Containment (immediate)<a hidden class=anchor aria-hidden=true href=#containment-immediate>#</a></h3><pre tabindex=0><code>□ 6. Isolate the infected host
+       → EDR network isolation / quarantine
+       → Document: hostname, IP, user, time of isolation
+
+□ 7. Disable user account if compromised credentials suspected
+       → Reset password, revoke all active sessions
+       → Check for OAuth tokens and revoke
+
+□ 8. Block IOCs across the estate
+       → Block C2 IPs and domains at firewall/proxy
+       → Block file hashes in EDR across all endpoints
+       → Update threat intel platform with new IOCs
+</code></pre><h3 id=evidence-to-collect-2>Evidence to collect<a hidden class=anchor aria-hidden=true href=#evidence-to-collect-2>#</a></h3><pre tabindex=0><code>□ EDR alert details and process tree
+□ Memory dump of suspicious process (if possible)
+□ Full forensic image of endpoint (before reimaging)
+□ Network logs: all connections from infected host (72 hours)
+□ Authentication logs for affected user (30 days)
+□ VirusTotal / sandbox analysis report
+□ Timeline of infection → detection → isolation
+</code></pre><hr><h2 id=playbook-4--data-exfiltration-alert>Playbook 4 — Data Exfiltration Alert<a hidden class=anchor aria-hidden=true href=#playbook-4--data-exfiltration-alert>#</a></h2><p><strong>Alert:</strong> Large outbound data transfer or DLP alert
+<strong>ATT&amp;CK:</strong> T1041, T1567, T1048
+<strong>Severity:</strong> Critical
+<strong>SLA:</strong> Acknowledge within 15 minutes</p><h3 id=triage-5-minutes-3>Triage (5 minutes)<a hidden class=anchor aria-hidden=true href=#triage-5-minutes-3>#</a></h3><pre tabindex=0><code>□ 1. Determine what data may have been exfiltrated
+       → What is the destination? (known cloud service vs unknown IP)
+       → What is the data volume? (MB vs GB)
+       → What user / process initiated the transfer?
+       → Is the source system in a sensitive data zone?
+
+□ 2. Distinguish from legitimate activity
+       → Is this a scheduled backup to approved destination?
+       → Is this an employee doing a large legitimate download?
+       → Check against list of approved data transfer tools and destinations
+</code></pre><h3 id=investigation-20-minutes-1>Investigation (20 minutes)<a hidden class=anchor aria-hidden=true href=#investigation-20-minutes-1>#</a></h3><pre tabindex=0><code>□ 3. Identify what was transferred
+       → Review proxy/DLP logs for file names or content categories
+       → Check source host for recently accessed sensitive files
+       → Review endpoint activity for file archiving / compression (zip, rar, tar)
+       → Check if data was encrypted before transfer (exfiltration prep)
+
+□ 4. Build the timeline
+       → When did the user first access the sensitive data?
+       → When did the exfiltration occur?
+       → Any other anomalous activity before or after?
+
+□ 5. Identify the exfiltration channel
+       → HTTP/HTTPS upload (proxy logs)
+       → Email (email gateway logs)
+       → Cloud sync (OneDrive, Dropbox, Google Drive activity)
+       → Physical media (USB — check endpoint logs)
+       → DNS tunneling (DNS query logs)
+</code></pre><h3 id=containment>Containment<a hidden class=anchor aria-hidden=true href=#containment>#</a></h3><pre tabindex=0><code>□ 6. Block destination at proxy/firewall (if external)
+□ 7. Preserve forensic evidence — do NOT immediately remove access
+       (may tip off insider — coordinate with HR/Legal first)
+□ 8. Notify: Security Manager, Legal, HR, Privacy Officer
+□ 9. Determine if data breach notification required (GDPR 72 hours)
+</code></pre><h3 id=escalation-criteria-2>Escalation criteria<a hidden class=anchor aria-hidden=true href=#escalation-criteria-2>#</a></h3><pre tabindex=0><code>Escalate to Incident Response AND Legal/Privacy team if:
+  → Personal data (PII, health, financial) involved
+  → Volume &gt; 10,000 records
+  → Destination is a competitor or nation-state actor
+  → Insider threat suspected (resignation, disciplinary action pending)
+  → Regulatory notification may be required
+</code></pre><hr><h2 id=playbook-5--cloud-account-compromise>Playbook 5 — Cloud Account Compromise<a hidden class=anchor aria-hidden=true href=#playbook-5--cloud-account-compromise>#</a></h2><p><strong>Alert:</strong> Unusual cloud API activity, impossible travel, new admin account
+<strong>ATT&amp;CK:</strong> T1078.004, T1136.003, T1098.003
+<strong>Severity:</strong> Critical
+<strong>SLA:</strong> Acknowledge within 15 minutes, contain within 30 minutes</p><h3 id=triage-5-minutes-4>Triage (5 minutes)<a hidden class=anchor aria-hidden=true href=#triage-5-minutes-4>#</a></h3><pre tabindex=0><code>□ 1. Identify the compromised account
+       → Is it a human account or a service account?
+       → What level of privilege does it have?
+       → What resources can it access?
+
+□ 2. Assess immediate impact
+       → What API calls have been made since the anomaly started?
+       → Have any resources been created, modified, or deleted?
+       → Have any IAM changes been made?
+       → Has any data been accessed or downloaded?
+</code></pre><h3 id=investigation-15-minutes-1>Investigation (15 minutes)<a hidden class=anchor aria-hidden=true href=#investigation-15-minutes-1>#</a></h3><pre tabindex=0><code>□ 3. Review CloudTrail / audit logs
+       → All API calls from the account in past 24 hours
+       → Any IAM policy changes (privilege escalation)
+       → Any new resources created (cryptomining EC2s, outbound data pipelines)
+       → Any secrets accessed (Secrets Manager, Parameter Store)
+       → Any S3 data downloads or bucket policy changes
+
+□ 4. Identify how compromise occurred
+       → Phishing → OAuth token theft?
+       → Leaked access key (check GitHub, Pastebin, dark web)?
+       → Credential stuffing on cloud console?
+       → Compromised developer workstation?
+
+□ 5. Determine blast radius
+       → What did the attacker enumerate? (ListBuckets, DescribeInstances etc.)
+       → What was accessed or exfiltrated?
+       → Did they pivot to other accounts or services?
+</code></pre><h3 id=containment-immediate-1>Containment (immediate)<a hidden class=anchor aria-hidden=true href=#containment-immediate-1>#</a></h3><pre tabindex=0><code>□ 6. Revoke all sessions for the compromised account
+       → AWS: aws iam delete-login-profile &amp;&amp; revoke all session tokens
+       → GCP: revoke OAuth tokens
+       → Azure: revoke all refresh tokens via Entra ID
+
+□ 7. Disable / rotate compromised credentials
+       → Disable access key immediately
+       → Rotate any secrets the account accessed
+
+□ 8. Remove any resources created by the attacker
+       → Terminate unauthorised EC2 instances
+       → Delete unauthorised IAM users or roles
+       → Revert IAM policy changes
+
+□ 9. Apply SCPs / deny policies to limit blast radius during investigation
+</code></pre><h3 id=evidence-to-collect-3>Evidence to collect<a hidden class=anchor aria-hidden=true href=#evidence-to-collect-3>#</a></h3><pre tabindex=0><code>□ CloudTrail logs: full API call history 72 hours before and after compromise
+□ IAM credential report: access key last used timestamps
+□ List of all resources created/modified during compromise window
+□ Network flow logs showing unusual egress
+□ List of all secrets and data accessed
+□ Copy of any new IAM policies or roles created
+</code></pre><hr><h2 id=playbook-index>Playbook index<a hidden class=anchor aria-hidden=true href=#playbook-index>#</a></h2><table><thead><tr><th>ID</th><th>Playbook</th><th>Alert types</th><th>Severity</th></tr></thead><tbody><tr><td>PB-001</td><td>Brute Force / Credential Stuffing</td><td>UC-AUTH-01, UC-AUTH-02</td><td>High</td></tr><tr><td>PB-002</td><td>Phishing Email</td><td>Email gateway, user report</td><td>High</td></tr><tr><td>PB-003</td><td>Malware / Suspicious Process</td><td>EDR alerts</td><td>Critical</td></tr><tr><td>PB-004</td><td>Data Exfiltration</td><td>DLP, large transfer</td><td>Critical</td></tr><tr><td>PB-005</td><td>Cloud Account Compromise</td><td>CloudTrail, impossible travel</td><td>Critical</td></tr><tr><td>PB-006</td><td>Ransomware</td><td>EDR mass encryption</td><td>Critical</td></tr><tr><td>PB-007</td><td>Insider Threat</td><td>Bulk download, off-hours access</td><td>High</td></tr><tr><td>PB-008</td><td>DDoS Attack</td><td>Network monitoring</td><td>High</td></tr><tr><td>PB-009</td><td>Privilege Escalation</td><td>LSASS, new admin</td><td>Critical</td></tr><tr><td>PB-010</td><td>Supply Chain Alert</td><td>Dependency CVE, build anomaly</td><td>High</td></tr></tbody></table><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/detection-engineering/siem-use-cases/><span class=ref-label>Detection</span>SIEM Use Case Library</a>
+<a class=ref-card href=/wiki/detection-engineering/sigma-rules/><span class=ref-label>Detection</span>Sigma Rule Writing Guide</a>
+<a class=ref-card href=/wiki/detection-engineering/alert-fatigue/><span class=ref-label>Detection</span>Alert Fatigue Guide</a>
+<a class=ref-card href=/wiki/detection-engineering/detection-metrics/><span class=ref-label>Detection</span>Detection Coverage Metrics</a>
+<a class=ref-card href=/wiki/advisory-assurance/controls-evidence/><span class=ref-label>Assurance</span>Controls & Evidence — MON domain</a>
+<a class=ref-card href=/wiki/red-teaming/><span class=ref-label>Wiki</span>Red Teaming</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/soc/>SOC</a></li><li><a href=https://logan23info.github.io/tags/playbooks/>Playbooks</a></li><li><a href=https://logan23info.github.io/tags/incident-response/>Incident-Response</a></li><li><a href=https://logan23info.github.io/tags/detection-engineering/>Detection-Engineering</a></li><li><a href=https://logan23info.github.io/tags/triage/>Triage</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

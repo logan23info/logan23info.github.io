@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>PASTA on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/pasta/</link>
+    <description>Recent content in PASTA on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/pasta/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PASTA: Process for Attack Simulation and Threat Analysis</title>
+      <link>https://logan23info.github.io/posts/04-pasta-framework/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/04-pasta-framework/</guid>
+      <description>A deep dive into PASTA — the seven-stage, business-risk-aligned framework that thinks like an attacker.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-pasta">What is PASTA?</h2>
+<p>PASTA is a seven-stage, risk-centric threat modelling framework. Unlike STRIDE (developer-friendly, component-focused), PASTA is attacker-centric — it simulates realistic attack scenarios and ties every finding back to business impact.</p>
+<p>Use PASTA when findings need to reach business stakeholders, not just engineers.</p>
+<hr>
+<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewels</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerabilities mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-i--business-objectives-example">Stage I — Business objectives example</h2>
+<pre tabindex="0"><code>Application: Payment processing API
+Crown jewels: cardholder data, payment tokens
+Regulatory scope: PCI-DSS Level 1
+Business impact of breach: up to $500k fines + customer churn
+Critical processes: checkout, refund, fraud detection
+</code></pre><hr>
+<h2 id="stage-iv--attacker-profiling">Stage IV — Attacker profiling</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat actor</th>
+					<th>Motivation</th>
+					<th>Capability</th>
+					<th>Likelihood</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External cybercriminal</td>
+					<td>Financial</td>
+					<td>High</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Sabotage</td>
+					<td>Medium</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Nation-state</td>
+					<td>IP theft</td>
+					<td>Very high</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Script kiddie</td>
+					<td>Opportunistic</td>
+					<td>Low</td>
+					<td>High</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-vi--attack-tree-example">Stage VI — Attack tree example</h2>
+<pre tabindex="0"><code>Goal: obtain cardholder PAN in plaintext
+├── Attack the application layer
+│   ├── SQL injection → dump card_tokens table
+│   ├── IDOR → access other users stored cards
+│   └── XSS → steal card details from DOM
+├── Attack the infrastructure
+│   └── Intercept traffic (no TLS enforced)
+└── Attack the supply chain
+    └── Compromise payment SDK dependency
+</code></pre><hr>
+<h2 id="pasta-vs-stride">PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>STRIDE</th>
+					<th>PASTA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time</td>
+					<td>1–2 hours</td>
+					<td>1–2 days</td>
+			</tr>
+			<tr>
+					<td>Audience</td>
+					<td>Engineering</td>
+					<td>Engineering + business + leadership</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Threat list</td>
+					<td>Risk register with financial impact</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Agile sprint review</td>
+					<td>Compliance, enterprise risk management</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see how to embed all of this into your CI/CD pipeline in <a href="/posts/05-threat-modelling-in-devsecops/">Threat Modelling in DevSecOps</a>.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>PASTA — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/pasta/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/pasta/</guid>
+      <description>Quick reference for the PASTA seven-stage threat modelling methodology.</description>
+      <content:encoded><![CDATA[<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewel list</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerability list mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="when-to-use-pasta-vs-stride">When to use PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Situation</th>
+					<th>Use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New feature threat review, 60-min timebox</td>
+					<td>STRIDE</td>
+			</tr>
+			<tr>
+					<td>Quarterly security review of tier-1 service</td>
+					<td>PASTA</td>
+			</tr>
+			<tr>
+					<td>Compliance audit (PCI-DSS, SOC 2)</td>
+					<td>PASTA</td>
+			</tr>
+			<tr>
+					<td>PR-level security checklist</td>
+					<td>STRIDE</td>
+			</tr>
+			<tr>
+					<td>Risk presentation to leadership</td>
+					<td>PASTA</td>
+			</tr>
+	</tbody>
+</table>
+<p>See the <a href="/posts/04-pasta-framework/">PASTA framework post</a> for a full walkthrough.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Threat Categorisation</a>
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Framework</span>DREAD — Risk Scoring</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/posts/04-pasta-framework/"><span class="ref-label">Post</span>PASTA Deep-Dive Post</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

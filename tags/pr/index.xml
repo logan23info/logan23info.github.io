@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>PR on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/pr/</link>
+    <description>Recent content in PR on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/pr/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PR Security Checklist Template</title>
+      <link>https://logan23info.github.io/wiki/templates/pr-checklist/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/templates/pr-checklist/</guid>
+      <description>A pull request security checklist template — add this to your repo so every engineer considers STRIDE on every code change.</description>
+      <content:encoded><![CDATA[<h2 id="why-a-pr-security-checklist">Why a PR security checklist?</h2>
+<p>A PR checklist is the simplest way to embed threat modelling into daily engineering. It takes 2 minutes per PR and prevents the most common categories of vulnerability from being introduced in the first place.</p>
+<hr>
+<h2 id="github-pr-template">GitHub PR template</h2>
+<p>Create this file at <code>.github/pull_request_template.md</code> in your repo:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gu">## What does this PR do?
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">&lt;!-- Brief description of the change --&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Type of change
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> New feature
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Bug fix
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Infrastructure / IaC change
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Pipeline / CI change
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Configuration change
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Content / docs only
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 🔒 Security checklist
+</span></span></span><span class="line"><span class="cl"><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">&gt; </span><span class="ge">**Skip if:** this is a content-only or docs-only change.
+</span></span></span><span class="line"><span class="cl"><span class="k">&gt; </span><span class="ge">**Complete if:** this PR touches authentication, authorisation, data handling,
+</span></span></span><span class="line"><span class="cl"><span class="k">&gt; </span><span class="ge">infrastructure, secrets, dependencies, or API endpoints.
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Input &amp; authentication (STRIDE: Spoofing, Tampering)
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> All new inputs are validated and sanitised
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> New API endpoints require authentication
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No new trust relationships without explicit justification
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> JWT / session tokens handled securely (short TTL, signed, validated)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Data handling (STRIDE: Information Disclosure)
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No secrets, credentials, or PII committed to the repo
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Sensitive data encrypted at rest and in transit
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Error messages do not leak internal details to clients
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> New log statements do not log sensitive data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Authorisation (STRIDE: Elevation of Privilege)
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Authorisation checked server-side (not just client-side)
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> New endpoints follow least-privilege — users can only access their own data
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No mass assignment vulnerabilities in new model/schema changes
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> IAM roles / policies follow least privilege
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Audit &amp; availability (STRIDE: Repudiation, Denial of Service)
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Sensitive actions (login, delete, admin) are audit-logged
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Rate limiting applied to new public-facing endpoints
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No unbounded loops or queries that could exhaust resources
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Timeout set on new external API calls
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Dependencies &amp; supply chain
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> New dependencies reviewed for known CVEs (<span class="sb">`npm audit`</span> / <span class="sb">`pip-audit`</span> / Dependabot)
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No new dependency added without justification in PR description
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> Dependency versions pinned in lockfile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Threat model
+</span></span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> <span class="sb">`threat-model.yml`</span> updated if new threats were identified
+</span></span><span class="line"><span class="cl"><span class="k">- [ ]</span> No open Critical threats remain after this change
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Checkov / tfsec output (for IaC changes)
+</span></span></span><span class="line"><span class="cl"><span class="cm">&lt;!-- Paste output or write &#34;clean&#34; --&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Reviewer notes
+</span></span></span><span class="line"><span class="cl"><span class="cm">&lt;!-- Anything specific you want the reviewer to check --&gt;</span>
+</span></span></code></pre></div><hr>
+<h2 id="jira--linear-ticket-checklist">Jira / Linear ticket checklist</h2>
+<p>For teams using Jira or Linear, add these acceptance criteria to your security-relevant ticket template:</p>
+<pre tabindex="0"><code>Security acceptance criteria:
+□ STRIDE analysis completed for this change
+□ All inputs validated
+□ Authentication and authorisation verified
+□ No secrets in code or logs
+□ Audit logging added for sensitive actions
+□ Rate limiting applied if public-facing
+□ Dependencies scanned for CVEs
+□ Threat register updated
+</code></pre><hr>
+<h2 id="lightweight-version-for-fast-moving-teams">Lightweight version (for fast-moving teams)</h2>
+<p>If the full checklist feels too heavy, use this 5-question version:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gu">## Quick security check (2 mins)
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">1.</span> <span class="gs">**New inputs?**</span> Are they validated? (Tampering / SQLi / XSS)
+</span></span><span class="line"><span class="cl"><span class="k">2.</span> <span class="gs">**New data access?**</span> Is it authorised per-user? (EoP / IDOR)
+</span></span><span class="line"><span class="cl"><span class="k">3.</span> <span class="gs">**New secrets?**</span> Are they in GitHub Secrets, not in code? (Info Disclosure)
+</span></span><span class="line"><span class="cl"><span class="k">4.</span> <span class="gs">**New endpoint?**</span> Does it require auth and have rate limiting? (DoS / Spoofing)
+</span></span><span class="line"><span class="cl"><span class="k">5.</span> <span class="gs">**New dependency?**</span> Has it been audited? (Supply chain)
+</span></span></code></pre></div><div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/">
+    <span class="ref-label">Framework</span>STRIDE — Threat Categorisation
+  </a>
+  <a class="ref-card" href="/wiki/templates/threat-register/">
+    <span class="ref-label">Template</span>Threat Register Template
+  </a>
+  <a class="ref-card" href="/wiki/templates/dfd/">
+    <span class="ref-label">Template</span>Data Flow Diagram Guide
+  </a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/">
+    <span class="ref-label">Post</span>Threat Modelling in DevSecOps
+  </a>
+  <a class="ref-card" href="/wiki/supply-chain/">
+    <span class="ref-label">Wiki</span>Supply Chain Security
+  </a>
+  <a class="ref-card" href="/wiki/maturity-ladder/">
+    <span class="ref-label">Wiki</span>Security Engineering Maturity Ladder
+  </a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

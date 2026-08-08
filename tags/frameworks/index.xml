@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Frameworks on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/frameworks/</link>
+    <description>Recent content in Frameworks on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/frameworks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>STRIDE: The Practitioner&#39;s Guide</title>
+      <link>https://logan23info.github.io/posts/02-stride-methodology/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/02-stride-methodology/</guid>
+      <description>A complete walkthrough of STRIDE with worked examples on a real Auth Service.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-stride">What is STRIDE?</h2>
+<p>STRIDE is a threat categorisation framework developed at Microsoft in 1999. It gives you a checklist of threat types to apply systematically to each component and data flow in your system.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Threat</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>S</strong></td>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Can an attacker pretend to be someone else?</td>
+			</tr>
+			<tr>
+					<td><strong>T</strong></td>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Can an attacker modify data or code?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can an attacker deny having done something?</td>
+			</tr>
+			<tr>
+					<td><strong>I</strong></td>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Can an attacker read data they should not?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can an attacker make the system unavailable?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>Can an attacker gain permissions they should not have?</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stride-by-element-type">STRIDE by element type</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="worked-example-auth-service">Worked example: Auth Service</h2>
+<h3 id="spoofing">Spoofing</h3>
+<ul>
+<li>JWT replay via stolen token</li>
+<li><strong>Mitigation:</strong> Short-lived JWTs (15 min), validate exp claim, rotate signing keys</li>
+</ul>
+<h3 id="tampering">Tampering</h3>
+<ul>
+<li>alg:none JWT forgery — remove signature, set algorithm to none</li>
+<li><strong>Mitigation:</strong> Whitelist allowed algorithms explicitly in jwt.verify()</li>
+</ul>
+<h3 id="repudiation">Repudiation</h3>
+<ul>
+<li>No audit log for password resets or login events</li>
+<li><strong>Mitigation:</strong> Structured auth event logging to tamper-evident store</li>
+</ul>
+<h3 id="information-disclosure">Information Disclosure</h3>
+<ul>
+<li>User enumeration via different error messages for valid vs invalid usernames</li>
+<li><strong>Mitigation:</strong> Return generic error messages to clients always</li>
+</ul>
+<h3 id="denial-of-service">Denial of Service</h3>
+<ul>
+<li>Credential stuffing exhausts database connection pool</li>
+<li><strong>Mitigation:</strong> Rate limiting per IP and account, connection pool limits</li>
+</ul>
+<h3 id="elevation-of-privilege">Elevation of Privilege</h3>
+<ul>
+<li>JWT role claim trusted without server-side validation</li>
+<li><strong>Mitigation:</strong> Always validate roles server-side from the database on every request</li>
+</ul>
+<hr>
+<h2 id="threat-register-output">Threat register output</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>Category</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>Spoofing</td>
+					<td>High</td>
+					<td>Short TTL + rotation</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>alg:none forgery</td>
+					<td>Tampering</td>
+					<td>Critical</td>
+					<td>Whitelist algorithms</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>Repudiation</td>
+					<td>Medium</td>
+					<td>Auth event logging</td>
+			</tr>
+			<tr>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>Info Disclosure</td>
+					<td>Medium</td>
+					<td>Generic errors</td>
+			</tr>
+			<tr>
+					<td>T-05</td>
+					<td>Credential stuffing</td>
+					<td>DoS</td>
+					<td>High</td>
+					<td>Rate limiting</td>
+			</tr>
+			<tr>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>EoP</td>
+					<td>Critical</td>
+					<td>Server-side validation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-scoring-your-findings">Next: scoring your findings</h2>
+<p>Use <a href="/posts/03-dread-scoring/">DREAD</a> to score and prioritise which threats to fix first.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>DREAD: Risk Scoring for Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/03-dread-scoring/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/03-dread-scoring/</guid>
+      <description>How to use DREAD to score and prioritise threats so your team knows what to fix first.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-dread">What is DREAD?</h2>
+<p>DREAD is a risk scoring model. Where STRIDE tells you what kind of threat something is, DREAD tells you how bad it is — so you can prioritise your mitigation backlog.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Dimension</th>
+					<th>Question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Damage</td>
+					<td>How much damage if exploited?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Reproducibility</td>
+					<td>How easy is it to reproduce?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Exploitability</td>
+					<td>How much skill does exploitation require?</td>
+			</tr>
+			<tr>
+					<td><strong>A</strong></td>
+					<td>Affected users</td>
+					<td>How many users are impacted?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Discoverability</td>
+					<td>How easy is it to find the vulnerability?</td>
+			</tr>
+	</tbody>
+</table>
+<p>Each dimension scored 1–10. Final score = average of all five.</p>
+<hr>
+<h2 id="scoring-guide">Scoring guide</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + custom tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>Fix SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9–10</td>
+					<td>Critical</td>
+					<td>Within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7–8.9</td>
+					<td>High</td>
+					<td>Within 1 week</td>
+			</tr>
+			<tr>
+					<td>4–6.9</td>
+					<td>Medium</td>
+					<td>Within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="prioritised-backlog-from-auth-service-threats">Prioritised backlog from Auth Service threats</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Priority</th>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>DREAD</th>
+					<th>Action</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>T-02</td>
+					<td>alg:none JWT forgery</td>
+					<td>9.0</td>
+					<td>Fix immediately</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>8.8</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>8.4</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>8.2</td>
+					<td>Fix this sprint</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>T-05</td>
+					<td>Credential stuffing DoS</td>
+					<td>6.6</td>
+					<td>Next sprint</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>5.2</td>
+					<td>Next sprint</td>
+			</tr>
+	</tbody>
+</table>
+<p>Now your backlog is prioritised — no guessing what matters most.</p>
+<hr>
+<h2 id="dread-vs-alternatives">DREAD vs alternatives</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Model</th>
+					<th>Strengths</th>
+					<th>When to use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DREAD</td>
+					<td>Fast, intuitive</td>
+					<td>Quick triage, smaller teams</td>
+			</tr>
+			<tr>
+					<td>CVSS v3.1</td>
+					<td>Standardised, auditable</td>
+					<td>Enterprise, compliance</td>
+			</tr>
+			<tr>
+					<td>OWASP Risk Rating</td>
+					<td>Includes business impact</td>
+					<td>Stakeholder reporting</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see <a href="/posts/04-pasta-framework/">PASTA</a> for business-risk-aligned threat modelling.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>PASTA: Process for Attack Simulation and Threat Analysis</title>
+      <link>https://logan23info.github.io/posts/04-pasta-framework/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/04-pasta-framework/</guid>
+      <description>A deep dive into PASTA — the seven-stage, business-risk-aligned framework that thinks like an attacker.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-pasta">What is PASTA?</h2>
+<p>PASTA is a seven-stage, risk-centric threat modelling framework. Unlike STRIDE (developer-friendly, component-focused), PASTA is attacker-centric — it simulates realistic attack scenarios and ties every finding back to business impact.</p>
+<p>Use PASTA when findings need to reach business stakeholders, not just engineers.</p>
+<hr>
+<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewels</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerabilities mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-i--business-objectives-example">Stage I — Business objectives example</h2>
+<pre tabindex="0"><code>Application: Payment processing API
+Crown jewels: cardholder data, payment tokens
+Regulatory scope: PCI-DSS Level 1
+Business impact of breach: up to $500k fines + customer churn
+Critical processes: checkout, refund, fraud detection
+</code></pre><hr>
+<h2 id="stage-iv--attacker-profiling">Stage IV — Attacker profiling</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat actor</th>
+					<th>Motivation</th>
+					<th>Capability</th>
+					<th>Likelihood</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External cybercriminal</td>
+					<td>Financial</td>
+					<td>High</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Sabotage</td>
+					<td>Medium</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Nation-state</td>
+					<td>IP theft</td>
+					<td>Very high</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Script kiddie</td>
+					<td>Opportunistic</td>
+					<td>Low</td>
+					<td>High</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-vi--attack-tree-example">Stage VI — Attack tree example</h2>
+<pre tabindex="0"><code>Goal: obtain cardholder PAN in plaintext
+├── Attack the application layer
+│   ├── SQL injection → dump card_tokens table
+│   ├── IDOR → access other users stored cards
+│   └── XSS → steal card details from DOM
+├── Attack the infrastructure
+│   └── Intercept traffic (no TLS enforced)
+└── Attack the supply chain
+    └── Compromise payment SDK dependency
+</code></pre><hr>
+<h2 id="pasta-vs-stride">PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>STRIDE</th>
+					<th>PASTA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time</td>
+					<td>1–2 hours</td>
+					<td>1–2 days</td>
+			</tr>
+			<tr>
+					<td>Audience</td>
+					<td>Engineering</td>
+					<td>Engineering + business + leadership</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Threat list</td>
+					<td>Risk register with financial impact</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Agile sprint review</td>
+					<td>Compliance, enterprise risk management</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see how to embed all of this into your CI/CD pipeline in <a href="/posts/05-threat-modelling-in-devsecops/">Threat Modelling in DevSecOps</a>.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

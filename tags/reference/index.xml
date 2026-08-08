@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Reference on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/reference/</link>
+    <description>Recent content in Reference on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/reference/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attack Trees — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/attack-trees/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/attack-trees/</guid>
+      <description>How to build and use attack trees to map all paths an attacker could take.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-an-attack-tree">What is an attack tree?</h2>
+<p>An attack tree maps all the ways an attacker could achieve a specific goal. Root = attacker goal. Branches = sub-goals. Leaves = individual attack steps.</p>
+<h2 id="and-vs-or-nodes">AND vs OR nodes</h2>
+<ul>
+<li><strong>OR-node</strong> — any single child path is enough for the attacker to succeed</li>
+<li><strong>AND-node</strong> — all child steps must succeed (multi-step attack chain)</li>
+</ul>
+<h2 id="example-gain-admin-access">Example: Gain admin access</h2>
+<pre tabindex="0"><code>GOAL: Gain admin access
+├── [OR] Compromise admin credentials
+│   ├── Phishing attack on admin user
+│   ├── Credential stuffing with leaked lists
+│   └── Brute force weak admin password
+├── [OR] Exploit application vulnerability
+│   ├── SQL injection → extract + crack password hashes
+│   └── IDOR on admin endpoint (missing auth check)
+└── [OR] Compromise infrastructure
+    ├── [AND] Exploit vulnerable dependency
+    │   ├── Identify outdated package via public scan
+    │   └── Use public exploit for that CVE
+    └── Steal developer session token
+</code></pre><h2 id="scoring-paths">Scoring paths</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Path</th>
+					<th>Attacker cost</th>
+					<th>Probability</th>
+					<th>Priority to mitigate</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Phishing admin</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>IDOR missing auth</td>
+					<td>Low</td>
+					<td>High</td>
+					<td>Critical</td>
+			</tr>
+			<tr>
+					<td>Brute force</td>
+					<td>Low</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>CVE exploit</td>
+					<td>Medium</td>
+					<td>Medium</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Steal dev session</td>
+					<td>High</td>
+					<td>Low</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="when-to-use-attack-trees">When to use attack trees</h2>
+<ul>
+<li>You have a specific high-value asset to protect</li>
+<li>Preparing penetration test or red team scope</li>
+<li>Communicating risk to non-technical stakeholders</li>
+<li>Stage VI of PASTA methodology</li>
+</ul>
+<h2 id="free-tools">Free tools</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>draw.io / diagrams.net</td>
+					<td>Visual, free, export to XML</td>
+			</tr>
+			<tr>
+					<td>OWASP Threat Dragon</td>
+					<td>Integrated with DFD threat modelling</td>
+			</tr>
+			<tr>
+					<td>Plain Markdown/ASCII</td>
+					<td>Version-controllable in Git</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE Reference</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Stage VI uses attack trees</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming</a>
+  <a class="ref-card" href="/wiki/templates/dfd/"><span class="ref-label">Template</span>Data Flow Diagram Guide</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/posts/01-intro-to-threat-modelling/"><span class="ref-label">Post</span>Intro to Threat Modelling</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>DREAD — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/dread/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/dread/</guid>
+      <description>Quick reference card for the DREAD risk scoring model.</description>
+      <content:encoded><![CDATA[<h2 id="scoring-dimensions-each-110">Scoring dimensions (each 1–10)</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9.0–10</td>
+					<td>Critical</td>
+					<td>Fix within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7.0–8.9</td>
+					<td>High</td>
+					<td>Fix within 1 week</td>
+			</tr>
+			<tr>
+					<td>4.0–6.9</td>
+					<td>Medium</td>
+					<td>Fix within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1.0–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="formula">Formula</h2>
+<pre tabindex="0"><code>DREAD = (Damage + Reproducibility + Exploitability + Affected Users + Discoverability) / 5
+</code></pre><p>See the <a href="/posts/03-dread-scoring/">DREAD scoring post</a> for a full worked example.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Threat Categorisation</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Full Methodology</a>
+  <a class="ref-card" href="/wiki/templates/threat-register/"><span class="ref-label">Template</span>Threat Register</a>
+  <a class="ref-card" href="/posts/03-dread-scoring/"><span class="ref-label">Post</span>DREAD Scoring Deep-Dive</a>
+  <a class="ref-card" href="/posts/02-stride-methodology/"><span class="ref-label">Post</span>STRIDE Practitioner's Guide</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>PASTA — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/pasta/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/pasta/</guid>
+      <description>Quick reference for the PASTA seven-stage threat modelling methodology.</description>
+      <content:encoded><![CDATA[<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewel list</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerability list mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="when-to-use-pasta-vs-stride">When to use PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Situation</th>
+					<th>Use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New feature threat review, 60-min timebox</td>
+					<td>STRIDE</td>
+			</tr>
+			<tr>
+					<td>Quarterly security review of tier-1 service</td>
+					<td>PASTA</td>
+			</tr>
+			<tr>
+					<td>Compliance audit (PCI-DSS, SOC 2)</td>
+					<td>PASTA</td>
+			</tr>
+			<tr>
+					<td>PR-level security checklist</td>
+					<td>STRIDE</td>
+			</tr>
+			<tr>
+					<td>Risk presentation to leadership</td>
+					<td>PASTA</td>
+			</tr>
+	</tbody>
+</table>
+<p>See the <a href="/posts/04-pasta-framework/">PASTA framework post</a> for a full walkthrough.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Threat Categorisation</a>
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Framework</span>DREAD — Risk Scoring</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/posts/04-pasta-framework/"><span class="ref-label">Post</span>PASTA Deep-Dive Post</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/stride/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/stride/</guid>
+      <description>Quick reference card for the STRIDE threat categorisation framework.</description>
+      <content:encoded><![CDATA[<h2 id="categories">Categories</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Category</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+					<th>Common examples</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Who are you, really?</td>
+					<td>Fake JWT, ARP spoofing, phishing</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Has this been modified?</td>
+					<td>SQL injection, MITM, log tampering</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can you prove who did it?</td>
+					<td>Missing audit logs, log deletion</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Who can read this?</td>
+					<td>Insecure S3, verbose errors</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can it be made unavailable?</td>
+					<td>Credential stuffing, regex DoS</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>What can you do that you shouldn&rsquo;t?</td>
+					<td>IDOR, JWT role claim</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="which-categories-apply-to-which-elements">Which categories apply to which elements</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="standard-mitigations">Standard mitigations</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Spoofing</td>
+					<td>Strong authentication, MFA, signed tokens</td>
+			</tr>
+			<tr>
+					<td>Tampering</td>
+					<td>Digital signatures, input validation, parameterised queries</td>
+			</tr>
+			<tr>
+					<td>Repudiation</td>
+					<td>Tamper-evident audit logging</td>
+			</tr>
+			<tr>
+					<td>Information Disclosure</td>
+					<td>Encryption, least privilege, data masking</td>
+			</tr>
+			<tr>
+					<td>Denial of Service</td>
+					<td>Rate limiting, circuit breakers, auto-scaling</td>
+			</tr>
+			<tr>
+					<td>Elevation of Privilege</td>
+					<td>Least privilege, server-side authorisation, RBAC</td>
+			</tr>
+	</tbody>
+</table>
+<p>See the <a href="/posts/02-stride-methodology/">STRIDE deep-dive post</a> for a full worked example.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Framework</span>DREAD — Risk Scoring</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Full Methodology</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/wiki/templates/threat-register/"><span class="ref-label">Template</span>Threat Register</a>
+  <a class="ref-card" href="/posts/02-stride-methodology/"><span class="ref-label">Post</span>STRIDE Deep-Dive</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,162 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Data Protection Impact Assessment (DPIA) | Security Engineering Wiki</title><meta name=keywords content="privacy,DPIA,GDPR,risk-assessment,data-protection"><meta name=description content="When and how to conduct a Data Protection Impact Assessment — triggers, the full process, risk scoring, and a reusable DPIA template."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/privacy/dpia/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/privacy/dpia/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/privacy/dpia/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/privacy/dpia/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Data Protection Impact Assessment (DPIA)"><meta property="og:description" content="When and how to conduct a Data Protection Impact Assessment — triggers, the full process, risk scoring, and a reusable DPIA template."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Data Protection Impact Assessment (DPIA)"><meta name=twitter:description content="When and how to conduct a Data Protection Impact Assessment — triggers, the full process, risk scoring, and a reusable DPIA template."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Privacy \u0026 Data Protection","item":"https://logan23info.github.io/wiki/privacy/"},{"@type":"ListItem","position":3,"name":"Data Protection Impact Assessment (DPIA)","item":"https://logan23info.github.io/wiki/privacy/dpia/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/privacy/>Privacy & Data Protection</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Data Protection Impact Assessment (DPIA)</h1><div class=post-description>When and how to conduct a Data Protection Impact Assessment — triggers, the full process, risk scoring, and a reusable DPIA template.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>912 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#what-is-a-dpia aria-label="What is a DPIA?">What is a DPIA?</a></li><li><a href=#when-is-a-dpia-mandatory aria-label="When is a DPIA mandatory?">When is a DPIA mandatory?</a></li><li><a href=#the-dpia-process aria-label="The DPIA process">The DPIA process</a></li><li><a href=#dpia-template aria-label="DPIA template">DPIA template</a></li><li><a href=#privacy-risk-scoring-guide aria-label="Privacy risk scoring guide">Privacy risk scoring guide</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=what-is-a-dpia>What is a DPIA?<a hidden class=anchor aria-hidden=true href=#what-is-a-dpia>#</a></h2><p>A Data Protection Impact Assessment (DPIA) is a process to identify and minimise the data protection risks of a project. GDPR Article 35 makes DPIAs mandatory for processing that is &ldquo;likely to result in a high risk to the rights and freedoms of natural persons.&rdquo;</p><p>A DPIA is not a box-ticking exercise — done well, it is a structured privacy threat model that surfaces risks before they become breaches or regulatory findings.</p><hr><h2 id=when-is-a-dpia-mandatory>When is a DPIA mandatory?<a hidden class=anchor aria-hidden=true href=#when-is-a-dpia-mandatory>#</a></h2><p>A DPIA is required when processing involves any of these (per Article 35 and guidance):</p><pre tabindex=0><code>□ Systematic and extensive profiling with significant effects
+  (e.g. credit scoring, automated hiring decisions)
+
+□ Large-scale processing of special category data
+  (health, biometric, racial/ethnic, political, religious data)
+
+□ Systematic monitoring of a publicly accessible area on a large scale
+  (e.g. CCTV, location tracking)
+
+Additional triggers from regulator guidance (any TWO = DPIA needed):
+□ Evaluation or scoring
+□ Automated decision-making with legal/significant effect
+□ Systematic monitoring
+□ Sensitive data or highly personal data
+□ Data processed on a large scale
+□ Matching or combining datasets
+□ Data concerning vulnerable subjects (children, employees, patients)
+□ Innovative use of new technology (AI, IoT, biometrics)
+□ Processing that prevents data subjects exercising a right or using a service
+</code></pre><hr><h2 id=the-dpia-process>The DPIA process<a hidden class=anchor aria-hidden=true href=#the-dpia-process>#</a></h2><pre tabindex=0><code>Step 1 — Describe the processing
+    What data, why, how, who, how long, where
+
+Step 2 — Assess necessity and proportionality
+    Is this processing necessary? Is there a less intrusive way?
+
+Step 3 — Identify and assess risks
+    What could go wrong for the individuals? (privacy threat modelling)
+
+Step 4 — Identify measures to mitigate risks
+    What controls reduce each risk to an acceptable level?
+
+Step 5 — Sign off and integrate
+    DPO reviews; residual high risks may require regulator consultation
+
+Step 6 — Review
+    Revisit when the processing changes
+</code></pre><hr><h2 id=dpia-template>DPIA template<a hidden class=anchor aria-hidden=true href=#dpia-template>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl><span class=gh># Data Protection Impact Assessment
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Project:**</span> [name]
+</span></span><span class=line><span class=cl><span class=gs>**DPIA reference:**</span> DPIA-2026-XXX
+</span></span><span class=line><span class=cl><span class=gs>**Author:**</span> [name]
+</span></span><span class=line><span class=cl><span class=gs>**Date:**</span> [date]
+</span></span><span class=line><span class=cl><span class=gs>**DPO review:**</span> [name, date]
+</span></span><span class=line><span class=cl><span class=gs>**Status:**</span> Draft / Approved / Requires regulator consultation
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 1. Description of processing
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**What is the project?**</span>
+</span></span><span class=line><span class=cl>[Describe the system/feature and its purpose]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**What personal data is processed?**</span>
+</span></span><span class=line><span class=cl>| Data category | Special category? | Source | Volume |
+</span></span><span class=line><span class=cl>|---|---|---|---|
+</span></span><span class=line><span class=cl>| [e.g. Name, email] | No | User signup | ~50,000 |
+</span></span><span class=line><span class=cl>| [e.g. Health data] | Yes | User input | ~5,000 |
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Purpose of processing:**</span> [Why is this data processed?]
+</span></span><span class=line><span class=cl><span class=gs>**Lawful basis:**</span> [Consent / Contract / Legitimate interest / etc.]
+</span></span><span class=line><span class=cl><span class=gs>**Data subjects:**</span> [Who? Customers, employees, children?]
+</span></span><span class=line><span class=cl><span class=gs>**Recipients:**</span> [Who receives the data? Internal teams, processors, third parties]
+</span></span><span class=line><span class=cl><span class=gs>**Retention period:**</span> [How long is data kept?]
+</span></span><span class=line><span class=cl><span class=gs>**International transfers:**</span> [Any transfers outside EU/UK? Safeguards?]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 2. Necessity and proportionality
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Is the processing necessary to achieve the purpose?**</span>
+</span></span><span class=line><span class=cl>[Justify why this data is needed]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Could the purpose be achieved with less data or less intrusive means?**</span>
+</span></span><span class=line><span class=cl>[Consider alternatives — can you use anonymised/aggregated data instead?]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**How is data minimisation applied?**</span>
+</span></span><span class=line><span class=cl>[What have you excluded? Why is what remains the minimum?]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 3. Risk assessment
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=ge>*For each risk: score Likelihood (1-5) × Severity (1-5) = Risk score*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| ID | Risk to individuals | Likelihood | Severity | Score | 
+</span></span><span class=line><span class=cl>|---|---|---|---|---|
+</span></span><span class=line><span class=cl>| R1 | [e.g. Unauthorised access to health data] | 3 | 5 | 15 |
+</span></span><span class=line><span class=cl>| R2 | [e.g. Data used beyond stated purpose] | 2 | 4 | 8 |
+</span></span><span class=line><span class=cl>| R3 | [e.g. Re-identification of anonymised data] | 2 | 4 | 8 |
+</span></span><span class=line><span class=cl>| R4 | [e.g. Excessive retention] | 3 | 3 | 9 |
+</span></span><span class=line><span class=cl>| R5 | [e.g. Data breach exposing PII] | 3 | 4 | 12 |
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>*Risk to individuals means harm to THEM — identity theft, discrimination,
+</span></span><span class=line><span class=cl>financial loss, distress, reputational damage — not risk to the company.*
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 4. Mitigation measures
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| Risk ID | Mitigation | Residual score | Owner |
+</span></span><span class=line><span class=cl>|---|---|---|---|
+</span></span><span class=line><span class=cl>| R1 | Encryption at rest + field-level access control + MFA | 4 | Eng lead |
+</span></span><span class=line><span class=cl>| R2 | Purpose tagging enforced at access time | 2 | Eng lead |
+</span></span><span class=line><span class=cl>| R3 | k-anonymity (k=5) verified before any data sharing | 2 | Data team |
+</span></span><span class=line><span class=cl>| R4 | Automated deletion after retention period | 3 | Platform |
+</span></span><span class=line><span class=cl>| R5 | Pen test + encryption + breach response plan | 4 | Security |
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 5. Outcome
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**Highest residual risk:**</span> [score]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>□ All risks reduced to acceptable level → proceed
+</span></span><span class=line><span class=cl>□ High residual risk remains → consult supervisory authority before proceeding (Article 36)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gs>**DPO recommendation:**</span> [Approve / Approve with conditions / Do not proceed]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>## 6. Sign-off
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| Role | Name | Date | Decision |
+</span></span><span class=line><span class=cl>|---|---|---|---|
+</span></span><span class=line><span class=cl>| Project owner | | | |
+</span></span><span class=line><span class=cl>| DPO | | | |
+</span></span><span class=line><span class=cl>| CISO | | | |
+</span></span></code></pre></div><hr><h2 id=privacy-risk-scoring-guide>Privacy risk scoring guide<a hidden class=anchor aria-hidden=true href=#privacy-risk-scoring-guide>#</a></h2><pre tabindex=0><code>SEVERITY (impact on the individual):
+5 — Critical: identity theft, physical safety risk, severe discrimination
+4 — Major: financial loss, significant distress, reputational harm
+3 — Moderate: inconvenience, minor distress, spam/unwanted contact
+2 — Minor: limited impact, easily remedied
+1 — Negligible: no meaningful impact
+
+LIKELIHOOD:
+5 — Almost certain: will happen without controls
+4 — Likely: probable in normal operation
+3 — Possible: could happen
+2 — Unlikely: would require unusual circumstances
+1 — Rare: highly improbable
+
+RISK = Severity × Likelihood
+15-25: High — mitigate before proceeding, consider regulator consultation
+8-14:  Medium — mitigate to reduce
+1-7:   Low — monitor
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/privacy/privacy-by-design/><span class=ref-label>Privacy</span>Privacy by Design</a>
+<a class=ref-card href=/wiki/privacy/gdpr-engineering/><span class=ref-label>Privacy</span>GDPR Engineering</a>
+<a class=ref-card href=/wiki/privacy/data-subject-rights/><span class=ref-label>Privacy</span>Data Subject Rights</a>
+<a class=ref-card href=/wiki/compliance/gdpr/><span class=ref-label>Compliance</span>GDPR</a>
+<a class=ref-card href=/wiki/templates/threat-register/><span class=ref-label>Template</span>Threat Register</a>
+<a class=ref-card href=/wiki/stride/><span class=ref-label>Framework</span>STRIDE Reference</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/privacy/>Privacy</a></li><li><a href=https://logan23info.github.io/tags/dpia/>DPIA</a></li><li><a href=https://logan23info.github.io/tags/gdpr/>GDPR</a></li><li><a href=https://logan23info.github.io/tags/risk-assessment/>Risk-Assessment</a></li><li><a href=https://logan23info.github.io/tags/data-protection/>Data-Protection</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

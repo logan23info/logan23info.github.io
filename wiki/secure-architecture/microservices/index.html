@@ -1,0 +1,178 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Microservices Security | Security Engineering Wiki</title><meta name=keywords content="microservices,mTLS,service-mesh,zero-trust,architecture"><meta name=description content="Security patterns for microservices architectures — service identity, mTLS, zero trust between services, service mesh, and lateral movement prevention."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/secure-architecture/microservices/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/secure-architecture/microservices/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/secure-architecture/microservices/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/secure-architecture/microservices/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Microservices Security"><meta property="og:description" content="Security patterns for microservices architectures — service identity, mTLS, zero trust between services, service mesh, and lateral movement prevention."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Microservices Security"><meta name=twitter:description content="Security patterns for microservices architectures — service identity, mTLS, zero trust between services, service mesh, and lateral movement prevention."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Secure Architecture Patterns","item":"https://logan23info.github.io/wiki/secure-architecture/"},{"@type":"ListItem","position":3,"name":"Microservices Security","item":"https://logan23info.github.io/wiki/secure-architecture/microservices/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/secure-architecture/>Secure Architecture Patterns</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Microservices Security</h1><div class=post-description>Security patterns for microservices architectures — service identity, mTLS, zero trust between services, service mesh, and lateral movement prevention.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>1007 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#the-microservices-security-problem aria-label="The microservices security problem">The microservices security problem</a></li><li><a href=#pattern-1--service-identity-with-mtls aria-label="Pattern 1 — Service identity with mTLS">Pattern 1 — Service identity with mTLS</a><ul><li><a href=#implementing-mtls-with-cert-manager-kubernetes aria-label="Implementing mTLS with cert-manager (Kubernetes)">Implementing mTLS with cert-manager (Kubernetes)</a></li><li><a href=#implementing-mtls-with-istio-service-mesh aria-label="Implementing mTLS with Istio service mesh">Implementing mTLS with Istio service mesh</a></li></ul></li><li><a href=#pattern-2--zero-trust-between-services aria-label="Pattern 2 — Zero trust between services">Pattern 2 — Zero trust between services</a><ul><li><a href=#spiffe--spire--workload-identity-standard aria-label="SPIFFE / SPIRE — workload identity standard">SPIFFE / SPIRE — workload identity standard</a></li></ul></li><li><a href=#pattern-3--service-mesh-for-security aria-label="Pattern 3 — Service mesh for security">Pattern 3 — Service mesh for security</a></li><li><a href=#pattern-4--api-gateway-for-north-south-traffic aria-label="Pattern 4 — API gateway for north-south traffic">Pattern 4 — API gateway for north-south traffic</a></li><li><a href=#pattern-5--least-privilege-service-accounts aria-label="Pattern 5 — Least privilege service accounts">Pattern 5 — Least privilege service accounts</a></li><li><a href=#threat-model-for-microservices aria-label="Threat model for microservices">Threat model for microservices</a></li><li><a href=#security-checklist-for-microservices aria-label="Security checklist for microservices">Security checklist for microservices</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=the-microservices-security-problem>The microservices security problem<a hidden class=anchor aria-hidden=true href=#the-microservices-security-problem>#</a></h2><p>In a monolith, a function call stays inside a process — it cannot be intercepted, spoofed, or tampered with by an external attacker. In a microservices architecture, every function call becomes a network request. Each service-to-service call is a potential attack surface.</p><p>The core threats in microservices:</p><table><thead><tr><th>Threat</th><th>STRIDE category</th><th>Example</th></tr></thead><tbody><tr><td>Service A impersonating Service B</td><td>Spoofing</td><td>Attacker spins up rogue service claiming to be payment service</td></tr><tr><td>MITM between services</td><td>Tampering, Info Disclosure</td><td>Attacker intercepts internal API calls</td></tr><tr><td>Compromised service pivoting</td><td>Lateral movement</td><td>Attacker in one pod reaches all other services</td></tr><tr><td>Missing auth on internal APIs</td><td>Elevation of Privilege</td><td>Internal endpoint assumed safe, no auth check</td></tr><tr><td>Overprivileged service</td><td>Elevation of Privilege</td><td>Order service can access user credentials</td></tr></tbody></table><hr><h2 id=pattern-1--service-identity-with-mtls>Pattern 1 — Service identity with mTLS<a hidden class=anchor aria-hidden=true href=#pattern-1--service-identity-with-mtls>#</a></h2><p>Every service must have a cryptographic identity. Mutual TLS (mTLS) means both the client and server present certificates — so each service proves who it is before communication is allowed.</p><pre tabindex=0><code>Service A                              Service B
+    |                                      |
+    |--- presents client cert ------------&gt;|
+    |&lt;-- presents server cert -------------|
+    |--- TLS handshake complete ----------&gt;|
+    |=== encrypted, authenticated channel =|
+</code></pre><p><strong>Without mTLS:</strong> Any process on the internal network can call any service. One compromised container can reach everything.</p><p><strong>With mTLS:</strong> A compromised container can only call services its certificate is authorised to reach.</p><h3 id=implementing-mtls-with-cert-manager-kubernetes>Implementing mTLS with cert-manager (Kubernetes)<a hidden class=anchor aria-hidden=true href=#implementing-mtls-with-cert-manager-kubernetes>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># cert-manager CertificateRequest for a service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>cert-manager.io/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Certificate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service-cert</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>secretName</span><span class=p>:</span><span class=w> </span><span class=l>payment-service-tls</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>duration</span><span class=p>:</span><span class=w> </span><span class=l>24h       </span><span class=w> </span><span class=c># short-lived — rotate frequently</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>renewBefore</span><span class=p>:</span><span class=w> </span><span class=l>8h</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>subject</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>organizations</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=s2>&#34;mycompany&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>commonName</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;payment-service.production.svc.cluster.local&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>dnsNames</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=s2>&#34;payment-service&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=s2>&#34;payment-service.production&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=s2>&#34;payment-service.production.svc.cluster.local&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>issuerRef</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>internal-ca</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterIssuer</span><span class=w>
+</span></span></span></code></pre></div><h3 id=implementing-mtls-with-istio-service-mesh>Implementing mTLS with Istio service mesh<a hidden class=anchor aria-hidden=true href=#implementing-mtls-with-istio-service-mesh>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Enforce strict mTLS across the entire mesh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>security.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>PeerAuthentication</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>default</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>istio-system   </span><span class=w> </span><span class=c># applies mesh-wide</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>mtls</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mode</span><span class=p>:</span><span class=w> </span><span class=l>STRICT            </span><span class=w> </span><span class=c># reject all non-mTLS traffic</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Allow specific service-to-service calls only</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>security.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>AuthorizationPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service-policy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>action</span><span class=p>:</span><span class=w> </span><span class=l>ALLOW</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>from</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>source</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>principals</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=s2>&#34;cluster.local/ns/production/sa/order-service&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=s2>&#34;cluster.local/ns/production/sa/billing-service&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>to</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>operation</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>methods</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;POST&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>paths</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/v1/payments/*&#34;</span><span class=p>]</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=pattern-2--zero-trust-between-services>Pattern 2 — Zero trust between services<a hidden class=anchor aria-hidden=true href=#pattern-2--zero-trust-between-services>#</a></h2><p>Every service-to-service call must be:</p><ul><li><strong>Authenticated</strong> — who is calling?</li><li><strong>Authorised</strong> — are they allowed to call this endpoint?</li><li><strong>Encrypted</strong> — is the call protected in transit?</li></ul><p>Never assume a call is safe because it comes from inside the cluster.</p><pre tabindex=0><code># WRONG — trusting internal network
+if (request.source_ip in INTERNAL_NETWORK):
+    # skip auth check — it&#39;s internal
+    process_request()
+
+# RIGHT — verify every request regardless of source
+token = request.headers.get(&#34;Authorization&#34;)
+service_identity = verify_jwt(token, expected_issuer=&#34;spiffe://cluster.local&#34;)
+if not authorize(service_identity, request.method, request.path):
+    return 403
+process_request()
+</code></pre><h3 id=spiffe--spire--workload-identity-standard>SPIFFE / SPIRE — workload identity standard<a hidden class=anchor aria-hidden=true href=#spiffe--spire--workload-identity-standard>#</a></h3><p>SPIFFE (Secure Production Identity Framework for Everyone) provides a standard for workload identity in distributed systems. Each workload gets a SPIFFE ID:</p><pre tabindex=0><code>spiffe://trust-domain/ns/production/sa/payment-service
+</code></pre><p>SPIRE (SPIFFE Runtime Environment) issues short-lived X.509 SVIDs (SPIFFE Verifiable Identity Documents) that services use to authenticate each other — no long-lived secrets.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Install SPIRE server and agent</span>
+</span></span><span class=line><span class=cl>kubectl apply -f https://spiffe.github.io/spire/releases/latest/spire.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify a workload&#39;s SVID</span>
+</span></span><span class=line><span class=cl>spire-server entry show -spiffeID spiffe://example.org/ns/production/sa/payment-service
+</span></span></code></pre></div><hr><h2 id=pattern-3--service-mesh-for-security>Pattern 3 — Service mesh for security<a hidden class=anchor aria-hidden=true href=#pattern-3--service-mesh-for-security>#</a></h2><p>A service mesh (Istio, Linkerd, Consul Connect) handles mTLS, authorisation policy, and observability transparently — without changing application code. The sidecar proxy intercepts all traffic.</p><pre tabindex=0><code>Pod: Payment Service
+┌─────────────────────────────────┐
+│  ┌────────────────────┐         │
+│  │  payment-service   │         │
+│  │  (your app code)   │         │
+│  └────────┬───────────┘         │
+│           │ localhost:8080       │
+│  ┌────────▼───────────┐         │
+│  │   Envoy sidecar    │◄────────┼── all inbound/outbound
+│  │   (mTLS, authz,    │         │   traffic intercepted
+│  │    observability)  │─────────┼── here
+│  └────────────────────┘         │
+└─────────────────────────────────┘
+</code></pre><p><strong>Linkerd (simpler, lower overhead):</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Install Linkerd</span>
+</span></span><span class=line><span class=cl>linkerd install --crds <span class=p>|</span> kubectl apply -f -
+</span></span><span class=line><span class=cl>linkerd install <span class=p>|</span> kubectl apply -f -
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Inject sidecar into a namespace</span>
+</span></span><span class=line><span class=cl>kubectl annotate namespace production <span class=se>\
+</span></span></span><span class=line><span class=cl>  linkerd.io/inject<span class=o>=</span>enabled
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify mTLS is active</span>
+</span></span><span class=line><span class=cl>linkerd viz stat deploy -n production
+</span></span></code></pre></div><hr><h2 id=pattern-4--api-gateway-for-north-south-traffic>Pattern 4 — API gateway for north-south traffic<a hidden class=anchor aria-hidden=true href=#pattern-4--api-gateway-for-north-south-traffic>#</a></h2><p>All external traffic enters through a single API gateway. Services never expose ports directly to the internet.</p><pre tabindex=0><code>Internet
+    |
+    ▼
+[API Gateway / Ingress]
+    |  - TLS termination
+    |  - Authentication (JWT validation)
+    |  - Rate limiting
+    |  - WAF rules
+    |  - Request routing
+    ▼
+[Internal service mesh — mTLS]
+    ├── Auth Service
+    ├── Order Service
+    └── Payment Service
+</code></pre><hr><h2 id=pattern-5--least-privilege-service-accounts>Pattern 5 — Least privilege service accounts<a hidden class=anchor aria-hidden=true href=#pattern-5--least-privilege-service-accounts>#</a></h2><p>Each service runs with a dedicated service account that has only the permissions it needs.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Kubernetes ServiceAccount per service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>payment-service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>production</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>annotations</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c># AWS IRSA — bind to IAM role with least privilege</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>eks.amazonaws.com/role-arn</span><span class=p>:</span><span class=w> </span><span class=l>arn:aws:iam::123456789:role/payment-service-role</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># The IAM role only allows payment-service to access its own secrets</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># and its own S3 bucket — nothing else</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=threat-model-for-microservices>Threat model for microservices<a hidden class=anchor aria-hidden=true href=#threat-model-for-microservices>#</a></h2><p>Apply STRIDE to each service boundary:</p><pre tabindex=0><code>For every service-to-service API call, ask:
+
+S — Can an attacker spoof the calling service?
+    Mitigation: mTLS with SPIFFE identity
+
+T — Can the request be tampered with in transit?
+    Mitigation: TLS encryption, request signing
+
+R — Can the calling service deny making the call?
+    Mitigation: structured access logs with service identity
+
+I — Can the data in the response be intercepted?
+    Mitigation: TLS, minimal data returned per response
+
+D — Can the called service be overwhelmed?
+    Mitigation: circuit breakers, rate limiting, timeouts
+
+E — Can the calling service access endpoints it should not?
+    Mitigation: authorisation policy per endpoint per service identity
+</code></pre><hr><h2 id=security-checklist-for-microservices>Security checklist for microservices<a hidden class=anchor aria-hidden=true href=#security-checklist-for-microservices>#</a></h2><pre tabindex=0><code>Design
+□ Every service has a defined threat model
+□ Service-to-service communication diagram drawn
+□ Trust boundaries documented
+□ Data classification per service defined
+
+Implementation
+□ mTLS enforced between all services (STRICT mode)
+□ Each service has a dedicated service account
+□ AuthZ policy defined per endpoint per caller
+□ No hardcoded credentials in service code
+□ Health check endpoints do not expose sensitive data
+□ Error responses do not leak internal details
+
+Operations
+□ Certificate rotation automated (&lt; 24h TTL)
+□ Service mesh telemetry monitored for anomalies
+□ Unauthorised call attempts alerted on
+□ Quarterly service permission review conducted
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/secure-architecture/api-security/><span class=ref-label>Architecture</span>API Security Design</a>
+<a class=ref-card href=/wiki/secure-architecture/secrets-management/><span class=ref-label>Architecture</span>Secrets Management</a>
+<a class=ref-card href=/wiki/secure-architecture/kubernetes-security/><span class=ref-label>Architecture</span>Kubernetes Security</a>
+<a class=ref-card href=/wiki/zero-trust/><span class=ref-label>Wiki</span>Zero Trust Architecture</a>
+<a class=ref-card href=/wiki/stride/><span class=ref-label>Framework</span>STRIDE Reference</a>
+<a class=ref-card href=/wiki/supply-chain/><span class=ref-label>Wiki</span>Supply Chain Security</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/microservices/>Microservices</a></li><li><a href=https://logan23info.github.io/tags/mtls/>MTLS</a></li><li><a href=https://logan23info.github.io/tags/service-mesh/>Service-Mesh</a></li><li><a href=https://logan23info.github.io/tags/zero-trust/>Zero-Trust</a></li><li><a href=https://logan23info.github.io/tags/architecture/>Architecture</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

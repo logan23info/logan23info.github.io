@@ -1,0 +1,161 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Incident Response Plan | Security Engineering Wiki</title><meta name=keywords content="IR-plan,incident-response,governance,DFIR,NIST"><meta name=description content="Incident response plan template — governance, roles, incident classification, communication, and the six NIST phases."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/incident-response/ir-plan/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/incident-response/ir-plan/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/incident-response/ir-plan/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/incident-response/ir-plan/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Incident Response Plan"><meta property="og:description" content="Incident response plan template — governance, roles, incident classification, communication, and the six NIST phases."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Incident Response Plan"><meta name=twitter:description content="Incident response plan template — governance, roles, incident classification, communication, and the six NIST phases."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Incident Response","item":"https://logan23info.github.io/wiki/incident-response/"},{"@type":"ListItem","position":3,"name":"Incident Response Plan","item":"https://logan23info.github.io/wiki/incident-response/ir-plan/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/incident-response/>Incident Response</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Incident Response Plan</h1><div class=post-description>Incident response plan template — governance, roles, incident classification, communication, and the six NIST phases.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>965 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#ir-plan-structure aria-label="IR Plan structure">IR Plan structure</a></li><li><a href=#phase-1--preparation aria-label="Phase 1 — Preparation">Phase 1 — Preparation</a><ul><li><a href=#ir-team-structure aria-label="IR team structure">IR team structure</a></li><li><a href=#ir-preparation-checklist aria-label="IR preparation checklist">IR preparation checklist</a></li></ul></li><li><a href=#phase-2--detection-and-analysis aria-label="Phase 2 — Detection and Analysis">Phase 2 — Detection and Analysis</a><ul><li><a href=#incident-intake-form aria-label="Incident intake form">Incident intake form</a></li><li><a href=#timeline-construction aria-label="Timeline construction">Timeline construction</a></li></ul></li><li><a href=#phase-3--containment aria-label="Phase 3 — Containment">Phase 3 — Containment</a><ul><li><a href=#containment-decision-framework aria-label="Containment decision framework">Containment decision framework</a></li></ul></li><li><a href=#phase-4--eradication aria-label="Phase 4 — Eradication">Phase 4 — Eradication</a></li><li><a href=#phase-5--recovery aria-label="Phase 5 — Recovery">Phase 5 — Recovery</a></li><li><a href=#phase-6--post-incident-review aria-label="Phase 6 — Post-Incident Review">Phase 6 — Post-Incident Review</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=ir-plan-structure>IR Plan structure<a hidden class=anchor aria-hidden=true href=#ir-plan-structure>#</a></h2><p>Based on NIST SP 800-61 Computer Security Incident Handling Guide.</p><hr><h2 id=phase-1--preparation>Phase 1 — Preparation<a hidden class=anchor aria-hidden=true href=#phase-1--preparation>#</a></h2><p>Preparation happens before any incident. Without it, every incident takes 10x longer.</p><h3 id=ir-team-structure>IR team structure<a hidden class=anchor aria-hidden=true href=#ir-team-structure>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>ir_team</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>incident_commander</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>responsibilities</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Declare incident severity</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Coordinate all response activities</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Approve major decisions (isolate production, pay ransom, notify)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Brief executive and board</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Authorise external communications</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>technical_lead</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>responsibilities</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Lead technical investigation</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Coordinate with engineering, platform, DevOps</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Document technical timeline</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Recommend containment and eradication actions</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>communications_lead</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>responsibilities</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Draft customer and public communications</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Coordinate with legal before any external statement</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Manage media enquiries</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Update internal stakeholders</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>legal_and_compliance</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>responsibilities</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Advise on regulatory notification obligations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Review all external communications</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Manage law enforcement interaction</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Preserve legal privilege on investigation communications</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>external_ir_retainer</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>when_to_engage</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Nation-state level attack suspected</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Ransomware with &gt;$100k potential impact</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Data breach requiring forensic evidence for legal proceedings</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Internal team lacks capacity</span><span class=w>
+</span></span></span></code></pre></div><h3 id=ir-preparation-checklist>IR preparation checklist<a hidden class=anchor aria-hidden=true href=#ir-preparation-checklist>#</a></h3><pre tabindex=0><code>Documentation
+□ IR plan approved by management, reviewed annually
+□ Incident contact list current — tested quarterly (can you reach everyone at 3am?)
+□ Escalation matrix documented and practised
+□ External IR retainer contract signed and IR firm briefed
+
+Tools
+□ Out-of-band communication channel (Signal group, secondary email)
+□ Forensic workstation with write blockers and imaging tools
+□ Network capture capability (tcpdump, Wireshark on key segments)
+□ Log aggregation — all critical logs in SIEM with adequate retention
+□ EDR on all endpoints with isolation capability
+□ Incident tracking system (dedicated — separate from normal ticketing)
+
+Access
+□ Break-glass accounts: documented, tested, accessible when primary systems are down
+□ Cloud provider emergency access (AWS Support, Google Cloud Support)
+□ IR team has read access to all logs without production access
+
+Legal and insurance
+□ Cyber insurance policy reviewed — understand what is covered
+□ Cyber insurer&#39;s IR firm contact on file (insurer may require their firm)
+□ Legal firm with cyber experience on retainer
+□ Know which regulators to notify and within what timeframe
+</code></pre><hr><h2 id=phase-2--detection-and-analysis>Phase 2 — Detection and Analysis<a hidden class=anchor aria-hidden=true href=#phase-2--detection-and-analysis>#</a></h2><h3 id=incident-intake-form>Incident intake form<a hidden class=anchor aria-hidden=true href=#incident-intake-form>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># Complete within first 30 minutes of incident declaration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>incident_id</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;INC-2026-001&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>declared_by</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>declared_at</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-08-05T14:30:00Z&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>severity</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>        </span><span class=c># P1 / P2 / P3 / P4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>        </span><span class=c># ransomware / data_breach / account_compromise / ddos / insider / other</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>initial_description</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>  Brief description of what was detected, by whom, and when.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>affected_systems</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>affected_users_or_customers</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>data_potentially_involved</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>detection_source</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>   </span><span class=c># SIEM alert / user report / external notification / threat intel</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>immediate_questions</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Is the attacker still active in our environment?</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>What data may have been accessed or exfiltrated?</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Is customer-facing service impacted?</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Is this a notifiable breach under GDPR/PCI/DORA?</span><span class=w>
+</span></span></span></code></pre></div><h3 id=timeline-construction>Timeline construction<a hidden class=anchor aria-hidden=true href=#timeline-construction>#</a></h3><p>Build a precise timeline from the moment you begin — it is essential for:</p><ul><li>Root cause analysis</li><li>Regulatory reporting (GDPR 72-hour notification needs exact timestamps)</li><li>Legal proceedings</li><li>Post-incident review</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl><span class=gh># Incident Timeline — INC-2026-001
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>| Timestamp (UTC) | Event | Source | Actioned by |
+</span></span><span class=line><span class=cl>|---|---|---|---|
+</span></span><span class=line><span class=cl>| 2026-08-05 14:22 | SIEM alert fires — LSASS access on HOST-001 | SIEM | Automated |
+</span></span><span class=line><span class=cl>| 2026-08-05 14:25 | SOC analyst investigates alert | SIEM | analyst<span class=ni>@example</span>.com |
+</span></span><span class=line><span class=cl>| 2026-08-05 14:35 | Lateral movement confirmed — 3 hosts affected | EDR | analyst<span class=ni>@example</span>.com |
+</span></span><span class=line><span class=cl>| 2026-08-05 14:40 | Incident declared P1 | Phone | CISO |
+</span></span><span class=line><span class=cl>| 2026-08-05 14:45 | IR team assembled on bridge call | Zoom | IC |
+</span></span><span class=line><span class=cl>| 2026-08-05 15:00 | Affected hosts isolated | EDR | tech-lead<span class=ni>@example</span>.com |
+</span></span></code></pre></div><hr><h2 id=phase-3--containment>Phase 3 — Containment<a hidden class=anchor aria-hidden=true href=#phase-3--containment>#</a></h2><h3 id=containment-decision-framework>Containment decision framework<a hidden class=anchor aria-hidden=true href=#containment-decision-framework>#</a></h3><pre tabindex=0><code>For each affected system, decide:
+
+SHORT-TERM CONTAINMENT (do immediately)
+→ Isolate: EDR network isolation, VLAN change, firewall block
+→ Preserve: memory dump, log snapshot before isolation
+
+LONG-TERM CONTAINMENT (within hours)
+→ Can the system be rebuilt from known-good?
+→ Is evidence preservation required for legal action?
+→ Can the service be temporarily moved to a clean environment?
+
+DO NOT DO IMMEDIATELY (preserve evidence):
+→ Do not reimage without taking forensic image first
+→ Do not delete attacker artefacts (you need them for root cause)
+→ Do not patch before understanding the attack vector
+</code></pre><hr><h2 id=phase-4--eradication>Phase 4 — Eradication<a hidden class=anchor aria-hidden=true href=#phase-4--eradication>#</a></h2><pre tabindex=0><code>□ Identify all attacker persistence mechanisms
+  → Scheduled tasks, startup items, registry keys
+  → New user accounts or SSH keys
+  → Web shells on web servers
+  → Malware files and dropper scripts
+  → Compromised credentials (rotate ALL credentials)
+
+□ Remove all attacker artefacts from ALL affected systems
+□ Patch the vulnerability that enabled the attack
+□ Rotate all potentially compromised credentials
+□ Revoke all potentially compromised tokens and certificates
+□ Rebuild systems from known-good images where possible
+</code></pre><hr><h2 id=phase-5--recovery>Phase 5 — Recovery<a hidden class=anchor aria-hidden=true href=#phase-5--recovery>#</a></h2><pre tabindex=0><code>□ Restore from known-good backups (verify backup integrity first)
+□ Rebuild compromised systems from clean base images
+□ Verify systems are clean before returning to production
+  → Fresh vulnerability scan
+  → EDR confirmation no malicious processes
+  → Log review for 24 hours post-recovery
+
+□ Restore services in prioritised order (critical first)
+□ Monitor intensively for 72 hours post-recovery
+□ Communication: notify customers/stakeholders of recovery
+
+Recovery validation:
+□ Have we removed ALL attacker access?
+□ Have we patched the root cause vulnerability?
+□ Have we rotated all compromised credentials?
+□ Are our monitoring and alerting working?
+□ Do we have enhanced monitoring in place for the next 30 days?
+</code></pre><hr><h2 id=phase-6--post-incident-review>Phase 6 — Post-Incident Review<a hidden class=anchor aria-hidden=true href=#phase-6--post-incident-review>#</a></h2><p>Conduct within 2 weeks of recovery. See <a href=/wiki/incident-response/post-incident-review/>Post-Incident Review Template</a> for the full template.</p><pre tabindex=0><code>Minimum outputs:
+□ Complete incident timeline
+□ Root cause identified
+□ What worked well
+□ What could be improved
+□ Action items with owners and due dates — tracked to completion
+□ Updated IR plan if gaps identified
+□ Brief to executive team
+□ Lessons shared with engineering team
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/incident-response/ransomware-playbook/><span class=ref-label>IR</span>Ransomware Playbook</a>
+<a class=ref-card href=/wiki/incident-response/data-breach-playbook/><span class=ref-label>IR</span>Data Breach Playbook</a>
+<a class=ref-card href=/wiki/incident-response/post-incident-review/><span class=ref-label>IR</span>Post-Incident Review Template</a>
+<a class=ref-card href=/wiki/detection-engineering/soc-playbooks/><span class=ref-label>Detection</span>SOC Playbook Templates</a>
+<a class=ref-card href=/wiki/compliance/gdpr/><span class=ref-label>Compliance</span>GDPR — breach notification</a>
+<a class=ref-card href=/wiki/compliance/dora/><span class=ref-label>Compliance</span>DORA — incident reporting</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/ir-plan/>IR-Plan</a></li><li><a href=https://logan23info.github.io/tags/incident-response/>Incident-Response</a></li><li><a href=https://logan23info.github.io/tags/governance/>Governance</a></li><li><a href=https://logan23info.github.io/tags/dfir/>DFIR</a></li><li><a href=https://logan23info.github.io/tags/nist/>NIST</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

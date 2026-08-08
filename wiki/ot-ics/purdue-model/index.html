@@ -1,0 +1,120 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>The Purdue Model | Security Engineering Wiki</title><meta name=keywords content="OT-security,ICS,Purdue-model,network-segmentation,SCADA"><meta name=description content="The Purdue Enterprise Reference Architecture — the six levels of OT/ICS network segmentation and how to secure the boundaries between them."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/ot-ics/purdue-model/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/ot-ics/purdue-model/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/ot-ics/purdue-model/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/ot-ics/purdue-model/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="The Purdue Model"><meta property="og:description" content="The Purdue Enterprise Reference Architecture — the six levels of OT/ICS network segmentation and how to secure the boundaries between them."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="The Purdue Model"><meta name=twitter:description content="The Purdue Enterprise Reference Architecture — the six levels of OT/ICS network segmentation and how to secure the boundaries between them."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"OT / ICS Security","item":"https://logan23info.github.io/wiki/ot-ics/"},{"@type":"ListItem","position":3,"name":"The Purdue Model","item":"https://logan23info.github.io/wiki/ot-ics/purdue-model/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/ot-ics/>OT / ICS Security</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">The Purdue Model</h1><div class=post-description>The Purdue Enterprise Reference Architecture — the six levels of OT/ICS network segmentation and how to secure the boundaries between them.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>752 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#what-is-the-purdue-model aria-label="What is the Purdue Model?">What is the Purdue Model?</a></li><li><a href=#the-purdue-model-levels aria-label="The Purdue Model levels">The Purdue Model levels</a></li><li><a href=#the-idmz--the-critical-boundary aria-label="The IDMZ — the critical boundary">The IDMZ — the critical boundary</a></li><li><a href=#securing-each-level aria-label="Securing each level">Securing each level</a></li><li><a href=#modern-evolution-of-the-purdue-model aria-label="Modern evolution of the Purdue Model">Modern evolution of the Purdue Model</a></li><li><a href=#purdue-model-implementation-checklist aria-label="Purdue Model implementation checklist">Purdue Model implementation checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=what-is-the-purdue-model>What is the Purdue Model?<a hidden class=anchor aria-hidden=true href=#what-is-the-purdue-model>#</a></h2><p>The Purdue Enterprise Reference Architecture (PERA), commonly called the Purdue Model, is the foundational framework for segmenting OT and IT networks. It divides the environment into hierarchical levels, each with different security requirements, and defines how they should be separated.</p><p>It remains the mental model for OT network segmentation, even as modern architectures evolve.</p><hr><h2 id=the-purdue-model-levels>The Purdue Model levels<a hidden class=anchor aria-hidden=true href=#the-purdue-model-levels>#</a></h2><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────┐
+│ LEVEL 5 — Enterprise Network                                │
+│   Corporate IT, email, ERP, internet access                 │
+│   (Standard IT security applies)                            │
+├─────────────────────────────────────────────────────────────┤
+│ LEVEL 4 — Site Business Planning &amp; Logistics                │
+│   Plant scheduling, MES, business systems                   │
+├═════════════════════════════════════════════════════════════┤
+│         ▲▲▲  INDUSTRIAL DEMILITARIZED ZONE (IDMZ)  ▲▲▲       │
+│   The critical security boundary between IT and OT          │
+│   Data historians (replicas), patch servers, jump hosts     │
+├═════════════════════════════════════════════════════════════┤
+│ LEVEL 3 — Site Operations                                   │
+│   Production management, historians, OT domain controllers  │
+├─────────────────────────────────────────────────────────────┤
+│ LEVEL 2 — Area Supervisory Control                          │
+│   HMIs, SCADA servers, engineering workstations             │
+├─────────────────────────────────────────────────────────────┤
+│ LEVEL 1 — Basic Control                                     │
+│   PLCs, RTUs, controllers — the devices running the process │
+├─────────────────────────────────────────────────────────────┤
+│ LEVEL 0 — Physical Process                                  │
+│   Sensors, actuators, valves, motors — the physical world   │
+└─────────────────────────────────────────────────────────────┘
+
+Safety Instrumented Systems (SIS) sit alongside Levels 0-1,
+often on a physically separate network.
+</code></pre><hr><h2 id=the-idmz--the-critical-boundary>The IDMZ — the critical boundary<a hidden class=anchor aria-hidden=true href=#the-idmz--the-critical-boundary>#</a></h2><p>The Industrial DMZ between Level 3 (OT) and Level 4 (IT) is the single most important security control in the Purdue Model. <strong>No traffic should flow directly between IT and OT — everything passes through the IDMZ.</strong></p><pre tabindex=0><code>IT (Level 4/5)          IDMZ                    OT (Level 3)
+     │                    │                          │
+     │── data request ───▶│                          │
+     │                    │── replicated data ◀──────│
+     │◀── from replica ───│                          │
+     │                    │                          │
+   No direct           Broker /                  OT systems
+   connection          replica                   never directly
+   to OT               servers                   exposed to IT
+</code></pre><p><strong>IDMZ design principles:</strong></p><ul><li>No protocol passes straight through — traffic terminates in the IDMZ and a separate connection continues</li><li>Data historians are replicated into the IDMZ; IT reads the replica, never the OT original</li><li>Jump hosts in the IDMZ for administrative access, with MFA</li><li>Patch and antivirus update servers staged in the IDMZ</li><li>Default deny — only explicitly required flows permitted</li></ul><hr><h2 id=securing-each-level>Securing each level<a hidden class=anchor aria-hidden=true href=#securing-each-level>#</a></h2><pre tabindex=0><code>LEVEL 5/4 (Enterprise/Business):
+  Standard IT security — see the rest of this wiki
+  This is where most attacks begin before pivoting to OT
+
+IDMZ:
+  Default-deny firewalls both sides
+  No direct IT-to-OT protocols
+  Replicated historians, staged patches, MFA jump hosts
+  Monitor all traffic crossing the boundary
+
+LEVEL 3 (Site Operations):
+  OT domain controllers separate from IT domain
+  Historians, patch management for OT
+  Application allowlisting on servers
+
+LEVEL 2 (Supervisory):
+  HMIs and SCADA servers hardened
+  Engineering workstations locked down (biggest pivot risk)
+  Application allowlisting
+
+LEVEL 1 (Control):
+  PLCs and controllers — often cannot be secured directly
+  Protect via network segmentation and monitoring
+  Change management for logic changes
+  Physical security for controller access
+
+LEVEL 0 (Physical):
+  Sensors and actuators
+  Protect via physical security and Level 1 controls
+  Safety Instrumented Systems provide independent safety layer
+</code></pre><hr><h2 id=modern-evolution-of-the-purdue-model>Modern evolution of the Purdue Model<a hidden class=anchor aria-hidden=true href=#modern-evolution-of-the-purdue-model>#</a></h2><p>The strict Purdue Model assumes clear boundaries, but modern trends challenge it:</p><pre tabindex=0><code>Challenges:
+  - IIoT devices connect directly to the cloud, bypassing levels
+  - Remote access needs have exploded (especially post-2020)
+  - Edge computing blurs the level boundaries
+
+Modern approach:
+  - Purdue Model as the baseline for segmentation
+  - Zero Trust principles layered on top (verify every connection)
+  - Micro-segmentation within levels
+  - Software-defined networking for dynamic segmentation
+
+The Purdue Model is not obsolete — it is the foundation on which
+Zero Trust OT architectures are built.
+</code></pre><hr><h2 id=purdue-model-implementation-checklist>Purdue Model implementation checklist<a hidden class=anchor aria-hidden=true href=#purdue-model-implementation-checklist>#</a></h2><pre tabindex=0><code>Segmentation
+□ Network segmented into Purdue levels
+□ IDMZ deployed between IT (L4/5) and OT (L3)
+□ Firewalls enforce default-deny between all levels
+□ No direct IT-to-OT protocol connections
+□ VLANs or physical separation between levels
+
+IDMZ
+□ Data historians replicated to IDMZ (IT reads replica only)
+□ Jump hosts with MFA for administrative access
+□ Patch/AV update servers staged in IDMZ
+□ All boundary traffic logged and monitored
+
+Access control
+□ Separate OT domain (not joined to IT Active Directory)
+□ Engineering workstations locked down and monitored
+□ Remote access via IDMZ jump hosts only, with MFA
+□ Vendor access controlled, time-limited, and logged
+
+Monitoring
+□ Passive OT network monitoring deployed (no active scanning)
+□ Baseline of normal OT traffic established
+□ Alerts on unexpected cross-level traffic
+□ Alerts on new devices appearing on OT networks
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/ot-ics/ics-threat-model/><span class=ref-label>OT/ICS</span>ICS Threat Modelling</a>
+<a class=ref-card href=/wiki/ot-ics/attack-ics/><span class=ref-label>OT/ICS</span>MITRE ATT&CK for ICS</a>
+<a class=ref-card href=/wiki/ot-ics/ot-network-security/><span class=ref-label>OT/ICS</span>OT Network Security</a>
+<a class=ref-card href=/wiki/zero-trust/><span class=ref-label>Wiki</span>Zero Trust Architecture</a>
+<a class=ref-card href=/wiki/secure-architecture/microservices/><span class=ref-label>Architecture</span>Network Segmentation</a>
+<a class=ref-card href=/wiki/asm/><span class=ref-label>Wiki</span>Attack Surface Management</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/ot-security/>OT-Security</a></li><li><a href=https://logan23info.github.io/tags/ics/>ICS</a></li><li><a href=https://logan23info.github.io/tags/purdue-model/>Purdue-Model</a></li><li><a href=https://logan23info.github.io/tags/network-segmentation/>Network-Segmentation</a></li><li><a href=https://logan23info.github.io/tags/scada/>SCADA</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

@@ -1,0 +1,2566 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Security-Engineering on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/security-engineering/</link>
+    <description>Recent content in Security-Engineering on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/security-engineering/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Security Engineering Maturity Ladder</title>
+      <link>https://logan23info.github.io/wiki/maturity-ladder/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/maturity-ladder/</guid>
+      <description>The complete Security Engineering Maturity Ladder — from Threat Modelling foundations through to advanced adversary simulation and Zero Trust Architecture.</description>
+      <content:encoded><![CDATA[<h2 id="overview">Overview</h2>
+<p>The Security Engineering Maturity Ladder describes how organisations evolve their security practices from reactive to proactive, from manual to automated, and from hypothetical to intelligence-driven. Each level builds on the previous one — you cannot effectively run a Red Team if you have not first modelled what you are defending.</p>
+<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────┐
+│         SECURITY ENGINEERING MATURITY LADDER                   │
+├───────┬─────────────────────────────────┬──────────────────────┤
+│ Level │ Discipline                      │ Core question        │
+├───────┼─────────────────────────────────┼──────────────────────┤
+│   1   │ Threat Modelling                │ What could go wrong? │
+│   2   │ Attack Surface Management       │ Where are we exposed?│
+│   3   │ Red Teaming                     │ Can attacks succeed? │
+│   4   │ Purple Teaming                  │ Can we detect them?  │
+│   5   │ Threat Intelligence             │ Who is targeting us? │
+│   6   │ Zero Trust Architecture         │ Trust nothing, ever  │
+│  +1   │ Supply Chain Security           │ Is our code safe?    │
+└───────┴─────────────────────────────────┴──────────────────────┘
+</code></pre><p>Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally. Level 6 is a multi-year architectural transformation.</p>
+<hr>
+<h2 id="level-1--threat-modelling">Level 1 — Threat Modelling</h2>
+<p><strong>What it is:</strong> A structured process for identifying security risks during the design phase, before code is written or systems are built.</p>
+<p><strong>Key frameworks:</strong> STRIDE, DREAD, PASTA, Attack Trees</p>
+<p><strong>Core output:</strong> A prioritised threat register with mitigations mapped to each threat.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Threat models are produced for new features and services</li>
+<li>Findings are tracked as engineering tickets</li>
+<li>Threat model is stored as code alongside the system it describes</li>
+<li>Security checklist is part of every PR review</li>
+</ul>
+<p><strong>Where it fits:</strong> Design and development phase. The cheapest place to find and fix security issues.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/stride/">Threat Modelling</a> | <a href="/wiki/stride/">STRIDE</a> | <a href="/wiki/dread/">DREAD</a> | <a href="/wiki/pasta/">PASTA</a></p>
+<hr>
+<h2 id="level-2--attack-surface-management-asm">Level 2 — Attack Surface Management (ASM)</h2>
+<p><strong>What it is:</strong> Continuous discovery, inventory, and monitoring of every externally exposed asset — including assets the organisation may not know it has.</p>
+<p><strong>Key tools:</strong> Censys, Shodan, Microsoft Defender EASM, Tenable ASM, CyCognito</p>
+<p><strong>Core output:</strong> A continuously updated inventory of exposed assets, with risk scores and change alerts.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>All internet-facing assets are discovered automatically, not manually</li>
+<li>Unknown or shadow IT assets are detected and investigated</li>
+<li>New exposures trigger automated alerts within hours</li>
+<li>Asset inventory is integrated with the threat model</li>
+</ul>
+<p><strong>Where it fits:</strong> Continuous, runtime. Validates and extends threat models with real-world exposure data.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/asm/">Attack Surface Management</a></p>
+<hr>
+<h2 id="level-3--red-teaming">Level 3 — Red Teaming</h2>
+<p><strong>What it is:</strong> Authorised simulation of real-world attackers against live systems. Goes beyond penetration testing to simulate full attack campaigns — from initial access through lateral movement to data exfiltration.</p>
+<p><strong>Key frameworks:</strong> MITRE ATT&amp;CK, TIBER-EU, CBEST</p>
+<p><strong>Core output:</strong> An attack narrative showing exactly how far a real attacker could get, and what they could access.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Red team exercises run at least annually against critical systems</li>
+<li>Findings are mapped to MITRE ATT&amp;CK techniques</li>
+<li>Red team scope is derived from threat intelligence, not just compliance</li>
+<li>Results feed directly back into threat models and defensive controls</li>
+</ul>
+<p><strong>Where it fits:</strong> Post-deployment validation. Tests real defensive controls against real attack techniques.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/red-teaming/">Red Teaming</a></p>
+<hr>
+<h2 id="level-4--purple-teaming">Level 4 — Purple Teaming</h2>
+<p><strong>What it is:</strong> Red team (attackers) and Blue team (defenders) working together simultaneously — the red team executes attack techniques while the blue team validates whether their detection and response controls actually work.</p>
+<p><strong>Key frameworks:</strong> MITRE ATT&amp;CK, Atomic Red Team, VECTR</p>
+<p><strong>Core output:</strong> A detection coverage map showing which attack techniques are detected, which are missed, and which alerting rules need improvement.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Purple team exercises run regularly, not just annually</li>
+<li>Every red team technique is validated against SIEM detection rules</li>
+<li>Detection gaps are immediately addressed during the exercise</li>
+<li>Results drive SOC playbook improvements</li>
+</ul>
+<p><strong>Where it fits:</strong> Validation layer. Proves whether defensive investments are actually working.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/purple-teaming/">Purple Teaming</a></p>
+<hr>
+<h2 id="level-5--threat-intelligence">Level 5 — Threat Intelligence</h2>
+<p><strong>What it is:</strong> The use of structured, curated information about real-world threat actors — their identities, motivations, capabilities, and specific tactics — to drive security decisions. Transforms threat modelling from hypothetical to intelligence-driven.</p>
+<p><strong>Key sources:</strong> MITRE ATT&amp;CK Groups, MISP, OpenCTI, Recorded Future, Mandiant Advantage</p>
+<p><strong>Core output:</strong> Threat actor profiles, TTP (Tactics, Techniques, Procedures) mappings, and intelligence-driven threat models.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Threat models reference real attacker groups relevant to your sector</li>
+<li>IOCs (Indicators of Compromise) are ingested and acted on automatically</li>
+<li>Intelligence is operationalised — it drives detection rules, not just reports</li>
+<li>Threat intelligence is shared with sector peers (ISACs)</li>
+</ul>
+<p><strong>Where it fits:</strong> Strategic layer. Makes every other level more precise and relevant.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/threat-intelligence/">Threat Intelligence</a></p>
+<hr>
+<h2 id="level-6--zero-trust-architecture">Level 6 — Zero Trust Architecture</h2>
+<p><strong>What it is:</strong> An architectural philosophy where no user, device, or network location is trusted by default. Every request is authenticated, authorised, and validated — regardless of where it originates. The architectural implementation of the principle of least privilege at every layer.</p>
+<p><strong>Key standards:</strong> NIST SP 800-207, CISA Zero Trust Maturity Model, Google BeyondCorp</p>
+<p><strong>Core output:</strong> An architecture where lateral movement is structurally prevented, not just detected.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Identity is the new perimeter — every access decision is identity-based</li>
+<li>Microsegmentation prevents lateral movement between services</li>
+<li>Devices are continuously validated, not trusted after initial login</li>
+<li>All traffic is encrypted and inspected, including internal east-west traffic</li>
+</ul>
+<p><strong>Where it fits:</strong> Architectural transformation. Eliminates entire categories of threats rather than mitigating them one by one.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/zero-trust/">Zero Trust Architecture</a></p>
+<hr>
+<h2 id="1--supply-chain-security">+1 — Supply Chain Security</h2>
+<p><strong>What it is:</strong> Securing not just your own code but every dependency, tool, and third-party component your software relies on. Addresses the reality that most modern software is 80–90% open source code written by others.</p>
+<p><strong>Key frameworks:</strong> SLSA (Supply chain Levels for Software Artifacts), SSDF (NIST), SBOM</p>
+<p><strong>Core output:</strong> A verified, signed, and continuously monitored software supply chain with full dependency visibility.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>SBOM (Software Bill of Materials) is generated for every build</li>
+<li>All dependencies are scanned for known vulnerabilities on every build</li>
+<li>Build artifacts are cryptographically signed (Sigstore/Cosign)</li>
+<li>Third-party code is reviewed before adoption</li>
+</ul>
+<p><strong>Where it fits:</strong> Underlies all levels. A compromised dependency undermines every other security control.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/supply-chain/">Supply Chain Security</a></p>
+<hr>
+<h2 id="how-the-levels-interact">How the levels interact</h2>
+<p>The ladder is not strictly sequential — most mature organisations run all levels simultaneously. But each level amplifies the others:</p>
+<ul>
+<li><strong>Threat Intelligence → Threat Modelling:</strong> Real attacker TTPs make threat models more accurate</li>
+<li><strong>Threat Modelling → Red Teaming:</strong> Threat models define what red teams should try to do</li>
+<li><strong>Red Teaming → Purple Teaming:</strong> Red team findings define what blue teams need to detect</li>
+<li><strong>Purple Teaming → Detection Engineering:</strong> Coverage gaps drive SIEM rule development</li>
+<li><strong>ASM → All levels:</strong> Real exposure data keeps threat models, red team scope, and detection rules current</li>
+<li><strong>Zero Trust → All levels:</strong> Architectural controls reduce the blast radius when other levels miss something</li>
+<li><strong>Supply Chain → All levels:</strong> Secure the foundation that everything else runs on</li>
+</ul>
+<hr>
+<h2 id="where-to-start">Where to start</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Organisation size</th>
+					<th>Starting point</th>
+					<th>Next step</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Startup / small team</td>
+					<td>Threat Modelling (Level 1)</td>
+					<td>ASM (Level 2)</td>
+			</tr>
+			<tr>
+					<td>Mid-size / scale-up</td>
+					<td>ASM + basic Threat Intel</td>
+					<td>Red Teaming</td>
+			</tr>
+			<tr>
+					<td>Enterprise</td>
+					<td>Purple Teaming + Threat Intel</td>
+					<td>Zero Trust roadmap</td>
+			</tr>
+			<tr>
+					<td>Regulated (finance, health)</td>
+					<td>All levels + compliance mapping</td>
+					<td>TIBER-EU / CBEST</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-all-wiki-pages">📚 All wiki pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Level 1</span>STRIDE</a>
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Level 1</span>DREAD</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Level 1</span>PASTA</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Level 1</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Level 2</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Level 3</span>Red Teaming</a>
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Level 4</span>Purple Teaming</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Level 5</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Level 6</span>Zero Trust Architecture</a>
+  <a class="ref-card" href="/wiki/supply-chain/"><span class="ref-label">+1</span>Supply Chain Security</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/wiki/tools/threagile/"><span class="ref-label">Tool</span>Threagile</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Attack Surface Management (ASM)</title>
+      <link>https://logan23info.github.io/wiki/asm/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/asm/</guid>
+      <description>Complete guide to Attack Surface Management — continuous discovery, inventory, and risk scoring of every externally exposed asset.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-attack-surface-management">What is Attack Surface Management?</h2>
+<p>Attack Surface Management (ASM) is the continuous process of discovering, inventorying, classifying, and monitoring every asset an organisation exposes to the internet — including assets the organisation may not know it has.</p>
+<p>Where threat modelling is a <strong>design-time</strong> activity (what could go wrong?), ASM is <strong>runtime</strong> (what is actually exposed right now?).</p>
+<p>The attack surface includes:</p>
+<ul>
+<li>Web applications and APIs</li>
+<li>Cloud storage buckets and databases</li>
+<li>Subdomains and DNS records</li>
+<li>SSL/TLS certificates and their expiry dates</li>
+<li>Open ports and running services</li>
+<li>Third-party SaaS integrations</li>
+<li>Shadow IT — systems deployed without IT&rsquo;s knowledge</li>
+</ul>
+<hr>
+<h2 id="why-asm-matters">Why ASM matters</h2>
+<h3 id="the-shadow-it-problem">The shadow IT problem</h3>
+<p>In a 2023 survey, organisations discovered an average of <strong>30% more internet-facing assets</strong> than they had in their official inventory. Every untracked asset is a potential entry point an attacker can find — and an organisation can&rsquo;t defend what it doesn&rsquo;t know exists.</p>
+<h3 id="the-speed-problem">The speed problem</h3>
+<p>Attackers scan the entire internet continuously. Tools like Shodan and Censys index new exposures within <strong>hours</strong> of them appearing. The average organisation takes <strong>days to weeks</strong> to discover a new exposure through manual processes. ASM closes this gap.</p>
+<h3 id="the-third-party-problem">The third-party problem</h3>
+<p>Your attack surface includes your suppliers, partners, and SaaS providers. A breach at a third party can expose your data and systems — as demonstrated by the SolarWinds supply chain attack, which compromised thousands of organisations through a single vendor update.</p>
+<hr>
+<h2 id="the-asm-process">The ASM process</h2>
+<pre tabindex="0"><code>Discover → Inventory → Classify → Prioritise → Monitor → Remediate
+    ↑                                                          |
+    └──────────────────── continuous loop ─────────────────────┘
+</code></pre><h3 id="1-discovery">1. Discovery</h3>
+<p>Enumerate all assets associated with your organisation using:</p>
+<ul>
+<li><strong>DNS enumeration</strong> — subdomains, MX records, TXT records</li>
+<li><strong>Certificate transparency logs</strong> — every SSL certificate issued for your domains</li>
+<li><strong>ASN (Autonomous System Number) lookup</strong> — IP ranges registered to your organisation</li>
+<li><strong>Reverse IP lookup</strong> — all domains hosted on your IP addresses</li>
+<li><strong>Search engine dorking</strong> — Google/Bing queries that surface exposed assets</li>
+<li><strong>Port scanning</strong> — open services on discovered IP ranges</li>
+</ul>
+<p><strong>Tools:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Subdomain enumeration</span>
+</span></span><span class="line"><span class="cl">subfinder -d example.com -o subdomains.txt
+</span></span><span class="line"><span class="cl">amass enum -d example.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Certificate transparency</span>
+</span></span><span class="line"><span class="cl">curl <span class="s2">&#34;https://crt.sh/?q=%.example.com&amp;output=json&#34;</span> <span class="p">|</span> jq <span class="s1">&#39;.[].name_value&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Port scanning</span>
+</span></span><span class="line"><span class="cl">nmap -sV -p- --open &lt;IP_RANGE&gt;
+</span></span></code></pre></div><h3 id="2-inventory">2. Inventory</h3>
+<p>Build a structured asset register:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">asset</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;asset-001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;api.example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;203.0.113.42&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;web-application&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;payments-team&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">discovered</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-01&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">last_seen</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;HTTPS&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">certificate_expiry</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-12-01&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tags</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;internet-facing&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;handles-pii&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;pci-scope&#34;</span><span class="w">
+</span></span></span></code></pre></div><h3 id="3-classify">3. Classify</h3>
+<p>Rate each asset by sensitivity and business criticality:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Classification</th>
+					<th>Description</th>
+					<th>Example</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Critical</td>
+					<td>Directly handles sensitive data or auth</td>
+					<td>Payment API, SSO endpoint</td>
+			</tr>
+			<tr>
+					<td>High</td>
+					<td>Supports critical systems</td>
+					<td>Internal admin portal</td>
+			</tr>
+			<tr>
+					<td>Medium</td>
+					<td>Business function, limited data</td>
+					<td>Marketing site</td>
+			</tr>
+			<tr>
+					<td>Low</td>
+					<td>Minimal business impact</td>
+					<td>Static documentation</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="4-prioritise">4. Prioritise</h3>
+<p>Score each exposure by combining asset criticality with vulnerability severity:</p>
+<pre tabindex="0"><code>Risk score = Asset criticality × Vulnerability severity × Exploitability
+</code></pre><p>A critical-severity vulnerability on a low-criticality asset may rank lower than a medium-severity vulnerability on a payment API.</p>
+<h3 id="5-monitor">5. Monitor</h3>
+<p>Set up continuous monitoring for:</p>
+<ul>
+<li>New subdomains appearing (possible shadow IT or typosquatting)</li>
+<li>SSL certificate expiry (within 30 days)</li>
+<li>New open ports on known assets</li>
+<li>Changes to DNS records</li>
+<li>New vulnerabilities in services you run</li>
+</ul>
+<h3 id="6-remediate">6. Remediate</h3>
+<p>For each finding, route to the owning team with:</p>
+<ul>
+<li>Asset details and discovery method</li>
+<li>Risk score and business impact</li>
+<li>Recommended remediation steps</li>
+<li>SLA based on severity (Critical: 24h, High: 7 days, Medium: 30 days)</li>
+</ul>
+<hr>
+<h2 id="asm-tooling">ASM tooling</h2>
+<h3 id="open-source-tools">Open source tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+					<th>Cost</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Subfinder</td>
+					<td>Subdomain discovery</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Amass</td>
+					<td>Attack surface mapping</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Shodan CLI</td>
+					<td>Internet-wide scanning data</td>
+					<td>Free tier</td>
+			</tr>
+			<tr>
+					<td>Nuclei</td>
+					<td>Vulnerability scanning at scale</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>httpx</td>
+					<td>HTTP probe and response analysis</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Nmap</td>
+					<td>Port scanning and service detection</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>theHarvester</td>
+					<td>OSINT gathering</td>
+					<td>Free</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="commercial-asm-platforms">Commercial ASM platforms</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Strengths</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Microsoft Defender EASM</td>
+					<td>Deep Azure integration, continuous monitoring</td>
+			</tr>
+			<tr>
+					<td>Censys ASM</td>
+					<td>Best discovery coverage, certificate data</td>
+			</tr>
+			<tr>
+					<td>Tenable ASM</td>
+					<td>Integrates with vulnerability management</td>
+			</tr>
+			<tr>
+					<td>CyCognito</td>
+					<td>Strong third-party/subsidiary discovery</td>
+			</tr>
+			<tr>
+					<td>Palo Alto Cortex Xpanse</td>
+					<td>Enterprise-grade, XSOAR integration</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="asm-in-a-devsecops-pipeline">ASM in a DevSecOps pipeline</h2>
+<p>Integrate ASM into CI/CD so new exposures are caught before they reach production:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .github/workflows/asm-scan.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ASM — Attack Surface Scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0 6 * * *&#39;</span><span class="w">    </span><span class="c"># daily at 06:00</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">main]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">surface-scan</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install tools</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+</span></span></span><span class="line"><span class="cl"><span class="sd">          go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enumerate subdomains</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">subfinder -d ${{ vars.TARGET_DOMAIN }} -o subdomains.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Probe live hosts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">httpx -l subdomains.txt -o live-hosts.txt -status-code -title</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run vulnerability scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">nuclei -l live-hosts.txt -severity critical,high -o nuclei-findings.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Upload results</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">asm-results</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">            subdomains.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            live-hosts.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            nuclei-findings.json</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="advanced-asm-concepts">Advanced ASM concepts</h2>
+<h3 id="continuous-threat-exposure-management-ctem">Continuous Threat Exposure Management (CTEM)</h3>
+<p>CTEM (coined by Gartner) extends ASM into a five-stage programme:</p>
+<ol>
+<li><strong>Scoping</strong> — define what is in scope for exposure management</li>
+<li><strong>Discovery</strong> — find all assets and vulnerabilities</li>
+<li><strong>Prioritisation</strong> — rank by exploitability and business impact</li>
+<li><strong>Validation</strong> — verify exploitability with red team or automated tools</li>
+<li><strong>Mobilisation</strong> — route findings to owners with SLAs</li>
+</ol>
+<h3 id="attack-path-analysis">Attack Path Analysis</h3>
+<p>Beyond individual asset exposure, model how an attacker could chain multiple exposures together:</p>
+<pre tabindex="0"><code>Exposed Jenkins CI server
+  → Steal AWS credentials from build logs
+    → Access S3 bucket containing customer PII
+      → Exfiltrate 2M customer records
+</code></pre><p>Each step alone might be low severity. The chain is critical. Tools like XM Cyber and Skybox Security automate attack path analysis across your full environment.</p>
+<h3 id="external-vs-internal-attack-surface">External vs Internal attack surface</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Surface</th>
+					<th>Definition</th>
+					<th>Tools</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External</td>
+					<td>Internet-facing assets</td>
+					<td>Censys, Shodan, ASM platforms</td>
+			</tr>
+			<tr>
+					<td>Internal</td>
+					<td>Assets on corporate network</td>
+					<td>Rumble, Nmap, vulnerability scanners</td>
+			</tr>
+			<tr>
+					<td>Cloud</td>
+					<td>Cloud resources (S3, RDS, etc.)</td>
+					<td>Prowler, ScoutSuite, CloudSploit</td>
+			</tr>
+			<tr>
+					<td>Third-party</td>
+					<td>Supplier and partner exposure</td>
+					<td>BitSight, SecurityScorecard</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="integration-with-threat-modelling">Integration with threat modelling</h3>
+<p>ASM findings should feed directly back into threat models:</p>
+<ul>
+<li>A newly discovered exposed admin portal → adds an entry point to the DFD</li>
+<li>An expired SSL certificate on a payment endpoint → maps to STRIDE Information Disclosure</li>
+<li>A shadow IT database → triggers a new threat modelling session for that system</li>
+</ul>
+<p>This creates a continuous loop: threat models define what to look for, ASM finds real exposures, findings update threat models.</p>
+<hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mean Time to Discover (MTTD)</td>
+					<td>&lt; 4 hours for new internet-facing assets</td>
+			</tr>
+			<tr>
+					<td>Mean Time to Remediate Critical</td>
+					<td>&lt; 24 hours</td>
+			</tr>
+			<tr>
+					<td>Unknown asset ratio</td>
+					<td>&lt; 5% of total inventory</td>
+			</tr>
+			<tr>
+					<td>Certificate expiry coverage</td>
+					<td>100% alerted 30 days before expiry</td>
+			</tr>
+			<tr>
+					<td>Third-party coverage</td>
+					<td>100% of tier-1 suppliers monitored</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Security Engineering Maturity Ladder</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — Level 3</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — feeds into ASM findings</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Wiki</span>Zero Trust Architecture</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Red Teaming &amp; Adversary Simulation</title>
+      <link>https://logan23info.github.io/wiki/red-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/red-teaming/</guid>
+      <description>Complete guide to Red Teaming — from basic penetration testing through to full adversary simulation using MITRE ATT&amp;amp;CK.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-red-teaming">What is Red Teaming?</h2>
+<p>Red Teaming is the authorised simulation of a real-world adversary against your organisation&rsquo;s people, processes, and technology. It goes far beyond penetration testing — rather than finding vulnerabilities in isolation, a red team simulates a complete attack campaign from initial access through to the attacker&rsquo;s end goal (data theft, ransomware deployment, business disruption).</p>
+<p>The term comes from military wargaming, where a &ldquo;red team&rdquo; plays the role of the enemy to test defensive plans.</p>
+<h3 id="red-team-vs-penetration-test">Red Team vs Penetration Test</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Penetration Test</th>
+					<th>Red Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Find as many vulnerabilities as possible</td>
+					<td>Achieve a specific attacker goal</td>
+			</tr>
+			<tr>
+					<td>Duration</td>
+					<td>Days to weeks</td>
+					<td>Weeks to months</td>
+			</tr>
+			<tr>
+					<td>Scope</td>
+					<td>Defined list of systems</td>
+					<td>Entire organisation</td>
+			</tr>
+			<tr>
+					<td>Rules</td>
+					<td>Specific targets in scope</td>
+					<td>Anything in scope to reach the goal</td>
+			</tr>
+			<tr>
+					<td>Stealth</td>
+					<td>Not required</td>
+					<td>Critical — avoid detection</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Vulnerability list</td>
+					<td>Attack narrative + detection gaps</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually / per compliance</td>
+					<td>Annually or after major changes</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="mitre-attck-framework">MITRE ATT&amp;CK Framework</h2>
+<p>Every red team operation should be mapped to MITRE ATT&amp;CK — the world&rsquo;s most comprehensive knowledge base of real adversary tactics and techniques, built from analysis of thousands of real-world incidents.</p>
+<h3 id="the-attck-matrix">The ATT&amp;CK Matrix</h3>
+<p>ATT&amp;CK organises adversary behaviour into <strong>14 Tactics</strong> (the why) and <strong>hundreds of Techniques</strong> (the how):</p>
+<table>
+	<thead>
+			<tr>
+					<th>Tactic</th>
+					<th>Description</th>
+					<th>Example technique</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Reconnaissance</td>
+					<td>Gather information</td>
+					<td>T1595: Active Scanning</td>
+			</tr>
+			<tr>
+					<td>Resource Development</td>
+					<td>Build attack infrastructure</td>
+					<td>T1583: Acquire Infrastructure</td>
+			</tr>
+			<tr>
+					<td>Initial Access</td>
+					<td>Get into the environment</td>
+					<td>T1566: Phishing</td>
+			</tr>
+			<tr>
+					<td>Execution</td>
+					<td>Run malicious code</td>
+					<td>T1059: Command and Scripting</td>
+			</tr>
+			<tr>
+					<td>Persistence</td>
+					<td>Maintain foothold</td>
+					<td>T1053: Scheduled Task/Job</td>
+			</tr>
+			<tr>
+					<td>Privilege Escalation</td>
+					<td>Gain higher permissions</td>
+					<td>T1068: Exploit Vulnerabilities</td>
+			</tr>
+			<tr>
+					<td>Defense Evasion</td>
+					<td>Avoid detection</td>
+					<td>T1070: Indicator Removal</td>
+			</tr>
+			<tr>
+					<td>Credential Access</td>
+					<td>Steal credentials</td>
+					<td>T1003: OS Credential Dumping</td>
+			</tr>
+			<tr>
+					<td>Discovery</td>
+					<td>Explore the environment</td>
+					<td>T1046: Network Service Scanning</td>
+			</tr>
+			<tr>
+					<td>Lateral Movement</td>
+					<td>Move between systems</td>
+					<td>T1021: Remote Services</td>
+			</tr>
+			<tr>
+					<td>Collection</td>
+					<td>Gather data of interest</td>
+					<td>T1005: Data from Local System</td>
+			</tr>
+			<tr>
+					<td>Command &amp; Control</td>
+					<td>Communicate with compromised systems</td>
+					<td>T1071: App Layer Protocol</td>
+			</tr>
+			<tr>
+					<td>Exfiltration</td>
+					<td>Steal data</td>
+					<td>T1041: Exfil over C2 Channel</td>
+			</tr>
+			<tr>
+					<td>Impact</td>
+					<td>Achieve attacker goal</td>
+					<td>T1486: Data Encrypted for Impact</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="red-team-operation-phases">Red Team operation phases</h2>
+<h3 id="phase-1--planning-and-scoping">Phase 1 — Planning and scoping</h3>
+<p>Define:</p>
+<ul>
+<li><strong>Objective:</strong> What is the attacker trying to achieve? (e.g. access customer database, deploy ransomware on 10 systems, access CFO email)</li>
+<li><strong>Threat actor profile:</strong> Which real-world attacker group are we emulating? (e.g. FIN7 for financial sector, APT29 for government)</li>
+<li><strong>Rules of engagement:</strong> What is explicitly out of scope? (production databases, specific systems)</li>
+<li><strong>Success criteria:</strong> How will we measure success or failure?</li>
+<li><strong>Emergency procedures:</strong> How does the red team stop if something goes wrong?</li>
+</ul>
+<h3 id="phase-2--reconnaissance">Phase 2 — Reconnaissance</h3>
+<p>Gather intelligence on the target without touching their systems:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># OSINT on the target organisation</span>
+</span></span><span class="line"><span class="cl">theHarvester -d targetcompany.com -b all
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Find employee names and roles on LinkedIn</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Identify technology stack from job postings</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Enumerate subdomains and IP ranges</span>
+</span></span><span class="line"><span class="cl">subfinder -d targetcompany.com <span class="p">|</span> httpx -title -tech-detect
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Search for leaked credentials</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Check HaveIBeenPwned API for compromised accounts</span>
+</span></span></code></pre></div><h3 id="phase-3--initial-access">Phase 3 — Initial access</h3>
+<p>Attempt to gain a foothold using the threat actor&rsquo;s preferred techniques:</p>
+<p><strong>Common initial access vectors:</strong></p>
+<ul>
+<li>Spear phishing with malicious attachments or links</li>
+<li>Exploiting internet-facing applications (VPN, email, web apps)</li>
+<li>Supply chain compromise (trojanised software update)</li>
+<li>Valid credentials (obtained via OSINT, credential stuffing, or purchase)</li>
+<li>Physical access (USB drops, tailgating)</li>
+</ul>
+<h3 id="phase-4--establish-persistence">Phase 4 — Establish persistence</h3>
+<p>Once inside, ensure the foothold survives reboots and credential rotations:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Common persistence mechanisms (ATT&amp;CK T1053)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Scheduled tasks (Windows)</span>
+</span></span><span class="line"><span class="cl">schtasks /create /tn <span class="s2">&#34;WindowsUpdate&#34;</span> /tr <span class="s2">&#34;C:\Users\Public\beacon.exe&#34;</span> /sc onlogon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Cron jobs (Linux)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;*/5 * * * * /tmp/.update&#34;</span> &gt;&gt; /var/spool/cron/root
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Registry run keys (Windows)</span>
+</span></span><span class="line"><span class="cl">reg add <span class="s2">&#34;HKCU\Software\Microsoft\Windows\CurrentVersion\Run&#34;</span> /v <span class="s2">&#34;Update&#34;</span> /t REG_SZ /d <span class="s2">&#34;C:\beacon.exe&#34;</span>
+</span></span></code></pre></div><h3 id="phase-5--privilege-escalation">Phase 5 — Privilege escalation</h3>
+<p>Escalate from standard user to administrator/root:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check for misconfigured sudo (Linux)</span>
+</span></span><span class="line"><span class="cl">sudo -l
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Look for SUID binaries</span>
+</span></span><span class="line"><span class="cl">find / -perm -4000 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows: check for unquoted service paths</span>
+</span></span><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode <span class="p">|</span> findstr /i <span class="s2">&#34;auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;c:\windows\\&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Token impersonation with tools like Rubeus or Mimikatz</span>
+</span></span></code></pre></div><h3 id="phase-6--lateral-movement">Phase 6 — Lateral movement</h3>
+<p>Move from the initial foothold to higher-value targets:</p>
+<pre tabindex="0"><code>Initial foothold (developer laptop)
+  → Steal credentials from memory (Mimikatz)
+    → Authenticate to internal file server
+      → Find database connection strings in config files
+        → Access production database
+          → Exfiltrate customer records
+</code></pre><p><strong>Common techniques:</strong></p>
+<ul>
+<li>Pass-the-Hash (PTH) — reuse NTLM hashes without cracking</li>
+<li>Pass-the-Ticket (PTT) — Kerberos ticket reuse (Golden/Silver ticket attacks)</li>
+<li>Remote services — RDP, WMI, PSExec, SSH</li>
+<li>Living-off-the-land — using built-in tools (PowerShell, WMI, certutil) to avoid AV detection</li>
+</ul>
+<h3 id="phase-7--objective-completion-and-reporting">Phase 7 — Objective completion and reporting</h3>
+<p>Once the objective is achieved (or time runs out), document:</p>
+<ul>
+<li>Complete attack narrative with timestamps</li>
+<li>Every technique used, mapped to ATT&amp;CK</li>
+<li>Evidence (screenshots, command output, data samples)</li>
+<li>Detection opportunities missed by the blue team</li>
+<li>Recommendations for each gap</li>
+</ul>
+<hr>
+<h2 id="red-team-tooling">Red Team tooling</h2>
+<h3 id="command-and-control-c2-frameworks">Command and Control (C2) frameworks</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Type</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cobalt Strike</td>
+					<td>Commercial</td>
+					<td>Industry standard, expensive (~$3,500/year)</td>
+			</tr>
+			<tr>
+					<td>Sliver</td>
+					<td>Open source</td>
+					<td>Modern Go-based C2, Cobalt Strike alternative</td>
+			</tr>
+			<tr>
+					<td>Metasploit</td>
+					<td>Open source</td>
+					<td>Broad exploit coverage, well-known (easily detected)</td>
+			</tr>
+			<tr>
+					<td>Havoc</td>
+					<td>Open source</td>
+					<td>Modern, evasion-focused</td>
+			</tr>
+			<tr>
+					<td>Brute Ratel</td>
+					<td>Commercial</td>
+					<td>Designed to evade EDR products</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="supporting-tools">Supporting tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mimikatz</td>
+					<td>Credential extraction from Windows memory</td>
+			</tr>
+			<tr>
+					<td>Rubeus</td>
+					<td>Kerberos attacks</td>
+			</tr>
+			<tr>
+					<td>BloodHound</td>
+					<td>Active Directory attack path analysis</td>
+			</tr>
+			<tr>
+					<td>Impacket</td>
+					<td>Python tools for Windows protocols</td>
+			</tr>
+			<tr>
+					<td>CrackMapExec</td>
+					<td>Network attack automation</td>
+			</tr>
+			<tr>
+					<td>Responder</td>
+					<td>Network credential capture</td>
+			</tr>
+			<tr>
+					<td>Burp Suite</td>
+					<td>Web application attacks</td>
+			</tr>
+			<tr>
+					<td>Nessus / OpenVAS</td>
+					<td>Vulnerability scanning</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="threat-intelligence-driven-red-teaming">Threat-intelligence-driven red teaming</h2>
+<p>The most advanced form of red teaming uses threat intelligence to emulate a specific threat actor relevant to your organisation and sector.</p>
+<h3 id="frameworks-for-intelligence-driven-red-teaming">Frameworks for intelligence-driven red teaming</h3>
+<p><strong>TIBER-EU</strong> (Threat Intelligence-Based Ethical Red Teaming)</p>
+<ul>
+<li>Developed by the European Central Bank</li>
+<li>Mandatory for financial institutions in many EU countries</li>
+<li>Three phases: preparation, red team test, closure</li>
+<li>Requires accredited threat intelligence provider + red team provider</li>
+</ul>
+<p><strong>CBEST</strong> (UK)</p>
+<ul>
+<li>Bank of England framework for UK financial sector</li>
+<li>Similar structure to TIBER-EU</li>
+<li>Uses CREST-accredited providers</li>
+</ul>
+<p><strong>DORA</strong> (Digital Operational Resilience Act)</p>
+<ul>
+<li>EU regulation requiring TLPT (Threat-Led Penetration Testing) for financial entities</li>
+<li>Effective January 2025</li>
+<li>Based on TIBER-EU methodology</li>
+</ul>
+<h3 id="selecting-a-threat-actor-profile">Selecting a threat actor profile</h3>
+<p>Research which threat actor groups target your sector using:</p>
+<ul>
+<li>MITRE ATT&amp;CK Groups: <a href="https://attack.mitre.org/groups/">https://attack.mitre.org/groups/</a></li>
+<li>Mandiant M-Trends annual report</li>
+<li>CrowdStrike Global Threat Report</li>
+<li>Sector-specific ISACs (Information Sharing and Analysis Centers)</li>
+</ul>
+<p><strong>Example: Financial sector threat actor profile</strong></p>
+<pre tabindex="0"><code>Threat actor: FIN7 (Carbanak)
+Primary motivation: Financial gain
+Typical initial access: Spear phishing with malicious Word docs
+Common tools: Carbanak malware, Cobalt Strike
+Target: Point-of-sale systems, wire transfer fraud
+Notable incidents: $1B+ stolen from banks globally
+MITRE ATT&amp;CK group: https://attack.mitre.org/groups/G0046/
+</code></pre><hr>
+<h2 id="red-team-reporting">Red Team reporting</h2>
+<p>A red team report contains:</p>
+<h3 id="executive-summary-12-pages">Executive summary (1–2 pages)</h3>
+<ul>
+<li>Objective and outcome</li>
+<li>Key findings in business impact terms</li>
+<li>Top 3–5 recommendations</li>
+</ul>
+<h3 id="attack-narrative">Attack narrative</h3>
+<ul>
+<li>Chronological story of the attack campaign</li>
+<li>Each step explained in plain language</li>
+<li>Business risk at each stage</li>
+</ul>
+<h3 id="technical-findings">Technical findings</h3>
+<ul>
+<li>Each technique used, mapped to ATT&amp;CK</li>
+<li>Evidence screenshots</li>
+<li>Detection status (detected / missed)</li>
+<li>Remediation recommendation</li>
+</ul>
+<h3 id="attck-navigator-heat-map">ATT&amp;CK Navigator heat map</h3>
+<p>A visual showing which techniques were used and which were detected:</p>
+<pre tabindex="0"><code>Technique             | Used | Detected | Gap
+T1566 Phishing        |  ✓   |    ✓     | None
+T1003 Credential Dump |  ✓   |    ✗     | HIGH GAP
+T1021 Remote Services |  ✓   |    ✗     | HIGH GAP
+T1486 Ransomware Sim  |  ✓   |    ✓     | None
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time to objective</td>
+					<td>How long to achieve the attacker&rsquo;s goal</td>
+			</tr>
+			<tr>
+					<td>Detection rate</td>
+					<td>% of techniques detected by blue team</td>
+			</tr>
+			<tr>
+					<td>Dwell time</td>
+					<td>Time between initial access and detection</td>
+			</tr>
+			<tr>
+					<td>Blast radius</td>
+					<td>Maximum access achieved</td>
+			</tr>
+			<tr>
+					<td>Coverage against ATT&amp;CK</td>
+					<td>% of relevant techniques tested</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Purple Teaming</title>
+      <link>https://logan23info.github.io/wiki/purple-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/purple-teaming/</guid>
+      <description>Complete guide to Purple Teaming — collaborative red and blue team exercises to validate and improve detection and response capabilities.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-purple-teaming">What is Purple Teaming?</h2>
+<p>Purple Teaming is a collaborative security exercise where the Red Team (attackers) and Blue Team (defenders) work together simultaneously. The red team executes attack techniques one at a time, the blue team monitors whether their detection tools catch it, and both teams immediately discuss and fix gaps.</p>
+<p><strong>Red = Attacker. Blue = Defender. Purple = Both working together.</strong></p>
+<p>Unlike traditional red teaming where findings are only shared at the end in a report, purple teaming produces immediate improvements — gaps are fixed in real time during the exercise.</p>
+<hr>
+<h2 id="purple-vs-red-vs-blue">Purple vs Red vs Blue</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Red Team</th>
+					<th>Blue Team</th>
+					<th>Purple Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Achieve attacker objective</td>
+					<td>Detect and respond</td>
+					<td>Improve detection coverage</td>
+			</tr>
+			<tr>
+					<td>Timing</td>
+					<td>Sequential (attack then report)</td>
+					<td>Reactive</td>
+					<td>Simultaneous collaboration</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Attack narrative</td>
+					<td>Incident reports</td>
+					<td>Detection coverage map</td>
+			</tr>
+			<tr>
+					<td>Feedback loop</td>
+					<td>Weeks (end of engagement)</td>
+					<td>After incident</td>
+					<td>Real-time</td>
+			</tr>
+			<tr>
+					<td>Improvement</td>
+					<td>Slow</td>
+					<td>Slow</td>
+					<td>Immediate</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually</td>
+					<td>Continuous</td>
+					<td>Quarterly / monthly</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="the-purple-team-exercise-structure">The Purple Team exercise structure</h2>
+<h3 id="pre-exercise">Pre-exercise</h3>
+<p><strong>1. Define scope using ATT&amp;CK Navigator</strong></p>
+<p>Select the techniques you want to test based on:</p>
+<ul>
+<li>Threat intelligence about actors targeting your sector</li>
+<li>Previous red team findings that weren&rsquo;t detected</li>
+<li>Compliance requirements (e.g. DORA, TIBER)</li>
+<li>Recent high-profile incidents in your industry</li>
+</ul>
+<p>Export the technique list as a checklist for the exercise.</p>
+<p><strong>2. Prepare the environment</strong></p>
+<ul>
+<li>Confirm SIEM and EDR are fully operational</li>
+<li>Ensure log sources are all feeding correctly</li>
+<li>Set up a dedicated exercise channel (Slack/Teams)</li>
+<li>Agree on communication protocol between red and blue</li>
+</ul>
+<p><strong>3. Set up tracking</strong></p>
+<p>Use VECTR (free, open source) or a simple spreadsheet:</p>
+<pre tabindex="0"><code>Technique ID | Name                  | Executed | Alert fired | Log found | Result
+T1566.001    | Phishing - Attachment | ✓        | ✗           | ✓         | PARTIAL
+T1003.001    | LSASS Memory Dump     | ✓        | ✓           | ✓         | DETECTED
+T1021.002    | SMB/Admin Shares      | ✓        | ✗           | ✗         | MISSED
+T1486        | Data Encrypted        | ✓        | ✓           | ✓         | DETECTED
+</code></pre><hr>
+<h2 id="exercise-execution">Exercise execution</h2>
+<h3 id="the-purple-team-loop">The purple team loop</h3>
+<p>For each technique:</p>
+<pre tabindex="0"><code>Red executes technique
+        ↓
+Blue checks SIEM/EDR (5-10 minutes)
+        ↓
+     Detected?
+    ↙         ↘
+  YES           NO
+   ↓             ↓
+Document      Find the log
+as detected   evidence manually
+              ↓
+         Log exists?
+        ↙         ↘
+      YES           NO
+       ↓             ↓
+  Write/tune      Fix log
+  detection rule  collection
+       ↓             ↓
+  Re-test         Re-test
+</code></pre><h3 id="example-exercise-session">Example exercise session</h3>
+<p><strong>09:00 — Technique: T1566.001 Spear Phishing</strong></p>
+<p>Red team sends a test phishing email with a benign payload to a test account.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Email gateway logs → email received and delivered</li>
+<li>EDR → macro execution detected? → YES, alert fired</li>
+<li>SIEM → correlation rule triggered? → NO, no SIEM alert</li>
+</ul>
+<p>Result: PARTIAL. EDR detects it, SIEM has no correlation rule.
+Action: Blue team creates SIEM rule to correlate EDR macro alert with email gateway log.
+Re-test: Rule fires correctly. Mark as DETECTED.</p>
+<hr>
+<p><strong>10:30 — Technique: T1003.001 LSASS Memory Dump</strong></p>
+<p>Red team runs <code>mimikatz.exe sekurlsa::logonpasswords</code> on a test endpoint.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>EDR → lsass access by unknown process → Alert fired, process quarantined</li>
+<li>SIEM → alert correlated → YES</li>
+<li>SOC analyst → alert reviewed in under 5 minutes</li>
+</ul>
+<p>Result: FULLY DETECTED. No action needed.</p>
+<hr>
+<p><strong>11:15 — Technique: T1021.002 SMB Lateral Movement</strong></p>
+<p>Red team connects to a network share on another system using valid credentials.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Network logs → SMB connection logged? → YES in firewall</li>
+<li>SIEM → alert fired? → NO</li>
+<li>EDR → anything? → NO (valid credentials, no malware)</li>
+</ul>
+<p>Result: MISSED. Legitimate-looking SMB with valid creds — no rule covers this.
+Action: Build a SIEM rule that alerts on SMB connections from workstations to workstations (unusual in most environments). Add user-entity baseline to detect off-hours access.</p>
+<hr>
+<h2 id="detection-engineering-from-purple-team-findings">Detection engineering from purple team findings</h2>
+<p>Each &ldquo;MISSED&rdquo; result becomes a detection engineering task.</p>
+<h3 id="detection-rule-lifecycle">Detection rule lifecycle</h3>
+<pre tabindex="0"><code>Purple team finds gap
+        ↓
+Write detection rule hypothesis
+        ↓
+Identify required log sources
+        ↓
+Verify logs are being collected
+        ↓
+Write SIEM rule / EDR policy
+        ↓
+Test rule with purple team re-execution
+        ↓
+Tune to reduce false positives
+        ↓
+Document and deploy to production
+        ↓
+Add to regression test suite
+</code></pre><h3 id="example-siem-rule-sigma-format">Example SIEM rule (Sigma format)</h3>
+<p>Sigma is a vendor-neutral format for SIEM detection rules:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Suspicious LSASS Access by Non-System Process</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">4a1c6c5e-3d8b-4f4a-9c2d-1e0a3b7f8d2c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">production</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Detects access to LSASS memory by processes that should not access it</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">tags</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.credential_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.t1003.001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">logsource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">process_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">product</span><span class="p">:</span><span class="w"> </span><span class="l">windows</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">detection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">TargetImage|endswith</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;\lsass.exe&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">filter</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">SourceImage|startswith</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Windows\System32\&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      - &#39;</span><span class="l">C:\Windows\SysWOW64\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Program Files\Windows Defender\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l">selection and not filter</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">falsepositives</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Legitimate security tools</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">AV software</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l">high</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="tooling">Tooling</h2>
+<h3 id="free-and-open-source">Free and open source</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>VECTR</td>
+					<td>Purple team exercise tracking and reporting</td>
+			</tr>
+			<tr>
+					<td>Atomic Red Team</td>
+					<td>Library of ATT&amp;CK technique test scripts</td>
+			</tr>
+			<tr>
+					<td>ATT&amp;CK Navigator</td>
+					<td>Visual ATT&amp;CK coverage mapping</td>
+			</tr>
+			<tr>
+					<td>Sigma</td>
+					<td>Vendor-neutral SIEM detection rule format</td>
+			</tr>
+			<tr>
+					<td>Caldera</td>
+					<td>Automated adversary emulation (MITRE project)</td>
+			</tr>
+			<tr>
+					<td>Invoke-AtomicRedTeam</td>
+					<td>PowerShell runner for Atomic Red Team</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="running-atomic-red-team-tests">Running Atomic Red Team tests</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># Install Atomic Red Team</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="nb">invoke-atomicredteam</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Import</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="nb">invoke-atomicredteam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Test T1003.001 — LSASS Memory Dump</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># List all available tests for a technique</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-ShowDetails</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Run specific test number</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-TestNumbers</span> <span class="mf">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Clean up after test</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-Cleanup</span>
+</span></span></code></pre></div><h3 id="vectr--tracking-exercise-results">VECTR — tracking exercise results</h3>
+<p>VECTR is a free, open-source platform for tracking purple team exercises:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Deploy VECTR with Docker</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/SecurityRiskAdvisors/VECTR
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> VECTR
+</span></span><span class="line"><span class="cl">docker-compose up -d
+</span></span><span class="line"><span class="cl"><span class="c1"># Access at http://localhost:8081</span>
+</span></span></code></pre></div><hr>
+<h2 id="coverage-measurement">Coverage measurement</h2>
+<p>After each exercise, measure your ATT&amp;CK coverage:</p>
+<pre tabindex="0"><code>Total techniques tested:          45
+Fully detected:                   28  (62%)
+Partially detected:                8  (18%)
+Missed:                            9  (20%)
+
+By tactic:
+Initial Access:      4/5 detected  (80%)
+Execution:           6/8 detected  (75%)
+Persistence:         3/6 detected  (50%)   ← gap
+Credential Access:   2/7 detected  (29%)   ← major gap
+Lateral Movement:    4/6 detected  (67%)
+Exfiltration:        2/3 detected  (67%)
+</code></pre><p>This coverage map directly drives your detection engineering roadmap — address the lowest-coverage tactics first.</p>
+<hr>
+<h2 id="purple-team-maturity-levels">Purple Team maturity levels</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Maturity</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Level 1</td>
+					<td>Ad-hoc: occasional exercises with no tracking</td>
+			</tr>
+			<tr>
+					<td>Level 2</td>
+					<td>Defined: regular exercises tracked in spreadsheet</td>
+			</tr>
+			<tr>
+					<td>Level 3</td>
+					<td>Managed: VECTR-tracked, ATT&amp;CK mapped, metrics reported</td>
+			</tr>
+			<tr>
+					<td>Level 4</td>
+					<td>Optimised: automated continuous testing, integrated with CI/CD</td>
+			</tr>
+	</tbody>
+</table>
+<p>Level 4 is sometimes called <strong>Continuous Purple Teaming</strong> — detection rules are tested automatically on every deployment, like unit tests for your SIEM.</p>
+<hr>
+<h2 id="key-outputs">Key outputs</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Output</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>ATT&amp;CK coverage heat map</td>
+					<td>Visual of detected vs missed techniques</td>
+			</tr>
+			<tr>
+					<td>Detection gap backlog</td>
+					<td>Prioritised list of rules to write</td>
+			</tr>
+			<tr>
+					<td>SOC playbook updates</td>
+					<td>New response procedures for newly detected techniques</td>
+			</tr>
+			<tr>
+					<td>Log source gaps</td>
+					<td>Missing data that prevents detection</td>
+			</tr>
+			<tr>
+					<td>MTTD improvement</td>
+					<td>Mean time to detect improving over time</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — Level 3</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — maps to ATT&CK techniques</a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/"><span class="ref-label">Post</span>Threat Modelling in DevSecOps</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threat Intelligence</title>
+      <link>https://logan23info.github.io/wiki/threat-intelligence/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/threat-intelligence/</guid>
+      <description>Complete guide to Cyber Threat Intelligence — from IOC feeds through to strategic intelligence-driven security programmes.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-cyber-threat-intelligence">What is Cyber Threat Intelligence?</h2>
+<p>Cyber Threat Intelligence (CTI) is structured, curated, and contextualised information about threats and threat actors that enables organisations to make faster and more accurate security decisions. It transforms security from reactive (responding to incidents) to proactive (anticipating and preventing them).</p>
+<p>Raw data becomes intelligence through the <strong>Intelligence Cycle:</strong></p>
+<pre tabindex="0"><code>Direction → Collection → Processing → Analysis → Dissemination → Feedback
+    ↑                                                                  |
+    └──────────────────────────────────────────────────────────────────┘
+</code></pre><hr>
+<h2 id="the-three-tiers-of-threat-intelligence">The three tiers of threat intelligence</h2>
+<h3 id="strategic-intelligence">Strategic intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> C-suite, board, business leaders</li>
+<li><strong>Timeframe:</strong> Months to years</li>
+<li><strong>Question:</strong> What threats should our business be preparing for?</li>
+<li><strong>Example:</strong> &ldquo;Nation-state actors are increasingly targeting critical infrastructure in our sector. We should invest in OT security this year.&rdquo;</li>
+<li><strong>Sources:</strong> Annual threat reports (Mandiant M-Trends, CrowdStrike Global Threat Report), government advisories (CISA, NCSC)</li>
+</ul>
+<h3 id="operational-intelligence">Operational intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> Security managers, incident responders, red/purple teams</li>
+<li><strong>Timeframe:</strong> Days to weeks</li>
+<li><strong>Question:</strong> What campaigns and threat actors are active right now?</li>
+<li><strong>Example:</strong> &ldquo;FIN7 is currently running a campaign targeting finance sector companies using a new phishing kit. Our red team should simulate this technique.&rdquo;</li>
+<li><strong>Sources:</strong> Threat intel platforms (Recorded Future, Mandiant), ISAC feeds, dark web monitoring</li>
+</ul>
+<h3 id="tactical-intelligence">Tactical intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> SOC analysts, threat hunters, SIEM engineers</li>
+<li><strong>Timeframe:</strong> Hours to days</li>
+<li><strong>Question:</strong> What specific indicators should we be blocking and detecting right now?</li>
+<li><strong>Example:</strong> IOCs — IP addresses, domains, file hashes, URLs associated with active malware campaigns</li>
+<li><strong>Sources:</strong> MISP, OTX AlienVault, threat intel feeds, VirusTotal</li>
+</ul>
+<hr>
+<h2 id="indicators-of-compromise-iocs">Indicators of Compromise (IOCs)</h2>
+<p>IOCs are artifacts that indicate a system has been compromised or an attack is in progress:</p>
+<table>
+	<thead>
+			<tr>
+					<th>IOC type</th>
+					<th>Example</th>
+					<th>Detection method</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>IP address</td>
+					<td>203.0.113.42 (C2 server)</td>
+					<td>Firewall / proxy block</td>
+			</tr>
+			<tr>
+					<td>Domain</td>
+					<td>evil-c2-server.com</td>
+					<td>DNS sinkhole / block</td>
+			</tr>
+			<tr>
+					<td>File hash (MD5/SHA256)</td>
+					<td>d41d8cd98f00b204e9800998ecf8427e</td>
+					<td>EDR / AV signature</td>
+			</tr>
+			<tr>
+					<td>URL</td>
+					<td><a href="https://phishing-site.com/login">https://phishing-site.com/login</a></td>
+					<td>Web proxy block</td>
+			</tr>
+			<tr>
+					<td>Email address</td>
+					<td><a href="mailto:attacker@evil.com">attacker@evil.com</a></td>
+					<td>Email gateway block</td>
+			</tr>
+			<tr>
+					<td>Registry key</td>
+					<td>HKCU\Software\Malware\persist</td>
+					<td>EDR detection rule</td>
+			</tr>
+			<tr>
+					<td>Mutex</td>
+					<td>\BaseNamedObjects\evil_mutex</td>
+					<td>Memory scanning</td>
+			</tr>
+			<tr>
+					<td>User agent</td>
+					<td>Mozilla/4.0 (compatible; MSIE 6.0)</td>
+					<td>Web proxy detection</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="the-pyramid-of-pain">The Pyramid of Pain</h3>
+<p>David Bianco&rsquo;s Pyramid of Pain shows how much disruption each IOC type causes to an attacker when blocked:</p>
+<pre tabindex="0"><code>              [TTPs]             ← hardest for attacker to change (MOST PAIN)
+           [Tools]
+        [Network/Host Artifacts]
+      [Domain Names]
+   [IP Addresses]
+[File Hashes]                    ← easiest for attacker to change (LEAST PAIN)
+</code></pre><p>Focus detection and blocking efforts on the top of the pyramid. Blocking a file hash costs the attacker nothing — they recompile and get a new hash in minutes. Detecting their TTPs (e.g. &ldquo;this process always dumps LSASS&rdquo;) forces them to fundamentally change their methods.</p>
+<hr>
+<h2 id="mitre-attck-for-threat-intelligence">MITRE ATT&amp;CK for threat intelligence</h2>
+<p>ATT&amp;CK provides a common language for describing threat actor behaviour, making it possible to compare intelligence from multiple sources and translate it directly into detections.</p>
+<h3 id="threat-actor-profiles">Threat actor profiles</h3>
+<p>ATT&amp;CK Groups catalogue known threat actors with their techniques:</p>
+<p><strong>APT29 (Cozy Bear, SVR)</strong></p>
+<ul>
+<li>Nation-state: Russia (SVR — Foreign Intelligence Service)</li>
+<li>Targets: Government, think tanks, healthcare, energy</li>
+<li>Known for: SolarWinds supply chain attack, COVID-19 vaccine research theft</li>
+<li>Key techniques: T1566 Phishing, T1195 Supply Chain Compromise, T1027 Obfuscated Files</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0016/">https://attack.mitre.org/groups/G0016/</a></li>
+</ul>
+<p><strong>FIN7 (Carbanak)</strong></p>
+<ul>
+<li>Motivation: Financial gain</li>
+<li>Targets: Retail, hospitality, finance (POS systems)</li>
+<li>Known for: $1B+ stolen, highly sophisticated spear phishing</li>
+<li>Key techniques: T1566.001 Spear Phishing, T1204 User Execution, T1055 Process Injection</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0046/">https://attack.mitre.org/groups/G0046/</a></li>
+</ul>
+<p><strong>Lazarus Group</strong></p>
+<ul>
+<li>Nation-state: North Korea (RGB)</li>
+<li>Motivation: Financial gain + espionage</li>
+<li>Targets: Cryptocurrency exchanges, banks, defence</li>
+<li>Known for: Bangladesh Bank heist ($81M), WannaCry ransomware</li>
+<li>Key techniques: T1189 Drive-by Compromise, T1195 Supply Chain, T1486 Ransomware</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0032/">https://attack.mitre.org/groups/G0032/</a></li>
+</ul>
+<h3 id="mapping-intelligence-to-detections">Mapping intelligence to detections</h3>
+<p>When you receive intelligence about a threat actor, translate their TTPs directly into SIEM detection rules:</p>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1003.001 (LSASS Memory Dump) via custom tool &#34;MiniDump&#34;
+
+→ Detection rule: Alert on any process accessing lsass.exe memory
+   that is not a known legitimate security tool
+
+→ Sigma rule:
+title: Suspicious LSASS Access - APT29 MiniDump Pattern
+tags:
+  - attack.t1003.001
+  - attribution.apt29
+detection:
+  selection:
+    TargetImage|endswith: &#39;\lsass.exe&#39;
+    GrantedAccess: &#39;0x1010&#39;
+</code></pre><hr>
+<h2 id="threat-intelligence-platforms">Threat intelligence platforms</h2>
+<h3 id="open-source--free">Open source / free</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MISP</td>
+					<td>Most widely used open-source TI sharing platform</td>
+			</tr>
+			<tr>
+					<td>OpenCTI</td>
+					<td>Modern, graph-based TI platform with ATT&amp;CK integration</td>
+			</tr>
+			<tr>
+					<td>OTX AlienVault</td>
+					<td>Free community threat intel feed</td>
+			</tr>
+			<tr>
+					<td>VirusTotal</td>
+					<td>File and URL analysis + community intelligence</td>
+			</tr>
+			<tr>
+					<td>Shodan</td>
+					<td>Internet scanning data (limited free tier)</td>
+			</tr>
+			<tr>
+					<td>URLhaus</td>
+					<td>Malicious URL database</td>
+			</tr>
+			<tr>
+					<td>MalwareBazaar</td>
+					<td>Malware sample repository</td>
+			</tr>
+			<tr>
+					<td>ThreatFox</td>
+					<td>IOC sharing platform by</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="commercial">Commercial</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Strengths</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Recorded Future</td>
+					<td>Broadest coverage, AI-powered, dark web</td>
+			</tr>
+			<tr>
+					<td>Mandiant Advantage</td>
+					<td>Incident response heritage, actor attribution</td>
+			</tr>
+			<tr>
+					<td>CrowdStrike Falcon Intel</td>
+					<td>Strong nation-state tracking</td>
+			</tr>
+			<tr>
+					<td>Microsoft Sentinel TI</td>
+					<td>Azure-native, MSTI integration</td>
+			</tr>
+			<tr>
+					<td>MISP (enterprise)</td>
+					<td>Self-hosted, full control, large community</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="setting-up-a-free-threat-intelligence-pipeline">Setting up a free threat intelligence pipeline</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># docker-compose.yml — free TI stack</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">misp</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/misp/misp-docker/misp-core:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;443:443&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MISP_ADMIN_EMAIL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;admin@example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">opencti</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">opencti/platform:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">APP__SECRET</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;changeme&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">OPENCTI__URL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;http://localhost:8080&#34;</span><span class="w">
+</span></span></span></code></pre></div><p><strong>Free intelligence feeds to connect:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Connect MISP to free feeds</span>
+</span></span><span class="line"><span class="cl"><span class="n">feeds</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://www.circl.lu/doc/misp/feed-osint/&#34;</span><span class="p">,</span>      <span class="c1"># CIRCL OSINT</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://bazaar.abuse.ch/export/csv/recent/&#34;</span><span class="p">,</span>      <span class="c1"># MalwareBazaar</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://feodotracker.abuse.ch/downloads/ipblocklist.csv&#34;</span><span class="p">,</span>  <span class="c1"># Feodo C2</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://urlhaus.abuse.ch/downloads/csv_recent/&#34;</span><span class="p">,</span>  <span class="c1"># URLhaus</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://otx.alienvault.com/api/v1/pulses/subscribed&#34;</span><span class="p">,</span>     <span class="c1"># OTX</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><hr>
+<h2 id="intelligence-driven-threat-modelling">Intelligence-driven threat modelling</h2>
+<p>The most powerful use of threat intelligence is feeding it directly into your threat models:</p>
+<h3 id="without-threat-intelligence">Without threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;An attacker could perform SQL injection on the login endpoint&#34;
+Severity: High (DREAD score 7.2)
+</code></pre><h3 id="with-threat-intelligence">With threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;FIN7 (active in our sector, confirmed targeting peers in Q3 2026)
+uses T1190 (Exploit Public-Facing Application) as primary initial access.
+Our login endpoint is internet-facing and handles authentication.
+FIN7 has used SQLi in 40% of confirmed incidents against retail targets.&#34;
+
+Severity: Critical (DREAD score 9.1)
+Priority: Immediate — active threat actor, confirmed sector targeting
+</code></pre><p>The second version drives urgency that gets executive attention and budget.</p>
+<hr>
+<h2 id="threat-hunting">Threat hunting</h2>
+<p>Threat intelligence enables proactive threat hunting — searching for attacker presence in your environment before an alert fires.</p>
+<h3 id="hypothesis-driven-hunting">Hypothesis-driven hunting</h3>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1078 (Valid Accounts) — stolen credentials
+              to authenticate to VPN from unusual geographies
+
+Hypothesis: If APT29 has stolen a user&#39;s VPN credentials, we would see
+            successful VPN logins from IPs in Russia/Eastern Europe
+            at unusual times
+
+Hunt query (Splunk):
+index=vpn_logs action=success
+| iplocation src_ip
+| where Country != &#34;India&#34;
+| stats count by user, Country, src_ip
+| where count &gt; 2
+| join user [search index=vpn_logs | stats earliest(_time) as first_seen by user]
+| where relative_time(now(), &#34;-7d&#34;) &gt; first_seen
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mean Time to Ingest IOC</td>
+					<td>&lt; 1 hour from feed to blocking</td>
+			</tr>
+			<tr>
+					<td>IOC False Positive Rate</td>
+					<td>&lt; 5% (too high = analyst fatigue)</td>
+			</tr>
+			<tr>
+					<td>Threat actor coverage</td>
+					<td>All sector-relevant groups profiled</td>
+			</tr>
+			<tr>
+					<td>Intelligence-to-detection rate</td>
+					<td>&gt; 80% of TTPs translated to detections</td>
+			</tr>
+			<tr>
+					<td>Feed freshness</td>
+					<td>All feeds updated within 24 hours</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — uses threat intel</a>
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — intelligence-driven threat modelling</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>A complete guide to all six levels of the Security Engineering Maturity Ladder — from Threat Modelling through to Zero Trust Architecture.</description>
+      <content:encoded><![CDATA[<h2 id="overview">Overview</h2>
+<p>The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.</p>
+<pre tabindex="0"><code>Level 1 — Threat Modelling           What could go wrong?
+Level 2 — Attack Surface Management  Where are we exposed right now?
+Level 3 — Red Teaming                Can attacks actually succeed?
+Level 4 — Purple Teaming             Can we detect those attacks?
+Level 5 — Threat Intelligence        Who is actually targeting us?
+Level 6 — Zero Trust Architecture    Eliminate trust entirely
+   +1   — Supply Chain Security      Is our code itself safe?
+</code></pre><p>Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.</p>
+<hr>
+<h2 id="level-1--threat-modelling">Level 1 — Threat Modelling</h2>
+<p><strong>Core question:</strong> What could go wrong with this system?</p>
+<p><strong>What it is:</strong> A structured design-time process for identifying security risks before code is written. Uses frameworks like STRIDE to enumerate threats per component and DREAD to score and prioritise them.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Data flow diagram (DFD) of the system</li>
+<li>Threat register with mitigations</li>
+<li>Security backlog for engineering</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat model produced for every new service</li>
+<li>Findings tracked as engineering tickets</li>
+<li>Security checklist on every PR</li>
+</ul>
+<p><strong>Time investment:</strong> 60–90 min per feature, 15 min per PR</p>
+<p><strong>Full reference:</strong> <a href="/wiki/stride/">Threat Modelling Wiki</a> | <a href="/wiki/stride/">STRIDE</a> | <a href="/wiki/dread/">DREAD</a> | <a href="/wiki/pasta/">PASTA</a></p>
+<hr>
+<h2 id="level-2--attack-surface-management">Level 2 — Attack Surface Management</h2>
+<p><strong>Core question:</strong> What are we actually exposing to the internet right now?</p>
+<p><strong>What it is:</strong> Continuous discovery and monitoring of every internet-facing asset — including assets the organisation does not know it has. Validates and extends threat models with real-world exposure data.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Continuously updated asset inventory</li>
+<li>Risk-scored exposure list</li>
+<li>Alerts on new exposures within hours</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>All internet-facing assets discovered automatically</li>
+<li>Unknown or shadow IT assets detected and investigated</li>
+<li>Certificate expiry monitored automatically</li>
+<li>New exposures trigger alerts within 4 hours</li>
+</ul>
+<p><strong>Free tools to start:</strong> Subfinder, Amass, Nuclei, httpx</p>
+<p><strong>Time investment:</strong> Initial setup 1–2 days, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/asm/">Attack Surface Management Wiki</a></p>
+<hr>
+<h2 id="level-3--red-teaming">Level 3 — Red Teaming</h2>
+<p><strong>Core question:</strong> If an attacker tried to compromise us using our threat model&rsquo;s attack scenarios, would they succeed?</p>
+<p><strong>What it is:</strong> Authorised simulation of a real-world adversary. A red team attempts to achieve a specific objective (steal data, deploy ransomware, access admin systems) using the same techniques real attackers use, mapped to MITRE ATT&amp;CK.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Attack narrative — how far the red team got and how</li>
+<li>ATT&amp;CK heat map of techniques used</li>
+<li>Detection gaps — what the blue team missed</li>
+<li>Business impact statement</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Red team exercises run at least annually</li>
+<li>Threat actor profile derived from threat intelligence</li>
+<li>Findings mapped to MITRE ATT&amp;CK</li>
+<li>Results feed back into threat models</li>
+</ul>
+<p><strong>Tools:</strong> Sliver C2 (free), Metasploit (free), BloodHound (free), Cobalt Strike (commercial)</p>
+<p><strong>Time investment:</strong> 2–8 weeks per engagement</p>
+<p><strong>Full reference:</strong> <a href="/wiki/red-teaming/">Red Teaming Wiki</a></p>
+<hr>
+<h2 id="level-4--purple-teaming">Level 4 — Purple Teaming</h2>
+<p><strong>Core question:</strong> Does our SIEM/EDR actually detect the attacks from the red team exercise?</p>
+<p><strong>What it is:</strong> Red and blue teams working together simultaneously. The red team executes one ATT&amp;CK technique at a time while the blue team checks whether their detection tools catch it. Gaps are fixed in real time.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>ATT&amp;CK detection coverage map (% of techniques detected)</li>
+<li>Detection gap backlog (rules to write)</li>
+<li>SOC playbook improvements</li>
+<li>MTTD (Mean Time to Detect) trend over time</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Purple team exercises run quarterly</li>
+<li>Every technique validated against live SIEM rules</li>
+<li>Detection gaps addressed during the exercise</li>
+<li>Atomic Red Team tests run automatically in CI</li>
+</ul>
+<p><strong>Tools:</strong> VECTR (free), Atomic Red Team (free), ATT&amp;CK Navigator (free), Sigma (free)</p>
+<p><strong>Time investment:</strong> 1–2 days per exercise, quarterly</p>
+<p><strong>Full reference:</strong> <a href="/wiki/purple-teaming/">Purple Teaming Wiki</a></p>
+<hr>
+<h2 id="level-5--threat-intelligence">Level 5 — Threat Intelligence</h2>
+<p><strong>Core question:</strong> Which real-world threat actors are targeting organisations like ours, and what techniques are they using right now?</p>
+<p><strong>What it is:</strong> Structured, curated information about real threat actors — their identities, motivations, and specific tactics — used to make every other security level more precise and relevant. Transforms threat models from hypothetical to intelligence-driven.</p>
+<p><strong>Three tiers:</strong></p>
+<ul>
+<li><strong>Strategic:</strong> What threats should we prepare for this year? (Board/C-suite)</li>
+<li><strong>Operational:</strong> What campaigns are active right now? (Security managers)</li>
+<li><strong>Tactical:</strong> What IOCs should we block today? (SOC analysts)</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Threat actor profiles for your sector</li>
+<li>TTP mappings to MITRE ATT&amp;CK</li>
+<li>IOC feeds integrated with SIEM and firewall</li>
+<li>Intelligence-driven threat models and red team scope</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat models reference real attacker groups</li>
+<li>IOCs ingested and actioned within 1 hour</li>
+<li>Threat hunting hypotheses derived from intelligence</li>
+<li>Intelligence shared with sector peers (ISACs)</li>
+</ul>
+<p><strong>Free tools:</strong> MISP, OpenCTI, OTX AlienVault, URLhaus, MalwareBazaar</p>
+<p><strong>Time investment:</strong> Initial setup 1 week, then ongoing</p>
+<p><strong>Full reference:</strong> <a href="/wiki/threat-intelligence/">Threat Intelligence Wiki</a></p>
+<hr>
+<h2 id="level-6--zero-trust-architecture">Level 6 — Zero Trust Architecture</h2>
+<p><strong>Core question:</strong> What if we never trusted any user, device, or network location by default — ever?</p>
+<p><strong>What it is:</strong> An architectural transformation based on &ldquo;never trust, always verify.&rdquo; Every request — regardless of source — is authenticated, authorised, and continuously validated. Microsegmentation prevents lateral movement. Identity replaces the network as the security perimeter.</p>
+<p><strong>Five pillars:</strong></p>
+<ol>
+<li><strong>Identity</strong> — MFA everywhere, passwordless for privileged accounts, continuous risk scoring</li>
+<li><strong>Devices</strong> — Every device registered, health-checked, and compliance-validated before access</li>
+<li><strong>Network</strong> — Microsegmentation, no implicit trust based on network location, encrypt east-west traffic</li>
+<li><strong>Applications</strong> — Per-app access control, SSO + MFA, session continuous validation</li>
+<li><strong>Data</strong> — Classification, encryption at rest and in transit, DLP</li>
+</ol>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Architecture where lateral movement is structurally prevented</li>
+<li>Identity-based access replacing VPN</li>
+<li>Complete device inventory with compliance enforcement</li>
+<li>Microsegmented network</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>MFA on 100% of applications</li>
+<li>VPN replaced by identity-aware proxy</li>
+<li>Device compliance checked before every access grant</li>
+<li>Privileged access managed via PAM solution</li>
+<li>All internal traffic encrypted</li>
+</ul>
+<p><strong>Reference implementation:</strong> Google BeyondCorp (published as open papers)
+<strong>Standard:</strong> NIST SP 800-207</p>
+<p><strong>Time investment:</strong> Multi-year transformation — typically 3 years to full maturity</p>
+<p><strong>Full reference:</strong> <a href="/wiki/zero-trust/">Zero Trust Architecture Wiki</a></p>
+<hr>
+<h2 id="1--supply-chain-security">+1 — Supply Chain Security</h2>
+<p><strong>Core question:</strong> Is the third-party code we depend on safe, verified, and unmodified?</p>
+<p><strong>What it is:</strong> Securing not just your code but every dependency, build tool, and third-party component. Modern software is 80–90% open source written by others — a compromised dependency undermines every other security control.</p>
+<p><strong>Key capabilities:</strong></p>
+<ul>
+<li>SBOM (Software Bill of Materials) — know every component</li>
+<li>SLSA framework — verify build integrity and provenance</li>
+<li>Dependency scanning — catch CVEs before they reach production</li>
+<li>Artifact signing — prove artifacts have not been tampered with</li>
+<li>Build pipeline hardening — protect the pipeline itself</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>SBOM for every production build</li>
+<li>Signed and verified build artifacts</li>
+<li>Hardened build pipeline</li>
+<li>Dependency vulnerability alerting</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>SBOM generated for every release</li>
+<li>All dependencies scanned on every build</li>
+<li>Build artifacts signed with Cosign/Sigstore</li>
+<li>No dependency updates merged without automated security review</li>
+</ul>
+<p><strong>Free tools:</strong> Syft (SBOM), Grype (scanning), Cosign/Sigstore (signing), Dependabot (GitHub-native), pip-audit, npm audit</p>
+<p><strong>Time investment:</strong> 1–2 weeks initial setup, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/supply-chain/">Supply Chain Security Wiki</a></p>
+<hr>
+<h2 id="how-the-levels-reinforce-each-other">How the levels reinforce each other</h2>
+<pre tabindex="0"><code>Threat Intelligence  ──feeds──▶  Threat Modelling  ──defines──▶  Red Team scope
+        │                               │                               │
+        │                               ▼                               ▼
+        │                          ASM validates              Purple Team validates
+        │                          real exposure              detection coverage
+        │                               │                               │
+        └───────────────────────────────┴───────────────────────────────┘
+                                        │
+                                        ▼
+                              Zero Trust eliminates
+                              entire threat categories
+                                        │
+                                        ▼
+                              Supply Chain secures
+                              the foundation everything runs on
+</code></pre><hr>
+<h2 id="where-to-start-based-on-your-organisation-size">Where to start based on your organisation size</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Size</th>
+					<th>Start here</th>
+					<th>Next 6 months</th>
+					<th>Year 2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Startup</td>
+					<td>Threat Modelling (STRIDE)</td>
+					<td>Dependabot + SBOM</td>
+					<td>ASM</td>
+			</tr>
+			<tr>
+					<td>Scale-up</td>
+					<td>Threat Modelling + ASM</td>
+					<td>Threat Intel feeds</td>
+					<td>First Red Team</td>
+			</tr>
+			<tr>
+					<td>Enterprise</td>
+					<td>Purple Teaming + Threat Intel</td>
+					<td>Zero Trust roadmap</td>
+					<td>TIBER-EU / CBEST</td>
+			</tr>
+			<tr>
+					<td>Regulated (finance/health)</td>
+					<td>All levels audit</td>
+					<td>DORA compliance</td>
+					<td>Continuous purple teaming</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Zero Trust Architecture (ZTA)</title>
+      <link>https://logan23info.github.io/wiki/zero-trust/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/zero-trust/</guid>
+      <description>Complete guide to Zero Trust Architecture — from NIST SP 800-207 foundations through to practical implementation roadmaps.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-zero-trust">What is Zero Trust?</h2>
+<p>Zero Trust is a security architecture philosophy based on a single principle:</p>
+<blockquote>
+<p><strong>&ldquo;Never trust, always verify.&rdquo;</strong></p>
+</blockquote>
+<p>In a traditional perimeter-based security model, anything inside the corporate network is trusted. Zero Trust eliminates the concept of a trusted network. Every request — regardless of where it comes from (corporate office, home, cloud, internal network) — must be authenticated, authorised, and continuously validated before access is granted.</p>
+<p><strong>The traditional model:</strong> Trust the network. Verify at the perimeter. Everything inside is safe.</p>
+<p><strong>Zero Trust:</strong> Trust nothing. Verify everything. Assume breach.</p>
+<hr>
+<h2 id="why-zero-trust-now">Why Zero Trust now?</h2>
+<p>The traditional perimeter has dissolved:</p>
+<ul>
+<li><strong>Cloud:</strong> Corporate data lives in AWS/GCP/Azure, not in an on-premises datacenter</li>
+<li><strong>Remote work:</strong> Users work from home, coffee shops, and hotels — outside the perimeter</li>
+<li><strong>SaaS:</strong> Applications like Salesforce, Slack, and GitHub are accessed over the internet</li>
+<li><strong>Mobile:</strong> Company data is accessed from phones and tablets outside corporate control</li>
+<li><strong>Insider threats:</strong> The perimeter model fails completely against internal attackers</li>
+</ul>
+<p>The result: a VPN that &ldquo;puts you inside the network&rdquo; now gives attackers who steal one credential access to everything.</p>
+<p><strong>Zero Trust solves this by making the identity and device the perimeter, not the network.</strong></p>
+<hr>
+<h2 id="nist-sp-800-207--the-definitive-standard">NIST SP 800-207 — The definitive standard</h2>
+<p>NIST Special Publication 800-207 is the authoritative definition of Zero Trust Architecture. It defines seven core tenets:</p>
+<h3 id="tenet-1--all-data-sources-and-computing-services-are-resources">Tenet 1 — All data sources and computing services are resources</h3>
+<p>Everything is a resource — a database, an API, a printer, a cloud function. No resource is inherently trusted because of where it is located.</p>
+<h3 id="tenet-2--all-communication-is-secured-regardless-of-network-location">Tenet 2 — All communication is secured regardless of network location</h3>
+<p>A request from inside the corporate network is treated the same as a request from the internet. All communication is encrypted and authenticated.</p>
+<h3 id="tenet-3--access-to-individual-resources-is-granted-on-a-per-session-basis">Tenet 3 — Access to individual resources is granted on a per-session basis</h3>
+<p>Access is not granted to a network segment — it is granted to a specific resource for a specific session. Logging into VPN does not grant access to everything; accessing the payroll database requires separate authorisation for that resource.</p>
+<h3 id="tenet-4--access-to-resources-is-determined-by-dynamic-policy">Tenet 4 — Access to resources is determined by dynamic policy</h3>
+<p>The policy engine considers identity, device health, location, time of day, data sensitivity, and behavioural patterns when making access decisions — not just &ldquo;is this user in the right group?&rdquo;</p>
+<h3 id="tenet-5--the-enterprise-monitors-and-measures-the-integrity-of-all-assets">Tenet 5 — The enterprise monitors and measures the integrity of all assets</h3>
+<p>All devices are continuously assessed for security posture — are they patched? Is AV running? Is disk encrypted? An unpatched device gets reduced access, not full trust.</p>
+<h3 id="tenet-6--all-resource-authentication-and-authorisation-is-dynamic-and-strictly-enforced">Tenet 6 — All resource authentication and authorisation is dynamic and strictly enforced</h3>
+<p>Authentication is not a one-time event. Sessions are continuously re-evaluated. An anomalous action (unusual download volume, access from a new location) triggers step-up authentication.</p>
+<h3 id="tenet-7--enterprise-collects-information-about-the-current-state-of-assets-network-and-communications">Tenet 7 — Enterprise collects information about the current state of assets, network, and communications</h3>
+<p>Comprehensive logging of all access requests, policy decisions, and resource access enables audit, threat hunting, and incident response.</p>
+<hr>
+<h2 id="the-zero-trust-logical-architecture">The Zero Trust logical architecture</h2>
+<pre tabindex="0"><code>                    ┌─────────────────────────────────┐
+                    │         CONTROL PLANE            │
+                    │                                  │
+  Identity ─────→  │  Policy Engine ←── Threat Intel  │
+  Device   ─────→  │       ↕                          │
+  Context  ─────→  │  Policy Administrator            │
+                    └──────────────┬──────────────────┘
+                                   │
+                    ┌──────────────▼──────────────────┐
+                    │          DATA PLANE              │
+                    │                                  │
+  Subject ─────→   │  Policy Enforcement Point (PEP)  │ ────→ Resource
+  (User/Device)    │                                  │
+                    └─────────────────────────────────┘
+</code></pre><ul>
+<li><strong>Policy Engine (PE):</strong> Makes the access decision (allow/deny/step-up auth)</li>
+<li><strong>Policy Administrator (PA):</strong> Executes the decision (issues session token, configures PEP)</li>
+<li><strong>Policy Enforcement Point (PEP):</strong> Enforces the decision (API gateway, proxy, firewall)</li>
+</ul>
+<hr>
+<h2 id="the-five-pillars-of-zero-trust">The five pillars of Zero Trust</h2>
+<h3 id="pillar-1--identity">Pillar 1 — Identity</h3>
+<p>Identity is the foundation of Zero Trust — it is the new perimeter.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Multi-factor authentication (MFA) on every application</li>
+<li>Passwordless authentication (FIDO2/WebAuthn) where possible</li>
+<li>Just-in-time (JIT) and just-enough-access (JEA) provisioning</li>
+<li>Privileged Access Management (PAM) for admin accounts</li>
+<li>Continuous identity risk scoring</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Entra ID, Okta, Ping Identity, CyberArk PAM</p>
+<p><strong>Maturity levels:</strong></p>
+<pre tabindex="0"><code>Level 1: MFA enabled for all users
+Level 2: Conditional access policies (block risky sign-ins)
+Level 3: Passwordless for privileged accounts
+Level 4: Continuous access evaluation, real-time risk scoring
+</code></pre><h3 id="pillar-2--devices">Pillar 2 — Devices</h3>
+<p>Every device accessing company resources must be known, managed, and healthy.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Device inventory (every device registered in MDM)</li>
+<li>Device compliance checks before access is granted</li>
+<li>Certificate-based device authentication</li>
+<li>Continuous device health monitoring</li>
+<li>Remote wipe capability for lost/stolen devices</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Intune, Jamf, CrowdStrike Falcon, Carbon Black</p>
+<p><strong>Compliance checks:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Example device compliance policy</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">check_device_compliance</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;disk_encrypted&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">bitlocker_enabled</span> <span class="ow">or</span> <span class="n">device</span><span class="o">.</span><span class="n">filevault_enabled</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;os_patched&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">days_since_patch</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;av_running&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">av_status</span> <span class="o">==</span> <span class="s2">&#34;active&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;screen_lock&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">screen_lock_timeout</span> <span class="o">&lt;=</span> <span class="mi">15</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;jailbroken&#34;</span><span class="p">:</span> <span class="ow">not</span> <span class="n">device</span><span class="o">.</span><span class="n">is_jailbroken</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">compliance_score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">compliance_score</span> <span class="o">&gt;=</span> <span class="mf">0.8</span>  <span class="c1"># 80% compliance required</span>
+</span></span></code></pre></div><h3 id="pillar-3--network">Pillar 3 — Network</h3>
+<p>Microsegment the network so that compromise of one segment cannot spread to others.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Eliminate implicit trust based on network location</li>
+<li>Microsegmentation — every workload isolated by default</li>
+<li>Encrypt all east-west (internal) traffic</li>
+<li>Software-defined perimeter (SDP) instead of VPN</li>
+<li>Network traffic analytics to detect anomalies</li>
+</ul>
+<p><strong>Technologies:</strong> Zscaler ZPA, Cloudflare Access, Palo Alto Prisma, Cisco Duo</p>
+<p><strong>Before microsegmentation:</strong></p>
+<pre tabindex="0"><code>Corporate Network (all trusted)
+├── Finance systems
+├── HR systems
+├── Developer systems   ← compromised
+│     └── Lateral movement to Finance ← unrestricted
+└── Customer database   ← exfiltrated
+</code></pre><p><strong>After microsegmentation:</strong></p>
+<pre tabindex="0"><code>Corporate Network (no implicit trust)
+├── Finance segment (Finance team only, MFA required per session)
+├── HR segment (HR team only)
+├── Developer segment   ← compromised
+│     └── Cannot reach Finance ← blocked by policy
+└── Customer DB segment (App service only, no direct user access)
+</code></pre><h3 id="pillar-4--applications">Pillar 4 — Applications</h3>
+<p>Move away from network-based access (VPN) to identity-based access per application.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>All applications require authentication (no network-based trust)</li>
+<li>Application-level authorisation (RBAC/ABAC)</li>
+<li>API gateway enforces per-request authorisation</li>
+<li>Single Sign-On (SSO) with MFA for all apps</li>
+<li>Continuous session validation</li>
+</ul>
+<p><strong>Technologies:</strong> Okta, Auth0, Azure AD App Proxy, BeyondCorp</p>
+<h3 id="pillar-5--data">Pillar 5 — Data</h3>
+<p>Protect data at rest and in transit, and enforce data-level access controls.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Data classification (public, internal, confidential, restricted)</li>
+<li>Encryption at rest for all sensitive data</li>
+<li>Encryption in transit (TLS 1.3 minimum)</li>
+<li>Data Loss Prevention (DLP) on endpoints and network</li>
+<li>Rights management for sensitive documents</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Purview, Varonis, Forcepoint DLP</p>
+<hr>
+<h2 id="zero-trust-implementation-roadmap">Zero Trust implementation roadmap</h2>
+<p>Zero Trust is a multi-year journey, not a product you buy.</p>
+<h3 id="year-1--foundation">Year 1 — Foundation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> MFA for all users on all applications</li>
+<li><input disabled="" type="checkbox"> Device inventory — know every device accessing your data</li>
+<li><input disabled="" type="checkbox"> Identity governance — review and remove excessive permissions</li>
+<li><input disabled="" type="checkbox"> Conditional access — block sign-ins from unmanaged devices</li>
+<li><input disabled="" type="checkbox"> Data classification — know where your sensitive data is</li>
+</ul>
+<h3 id="year-2--enforcement">Year 2 — Enforcement</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Device compliance policies — block non-compliant devices</li>
+<li><input disabled="" type="checkbox"> Application proxy — remove VPN for internal apps</li>
+<li><input disabled="" type="checkbox"> Microsegmentation — segment at least critical systems</li>
+<li><input disabled="" type="checkbox"> PAM solution — control privileged access</li>
+<li><input disabled="" type="checkbox"> DLP — prevent sensitive data leaving controlled channels</li>
+</ul>
+<h3 id="year-3--optimisation">Year 3 — Optimisation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Continuous access evaluation — real-time session risk assessment</li>
+<li><input disabled="" type="checkbox"> UEBA — behavioural analytics to detect anomalies</li>
+<li><input disabled="" type="checkbox"> Passwordless authentication for all users</li>
+<li><input disabled="" type="checkbox"> Full microsegmentation across all workloads</li>
+<li><input disabled="" type="checkbox"> Automated response — risky sessions terminated automatically</li>
+</ul>
+<hr>
+<h2 id="google-beyondcorp--the-real-world-blueprint">Google BeyondCorp — The real-world blueprint</h2>
+<p>Google built the first enterprise Zero Trust implementation after the Operation Aurora attack in 2010 (a nation-state attack via an IE zero-day). Their BeyondCorp architecture:</p>
+<ul>
+<li><strong>Eliminated the corporate VPN</strong> — all access goes through an identity-aware proxy</li>
+<li><strong>Made the internet the network</strong> — employees work from anywhere with the same access</li>
+<li><strong>Every request validated</strong> — user identity + device certificate + device health</li>
+<li><strong>No special trust for the internal network</strong> — a request from Google HQ is treated the same as from a coffee shop</li>
+</ul>
+<p>Google published their architecture in a series of papers (BeyondCorp 1–6) available free online. This became the template for the entire Zero Trust industry.</p>
+<hr>
+<h2 id="zero-trust-vs-traditional-security">Zero Trust vs traditional security</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Scenario</th>
+					<th>Traditional (Perimeter)</th>
+					<th>Zero Trust</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Stolen VPN credentials</td>
+					<td>Attacker has full network access</td>
+					<td>Access still requires MFA + compliant device</td>
+			</tr>
+			<tr>
+					<td>Compromised laptop on corporate network</td>
+					<td>Full lateral movement possible</td>
+					<td>Microsegmentation blocks cross-segment access</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Can access anything on the network</td>
+					<td>Access limited to job-required resources only</td>
+			</tr>
+			<tr>
+					<td>Shadow IT</td>
+					<td>Unknown apps on the network</td>
+					<td>All access requires policy enforcement point</td>
+			</tr>
+			<tr>
+					<td>Remote worker</td>
+					<td>Reduced access via VPN</td>
+					<td>Same access as office — identity is the perimeter</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MFA coverage</td>
+					<td>100% of users and applications</td>
+			</tr>
+			<tr>
+					<td>Managed device ratio</td>
+					<td>&gt; 95% of devices accessing company data</td>
+			</tr>
+			<tr>
+					<td>Privileged account review</td>
+					<td>Quarterly, all unused accounts removed</td>
+			</tr>
+			<tr>
+					<td>Mean time to revoke access</td>
+					<td>&lt; 1 hour for terminated employees</td>
+			</tr>
+			<tr>
+					<td>Microsegmentation coverage</td>
+					<td>100% of critical workloads isolated</td>
+			</tr>
+			<tr>
+					<td>Lateral movement blast radius</td>
+					<td>&lt; 5% of assets reachable from single compromise</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/supply-chain/"><span class="ref-label">Wiki</span>Supply Chain Security</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Zero Trust eliminates these threats</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Supply Chain Security</title>
+      <link>https://logan23info.github.io/wiki/supply-chain/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/supply-chain/</guid>
+      <description>Complete guide to Software Supply Chain Security — SLSA framework, SBOM, dependency management, and securing the build pipeline.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-supply-chain-security">What is Supply Chain Security?</h2>
+<p>Software supply chain security is the practice of securing every component, tool, and process that contributes to building and delivering your software. Modern applications are typically 80–90% third-party code — open source libraries, frameworks, and dependencies written by others.</p>
+<p>A supply chain attack targets this dependency on third-party code. Instead of attacking your application directly, attackers compromise something your application trusts — a popular open source library, a build tool, or a software update mechanism.</p>
+<hr>
+<h2 id="why-supply-chain-security-matters">Why supply chain security matters</h2>
+<h3 id="the-scale-of-the-problem">The scale of the problem</h3>
+<ul>
+<li>The average enterprise application has <strong>528 open source dependencies</strong></li>
+<li>In 2023, there were <strong>245,000+ malicious packages</strong> published to npm, PyPI, and other registries</li>
+<li>Supply chain attacks increased <strong>742%</strong> between 2019 and 2022</li>
+</ul>
+<h3 id="high-profile-supply-chain-attacks">High-profile supply chain attacks</h3>
+<p><strong>SolarWinds (2020)</strong></p>
+<ul>
+<li>Attackers compromised SolarWinds&rsquo; build pipeline</li>
+<li>Malicious code inserted into Orion software update</li>
+<li>18,000 organisations installed the backdoored update</li>
+<li>Victims included US Treasury, State Department, Microsoft, FireEye</li>
+</ul>
+<p><strong>Log4Shell (2021 — CVE-2021-44228)</strong></p>
+<ul>
+<li>Critical zero-day in Log4j — a logging library used in millions of Java applications</li>
+<li>CVSS score 10.0 (maximum)</li>
+<li>Affected organisations had no idea they were using Log4j — it was a transitive dependency</li>
+<li>Demonstrated: you must know every dependency, not just your direct ones</li>
+</ul>
+<p><strong>XZ Utils (2024)</strong></p>
+<ul>
+<li>Attacker spent two years building trust in the XZ Utils open source project</li>
+<li>Gained maintainer access and inserted a backdoor targeting SSH authentication</li>
+<li>Would have affected millions of Linux servers</li>
+<li>Caught by accident before widespread deployment</li>
+</ul>
+<hr>
+<h2 id="the-slsa-framework">The SLSA framework</h2>
+<p>SLSA (Supply chain Levels for Software Artifacts, pronounced &ldquo;salsa&rdquo;) is a security framework developed by Google that provides a checklist of standards to prevent tampering and improve software integrity.</p>
+<h3 id="slsa-levels">SLSA levels</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Level</th>
+					<th>Requirements</th>
+					<th>What it prevents</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SLSA 0</td>
+					<td>No guarantees</td>
+					<td>Nothing</td>
+			</tr>
+			<tr>
+					<td>SLSA 1</td>
+					<td>Build process documented, provenance generated</td>
+					<td>Accidental errors</td>
+			</tr>
+			<tr>
+					<td>SLSA 2</td>
+					<td>Build service used, provenance signed</td>
+					<td>Tampering by rogue developer</td>
+			</tr>
+			<tr>
+					<td>SLSA 3</td>
+					<td>Hardened build service, source verified</td>
+					<td>Compromised build service</td>
+			</tr>
+			<tr>
+					<td>SLSA 4</td>
+					<td>Two-party review, hermetic builds</td>
+					<td>Sophisticated insider attacks</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="slsa-provenance">SLSA provenance</h3>
+<p>Provenance is a verifiable record of how an artifact was built — who built it, from what source, using what process.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;_type&#34;</span><span class="p">:</span> <span class="s2">&#34;https://in-toto.io/Statement/v0.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;subject&#34;</span><span class="p">:</span> <span class="p">[{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;myapp-v1.0.tar.gz&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;sha256&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123...&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;predicateType&#34;</span><span class="p">:</span> <span class="s2">&#34;https://slsa.dev/provenance/v0.2&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;predicate&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;builder&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;https://github.com/actions/runner&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;buildType&#34;</span><span class="p">:</span> <span class="s2">&#34;https://github.com/slsa-framework/slsa-github-generator&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;invocation&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;configSource&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;uri&#34;</span><span class="p">:</span> <span class="s2">&#34;git+https://github.com/myorg/myapp@refs/heads/main&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;sha1&#34;</span><span class="p">:</span> <span class="s2">&#34;def456...&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;entryPoint&#34;</span><span class="p">:</span> <span class="s2">&#34;.github/workflows/release.yml&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;metadata&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;buildStartedOn&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-08-02T09:00:00Z&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;completeness&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;parameters&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nt">&#34;environment&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="implementing-slsa-in-github-actions">Implementing SLSA in GitHub Actions</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .github/workflows/release.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Release with SLSA provenance</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;v*&#39;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">permissions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l">write</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l">write</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">actions</span><span class="p">:</span><span class="w"> </span><span class="l">read</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">outputs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">hashes</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.hash.outputs.hashes }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build artifact</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          make build
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo &#34;artifact=myapp-${{ github.ref_name }}.tar.gz&#34; &gt;&gt; $GITHUB_OUTPUT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Generate SHA256 hashes</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">hash</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          sha256sum myapp-*.tar.gz &gt; checksums.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo &#34;hashes=$(cat checksums.txt | base64 -w0)&#34; &gt;&gt; $GITHUB_OUTPUT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">artifacts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*.tar.gz&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">provenance</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">build]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.10.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">base64-subjects</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;${{ needs.build.outputs.hashes }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">upload-assets</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="software-bill-of-materials-sbom">Software Bill of Materials (SBOM)</h2>
+<p>An SBOM is a complete list of every component in your software — like a nutritional label for code. It enables you to quickly determine whether you are affected by a newly discovered vulnerability.</p>
+<h3 id="sbom-formats">SBOM formats</h3>
+<p><strong>SPDX</strong> (Software Package Data Exchange) — Linux Foundation standard:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;SPDXID&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDXRef-DOCUMENT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;spdxVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDX-2.3&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;myapp-1.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;packages&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;SPDXID&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDXRef-log4j&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;log4j-core&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;supplier&#34;</span><span class="p">:</span> <span class="s2">&#34;Organization: Apache Software Foundation&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;downloadLocation&#34;</span><span class="p">:</span> <span class="s2">&#34;https://search.maven.org/...&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;filesAnalyzed&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;packageVerificationCode&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;packageVerificationCodeValue&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenseConcluded&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenseDeclared&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><strong>CycloneDX</strong> — OWASP standard, security-focused:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;bomFormat&#34;</span><span class="p">:</span> <span class="s2">&#34;CycloneDX&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;specVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;1.5&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;components&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;library&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;log4j-core&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;purl&#34;</span><span class="p">:</span> <span class="s2">&#34;pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenses&#34;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&#34;license&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span><span class="p">}}],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;vulnerabilities&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;CVE-2021-44228&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;ratings&#34;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&#34;severity&#34;</span><span class="p">:</span> <span class="s2">&#34;critical&#34;</span><span class="p">,</span> <span class="nt">&#34;score&#34;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="generating-sboms-in-cicd">Generating SBOMs in CI/CD</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># Add to your GitHub Actions workflow</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Generate SBOM</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">anchore/sbom-action@v0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l">sbom.spdx.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l">spdx-json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Scan SBOM for vulnerabilities</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">anchore/scan-action@v3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">sbom</span><span class="p">:</span><span class="w"> </span><span class="l">sbom.spdx.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fail-build</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">severity-cutoff</span><span class="p">:</span><span class="w"> </span><span class="l">high</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="dependency-security">Dependency security</h2>
+<h3 id="dependency-scanning-tools">Dependency scanning tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Language</th>
+					<th>CI Integration</th>
+					<th>Cost</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Dependabot</td>
+					<td>All</td>
+					<td>GitHub native</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Snyk</td>
+					<td>All</td>
+					<td>GitHub/GitLab/Jenkins</td>
+					<td>Free tier</td>
+			</tr>
+			<tr>
+					<td>OWASP Dependency-Check</td>
+					<td>Java/.NET</td>
+					<td>All CI</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>npm audit</td>
+					<td>JavaScript</td>
+					<td>npm native</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>pip-audit</td>
+					<td>Python</td>
+					<td>Any</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Trivy</td>
+					<td>Containers + packages</td>
+					<td>GitHub Actions</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Grype</td>
+					<td>Containers + SBOMs</td>
+					<td>Any</td>
+					<td>Free</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="dependency-confusion-attacks">Dependency confusion attacks</h3>
+<p>Dependency confusion (Alex Birsan, 2021) exploits how package managers resolve package names. If your private package registry has a package called <code>mycompany-utils</code>, an attacker can publish a <strong>public</strong> package with the same name but a higher version number — and package managers may install the malicious public version instead.</p>
+<p><strong>Mitigations:</strong></p>
+<pre tabindex="0"><code>1. Scope private packages: @mycompany/utils (npm scoped packages)
+2. Use private registry that explicitly blocks public fallback for private names
+3. Pin exact versions with lockfiles (package-lock.json, yarn.lock, poetry.lock)
+4. Verify package integrity with checksums
+</code></pre><h3 id="typosquatting">Typosquatting</h3>
+<p>Attackers publish malicious packages with names similar to popular ones:</p>
+<ul>
+<li><code>lodash</code> (legitimate) vs <code>lodashs</code> (malicious)</li>
+<li><code>requests</code> (legitimate) vs <code>request</code> (check carefully)</li>
+<li><code>numpy</code> (legitimate) vs <code>numpay</code> (malicious)</li>
+</ul>
+<p><strong>Mitigation:</strong> Only install packages from verified sources. Review package metadata before installing. Use Typosquatting detection tools.</p>
+<hr>
+<h2 id="securing-the-build-pipeline">Securing the build pipeline</h2>
+<p>Your build pipeline is a high-value target — compromise it and you can tamper with every artifact it produces.</p>
+<h3 id="build-pipeline-hardening-checklist">Build pipeline hardening checklist</h3>
+<pre tabindex="0"><code>Source code
+□ Branch protection on main branch (require PR review)
+□ Signed commits (GPG or SSH signing)
+□ CODEOWNERS for sensitive files
+□ Secret scanning enabled (GitHub Advanced Security / gitleaks)
+
+Build environment
+□ Ephemeral build environments (no persistent build agents)
+□ Minimal permissions for build service accounts
+□ No hardcoded credentials in build scripts
+□ Build artifacts checksummed and signed
+□ Hermetic builds (dependencies pinned, no internet access during build)
+
+Artifact storage
+□ Artifacts stored in access-controlled registry
+□ Vulnerability scanning on container images before push
+□ Image signing with Cosign/Notary
+□ Immutable artifact storage (no overwrite of published versions)
+
+Deployment
+□ Verify artifact signatures before deployment
+□ Verify SLSA provenance before deployment
+□ Deploy from registry, never from local build
+□ GitOps — deployment state in version control
+</code></pre><h3 id="signing-artifacts-with-sigstorecosign">Signing artifacts with Sigstore/Cosign</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Install cosign</span>
+</span></span><span class="line"><span class="cl">brew install cosign  <span class="c1"># or download from sigstore.dev</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Sign a container image (keyless using GitHub Actions OIDC)</span>
+</span></span><span class="line"><span class="cl">cosign sign --yes ghcr.io/myorg/myapp:v1.0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Verify a signed image</span>
+</span></span><span class="line"><span class="cl">cosign verify <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --certificate-identity <span class="s2">&#34;https://github.com/myorg/myapp/.github/workflows/release.yml@refs/heads/main&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --certificate-oidc-issuer <span class="s2">&#34;https://token.actions.githubusercontent.com&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  ghcr.io/myorg/myapp:v1.0
+</span></span></code></pre></div><hr>
+<h2 id="third-party-risk-management">Third-party risk management</h2>
+<h3 id="evaluating-open-source-dependencies">Evaluating open source dependencies</h3>
+<p>Before adding a new dependency, evaluate:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Factor</th>
+					<th>What to check</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Maintainership</td>
+					<td>How many active maintainers? When was the last commit?</td>
+			</tr>
+			<tr>
+					<td>Community</td>
+					<td>Stars, forks, contributors, issue response time</td>
+			</tr>
+			<tr>
+					<td>Security track record</td>
+					<td>Past CVEs, how quickly patched?</td>
+			</tr>
+			<tr>
+					<td>License</td>
+					<td>Compatible with your use case?</td>
+			</tr>
+			<tr>
+					<td>Popularity</td>
+					<td>Widely used = more scrutiny, but also bigger target</td>
+			</tr>
+			<tr>
+					<td>Provenance</td>
+					<td>Who published it? Is it the legitimate maintainer?</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="scorecard--automated-dependency-evaluation">Scorecard — automated dependency evaluation</h3>
+<p>OpenSSF Scorecard evaluates open source packages across 18 security criteria:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Install and run Scorecard</span>
+</span></span><span class="line"><span class="cl">go install sigs.k8s.io/release-utils/cmd/scorecard@latest
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">scorecard --repo<span class="o">=</span>github.com/someorg/somepackage
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Maintained: 8/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Code-Review: 7/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Branch-Protection: 5/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Vulnerabilities: 10/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Pinned-Dependencies: 3/10   ← gap</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># SAST: 6/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Aggregate: 7.2/10</span>
+</span></span></code></pre></div><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SBOM coverage</td>
+					<td>100% of production software</td>
+			</tr>
+			<tr>
+					<td>Time to patch critical CVE</td>
+					<td>&lt; 24 hours</td>
+			</tr>
+			<tr>
+					<td>Dependency freshness</td>
+					<td>No dependency &gt; 2 major versions behind</td>
+			</tr>
+			<tr>
+					<td>Signed artifact coverage</td>
+					<td>100% of released artifacts</td>
+			</tr>
+			<tr>
+					<td>Secret scan coverage</td>
+					<td>100% of repositories</td>
+			</tr>
+			<tr>
+					<td>Dependency review on PRs</td>
+					<td>100% of dependency-adding PRs reviewed</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Wiki</span>Zero Trust Architecture</a>
+  <a class="ref-card" href="/wiki/tools/threagile/"><span class="ref-label">Tool</span>Threagile — threat model as code</a>
+  <a class="ref-card" href="/wiki/templates/pr-checklist/"><span class="ref-label">Template</span>PR Security Checklist</a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/"><span class="ref-label">Post</span>Threat Modelling in DevSecOps</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

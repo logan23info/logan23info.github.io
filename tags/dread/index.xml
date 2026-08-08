@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DREAD on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/dread/</link>
+    <description>Recent content in DREAD on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/dread/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DREAD: Risk Scoring for Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/03-dread-scoring/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/03-dread-scoring/</guid>
+      <description>How to use DREAD to score and prioritise threats so your team knows what to fix first.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-dread">What is DREAD?</h2>
+<p>DREAD is a risk scoring model. Where STRIDE tells you what kind of threat something is, DREAD tells you how bad it is — so you can prioritise your mitigation backlog.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Dimension</th>
+					<th>Question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Damage</td>
+					<td>How much damage if exploited?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Reproducibility</td>
+					<td>How easy is it to reproduce?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Exploitability</td>
+					<td>How much skill does exploitation require?</td>
+			</tr>
+			<tr>
+					<td><strong>A</strong></td>
+					<td>Affected users</td>
+					<td>How many users are impacted?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Discoverability</td>
+					<td>How easy is it to find the vulnerability?</td>
+			</tr>
+	</tbody>
+</table>
+<p>Each dimension scored 1–10. Final score = average of all five.</p>
+<hr>
+<h2 id="scoring-guide">Scoring guide</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + custom tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>Fix SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9–10</td>
+					<td>Critical</td>
+					<td>Within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7–8.9</td>
+					<td>High</td>
+					<td>Within 1 week</td>
+			</tr>
+			<tr>
+					<td>4–6.9</td>
+					<td>Medium</td>
+					<td>Within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="prioritised-backlog-from-auth-service-threats">Prioritised backlog from Auth Service threats</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Priority</th>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>DREAD</th>
+					<th>Action</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>T-02</td>
+					<td>alg:none JWT forgery</td>
+					<td>9.0</td>
+					<td>Fix immediately</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>8.8</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>8.4</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>8.2</td>
+					<td>Fix this sprint</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>T-05</td>
+					<td>Credential stuffing DoS</td>
+					<td>6.6</td>
+					<td>Next sprint</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>5.2</td>
+					<td>Next sprint</td>
+			</tr>
+	</tbody>
+</table>
+<p>Now your backlog is prioritised — no guessing what matters most.</p>
+<hr>
+<h2 id="dread-vs-alternatives">DREAD vs alternatives</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Model</th>
+					<th>Strengths</th>
+					<th>When to use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DREAD</td>
+					<td>Fast, intuitive</td>
+					<td>Quick triage, smaller teams</td>
+			</tr>
+			<tr>
+					<td>CVSS v3.1</td>
+					<td>Standardised, auditable</td>
+					<td>Enterprise, compliance</td>
+			</tr>
+			<tr>
+					<td>OWASP Risk Rating</td>
+					<td>Includes business impact</td>
+					<td>Stakeholder reporting</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see <a href="/posts/04-pasta-framework/">PASTA</a> for business-risk-aligned threat modelling.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>DREAD — Quick Reference</title>
+      <link>https://logan23info.github.io/wiki/dread/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/dread/</guid>
+      <description>Quick reference card for the DREAD risk scoring model.</description>
+      <content:encoded><![CDATA[<h2 id="scoring-dimensions-each-110">Scoring dimensions (each 1–10)</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9.0–10</td>
+					<td>Critical</td>
+					<td>Fix within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7.0–8.9</td>
+					<td>High</td>
+					<td>Fix within 1 week</td>
+			</tr>
+			<tr>
+					<td>4.0–6.9</td>
+					<td>Medium</td>
+					<td>Fix within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1.0–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="formula">Formula</h2>
+<pre tabindex="0"><code>DREAD = (Damage + Reproducibility + Exploitability + Affected Users + Discoverability) / 5
+</code></pre><p>See the <a href="/posts/03-dread-scoring/">DREAD scoring post</a> for a full worked example.</p>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Threat Categorisation</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Framework</span>PASTA — Full Methodology</a>
+  <a class="ref-card" href="/wiki/templates/threat-register/"><span class="ref-label">Template</span>Threat Register</a>
+  <a class="ref-card" href="/posts/03-dread-scoring/"><span class="ref-label">Post</span>DREAD Scoring Deep-Dive</a>
+  <a class="ref-card" href="/posts/02-stride-methodology/"><span class="ref-label">Post</span>STRIDE Practitioner's Guide</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

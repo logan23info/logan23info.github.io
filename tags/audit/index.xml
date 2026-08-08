@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Audit on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/audit/</link>
+    <description>Recent content in Audit on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/audit/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Advisory &amp; Assurance — The Governance Layer Over Security Engineering</title>
+      <link>https://logan23info.github.io/posts/07-advisory-assurance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/07-advisory-assurance/</guid>
+      <description>How Advisory and Assurance activities — Test of Design, Test of Implementation, and Test of Operating Effectiveness — validate the controls your security engineering team builds.</description>
+      <content:encoded><![CDATA[<h2 id="the-missing-layer">The missing layer</h2>
+<p>You have threat models, a red team, purple team exercises, and a Zero Trust roadmap. But how does anyone — the board, your customers, regulators — know the controls are actually working?</p>
+<p>That is the role of <strong>Advisory &amp; Assurance</strong>: an independent governance layer that validates what security engineering builds.</p>
+<pre tabindex="0"><code>Security Engineering   → designs and builds controls
+Advisory               → advises on control design and gaps
+Assurance              → independently validates controls work
+</code></pre><p>These are not competing functions. They are the complete control lifecycle.</p>
+<hr>
+<h2 id="the-three-testing-disciplines">The three testing disciplines</h2>
+<h3 id="test-of-design-tod">Test of Design (ToD)</h3>
+<p><strong>Question: Is the control designed correctly to address the risk?</strong></p>
+<p>ToD happens before or during implementation. An assurance reviewer examines the control design — the architecture document, threat model, or policy — and assesses whether it logically mitigates the risk it is intended to address.</p>
+<p>A control can fail ToD because:</p>
+<ul>
+<li>It does not address the root cause of the risk</li>
+<li>It has a logical bypass built into the design</li>
+<li>It does not meet the relevant regulatory requirement</li>
+</ul>
+<p><strong>Real example:</strong>
+A company designs an MFA policy that requires MFA for all users — but exempts service accounts. An attacker who compromises a service account has full access with no MFA challenge. The design has a gap. ToD catches this before implementation.</p>
+<hr>
+<h3 id="test-of-implementation-toi">Test of Implementation (ToI)</h3>
+<p><strong>Question: Has the control been correctly implemented as designed?</strong></p>
+<p>ToI happens after implementation. The assurance reviewer tests whether the control is actually in place — not just documented.</p>
+<p>Common ToI techniques:</p>
+<ul>
+<li>Configuration inspection (check the actual settings)</li>
+<li>Walkthrough testing (step through the control operation)</li>
+<li>Technical testing (attempt to bypass the control)</li>
+<li>Evidence sampling (verify the control for a sample of cases)</li>
+</ul>
+<p><strong>Real example:</strong>
+MFA policy says all users must have MFA. ToI finds that 14 service accounts, created before the policy, have never had MFA enrolled. The design was correct but implementation is incomplete. ToI catches this.</p>
+<hr>
+<h3 id="test-of-operating-effectiveness-tooe">Test of Operating Effectiveness (ToOE)</h3>
+<p><strong>Question: Has the control operated consistently and effectively over the review period?</strong></p>
+<p>ToOE covers a period of time — typically 3, 6, or 12 months. It is not enough that a control worked once. It must work every time, for every applicable case, throughout the period.</p>
+<p>This is the equivalent of <strong>SOC 2 Type II</strong> — the gold standard for customer-facing security assurance.</p>
+<p><strong>Real example:</strong>
+MFA is enforced for all users. But in March, a bulk user import script created 200 accounts without triggering MFA enrollment. For 11 days, those accounts had no MFA. The control failed to operate effectively for 11 days. ToOE catches this through population sampling or continuous monitoring.</p>
+<hr>
+<h2 id="how-this-maps-to-compliance-frameworks">How this maps to compliance frameworks</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Framework</th>
+					<th>ToD equivalent</th>
+					<th>ToI equivalent</th>
+					<th>ToOE equivalent</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SOC 2</td>
+					<td>Trust service criteria design</td>
+					<td>Type I opinion</td>
+					<td>Type II opinion</td>
+			</tr>
+			<tr>
+					<td>ISO 27001</td>
+					<td>Control objective review</td>
+					<td>Implementation audit</td>
+					<td>Surveillance audit</td>
+			</tr>
+			<tr>
+					<td>PCI-DSS</td>
+					<td>Requirement design review</td>
+					<td>SAQ / onsite assessment</td>
+					<td>Continuous compliance</td>
+			</tr>
+			<tr>
+					<td>DORA (EU)</td>
+					<td>ICT risk control design</td>
+					<td>TLPT (threat-led pen test)</td>
+					<td>Annual ICT assurance</td>
+			</tr>
+			<tr>
+					<td>NIST CSF</td>
+					<td>Identify + Protect</td>
+					<td>Detect</td>
+					<td>Recover + continuous</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="advisory-activities">Advisory activities</h2>
+<p>Beyond testing, the advisory function provides forward-looking guidance:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Activity</th>
+					<th>Description</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Control gap analysis</td>
+					<td>Compare current controls to framework requirements</td>
+					<td>Gap register with priorities</td>
+			</tr>
+			<tr>
+					<td>Risk advisory</td>
+					<td>Advise on emerging risks and appropriate controls</td>
+					<td>Risk advisory report</td>
+			</tr>
+			<tr>
+					<td>Architecture review</td>
+					<td>Review new system designs for security control adequacy</td>
+					<td>Design findings</td>
+			</tr>
+			<tr>
+					<td>Regulatory advisory</td>
+					<td>Interpret new regulations and advise on compliance</td>
+					<td>Compliance roadmap</td>
+			</tr>
+			<tr>
+					<td>Security programme review</td>
+					<td>Assess overall security programme maturity</td>
+					<td>Maturity assessment</td>
+			</tr>
+			<tr>
+					<td>Red team debrief</td>
+					<td>Facilitate discussion of red team findings with stakeholders</td>
+					<td>Remediation priorities</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>The full control assurance lifecycle:</p>
+<pre tabindex="0"><code>1. Risk identified (via threat model, incident, regulatory change)
+        ↓
+2. Control designed (ToD — is the design adequate?)
+        ↓
+3. Control implemented (ToI — is it correctly in place?)
+        ↓
+4. Control operated (ToOE — is it working consistently?)
+        ↓
+5. Evidence collected (Controls &amp; Evidence Catalogue)
+        ↓
+6. Findings reported (to management, audit committee, regulators)
+        ↓
+7. Gaps remediated → back to step 2
+</code></pre><hr>
+<h2 id="quick-reference-what-to-test-and-when">Quick reference: what to test and when</h2>
+<table>
+	<thead>
+			<tr>
+					<th>When</th>
+					<th>Activity</th>
+					<th>Test type</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New system being designed</td>
+					<td>Architecture review, threat model review</td>
+					<td>ToD</td>
+			</tr>
+			<tr>
+					<td>Pre-go-live</td>
+					<td>Configuration review, walkthrough testing</td>
+					<td>ToI</td>
+			</tr>
+			<tr>
+					<td>Post-go-live (30 days)</td>
+					<td>Verify control operating</td>
+					<td>ToI</td>
+			</tr>
+			<tr>
+					<td>Quarterly</td>
+					<td>Access review validation, exception review</td>
+					<td>ToOE</td>
+			</tr>
+			<tr>
+					<td>Annually</td>
+					<td>Full control effectiveness review</td>
+					<td>ToOE</td>
+			</tr>
+			<tr>
+					<td>Before SOC 2 audit</td>
+					<td>Readiness assessment</td>
+					<td>ToD + ToI + ToOE</td>
+			</tr>
+			<tr>
+					<td>After security incident</td>
+					<td>Post-incident control review</td>
+					<td>ToI + ToOE</td>
+			</tr>
+			<tr>
+					<td>New regulation</td>
+					<td>Regulatory gap analysis</td>
+					<td>ToD</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/advisory-assurance/tod/"><span class="ref-label">Assurance</span>Test of Design (ToD)</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/toi/"><span class="ref-label">Assurance</span>Test of Implementation (ToI)</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/tooe/"><span class="ref-label">Assurance</span>Test of Operating Effectiveness</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/controls-evidence/"><span class="ref-label">Assurance</span>Controls & Evidence Catalogue</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Security Engineering Maturity Ladder</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

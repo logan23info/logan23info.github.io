@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Purple-Teaming on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/purple-teaming/</link>
+    <description>Recent content in Purple-Teaming on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/purple-teaming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Purple Teaming</title>
+      <link>https://logan23info.github.io/wiki/purple-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/purple-teaming/</guid>
+      <description>Complete guide to Purple Teaming — collaborative red and blue team exercises to validate and improve detection and response capabilities.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-purple-teaming">What is Purple Teaming?</h2>
+<p>Purple Teaming is a collaborative security exercise where the Red Team (attackers) and Blue Team (defenders) work together simultaneously. The red team executes attack techniques one at a time, the blue team monitors whether their detection tools catch it, and both teams immediately discuss and fix gaps.</p>
+<p><strong>Red = Attacker. Blue = Defender. Purple = Both working together.</strong></p>
+<p>Unlike traditional red teaming where findings are only shared at the end in a report, purple teaming produces immediate improvements — gaps are fixed in real time during the exercise.</p>
+<hr>
+<h2 id="purple-vs-red-vs-blue">Purple vs Red vs Blue</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Red Team</th>
+					<th>Blue Team</th>
+					<th>Purple Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Achieve attacker objective</td>
+					<td>Detect and respond</td>
+					<td>Improve detection coverage</td>
+			</tr>
+			<tr>
+					<td>Timing</td>
+					<td>Sequential (attack then report)</td>
+					<td>Reactive</td>
+					<td>Simultaneous collaboration</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Attack narrative</td>
+					<td>Incident reports</td>
+					<td>Detection coverage map</td>
+			</tr>
+			<tr>
+					<td>Feedback loop</td>
+					<td>Weeks (end of engagement)</td>
+					<td>After incident</td>
+					<td>Real-time</td>
+			</tr>
+			<tr>
+					<td>Improvement</td>
+					<td>Slow</td>
+					<td>Slow</td>
+					<td>Immediate</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually</td>
+					<td>Continuous</td>
+					<td>Quarterly / monthly</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="the-purple-team-exercise-structure">The Purple Team exercise structure</h2>
+<h3 id="pre-exercise">Pre-exercise</h3>
+<p><strong>1. Define scope using ATT&amp;CK Navigator</strong></p>
+<p>Select the techniques you want to test based on:</p>
+<ul>
+<li>Threat intelligence about actors targeting your sector</li>
+<li>Previous red team findings that weren&rsquo;t detected</li>
+<li>Compliance requirements (e.g. DORA, TIBER)</li>
+<li>Recent high-profile incidents in your industry</li>
+</ul>
+<p>Export the technique list as a checklist for the exercise.</p>
+<p><strong>2. Prepare the environment</strong></p>
+<ul>
+<li>Confirm SIEM and EDR are fully operational</li>
+<li>Ensure log sources are all feeding correctly</li>
+<li>Set up a dedicated exercise channel (Slack/Teams)</li>
+<li>Agree on communication protocol between red and blue</li>
+</ul>
+<p><strong>3. Set up tracking</strong></p>
+<p>Use VECTR (free, open source) or a simple spreadsheet:</p>
+<pre tabindex="0"><code>Technique ID | Name                  | Executed | Alert fired | Log found | Result
+T1566.001    | Phishing - Attachment | ✓        | ✗           | ✓         | PARTIAL
+T1003.001    | LSASS Memory Dump     | ✓        | ✓           | ✓         | DETECTED
+T1021.002    | SMB/Admin Shares      | ✓        | ✗           | ✗         | MISSED
+T1486        | Data Encrypted        | ✓        | ✓           | ✓         | DETECTED
+</code></pre><hr>
+<h2 id="exercise-execution">Exercise execution</h2>
+<h3 id="the-purple-team-loop">The purple team loop</h3>
+<p>For each technique:</p>
+<pre tabindex="0"><code>Red executes technique
+        ↓
+Blue checks SIEM/EDR (5-10 minutes)
+        ↓
+     Detected?
+    ↙         ↘
+  YES           NO
+   ↓             ↓
+Document      Find the log
+as detected   evidence manually
+              ↓
+         Log exists?
+        ↙         ↘
+      YES           NO
+       ↓             ↓
+  Write/tune      Fix log
+  detection rule  collection
+       ↓             ↓
+  Re-test         Re-test
+</code></pre><h3 id="example-exercise-session">Example exercise session</h3>
+<p><strong>09:00 — Technique: T1566.001 Spear Phishing</strong></p>
+<p>Red team sends a test phishing email with a benign payload to a test account.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Email gateway logs → email received and delivered</li>
+<li>EDR → macro execution detected? → YES, alert fired</li>
+<li>SIEM → correlation rule triggered? → NO, no SIEM alert</li>
+</ul>
+<p>Result: PARTIAL. EDR detects it, SIEM has no correlation rule.
+Action: Blue team creates SIEM rule to correlate EDR macro alert with email gateway log.
+Re-test: Rule fires correctly. Mark as DETECTED.</p>
+<hr>
+<p><strong>10:30 — Technique: T1003.001 LSASS Memory Dump</strong></p>
+<p>Red team runs <code>mimikatz.exe sekurlsa::logonpasswords</code> on a test endpoint.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>EDR → lsass access by unknown process → Alert fired, process quarantined</li>
+<li>SIEM → alert correlated → YES</li>
+<li>SOC analyst → alert reviewed in under 5 minutes</li>
+</ul>
+<p>Result: FULLY DETECTED. No action needed.</p>
+<hr>
+<p><strong>11:15 — Technique: T1021.002 SMB Lateral Movement</strong></p>
+<p>Red team connects to a network share on another system using valid credentials.</p>
+<p>Blue team checks:</p>
+<ul>
+<li>Network logs → SMB connection logged? → YES in firewall</li>
+<li>SIEM → alert fired? → NO</li>
+<li>EDR → anything? → NO (valid credentials, no malware)</li>
+</ul>
+<p>Result: MISSED. Legitimate-looking SMB with valid creds — no rule covers this.
+Action: Build a SIEM rule that alerts on SMB connections from workstations to workstations (unusual in most environments). Add user-entity baseline to detect off-hours access.</p>
+<hr>
+<h2 id="detection-engineering-from-purple-team-findings">Detection engineering from purple team findings</h2>
+<p>Each &ldquo;MISSED&rdquo; result becomes a detection engineering task.</p>
+<h3 id="detection-rule-lifecycle">Detection rule lifecycle</h3>
+<pre tabindex="0"><code>Purple team finds gap
+        ↓
+Write detection rule hypothesis
+        ↓
+Identify required log sources
+        ↓
+Verify logs are being collected
+        ↓
+Write SIEM rule / EDR policy
+        ↓
+Test rule with purple team re-execution
+        ↓
+Tune to reduce false positives
+        ↓
+Document and deploy to production
+        ↓
+Add to regression test suite
+</code></pre><h3 id="example-siem-rule-sigma-format">Example SIEM rule (Sigma format)</h3>
+<p>Sigma is a vendor-neutral format for SIEM detection rules:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Suspicious LSASS Access by Non-System Process</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">4a1c6c5e-3d8b-4f4a-9c2d-1e0a3b7f8d2c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">production</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Detects access to LSASS memory by processes that should not access it</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">tags</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.credential_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">attack.t1003.001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">logsource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">process_access</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">product</span><span class="p">:</span><span class="w"> </span><span class="l">windows</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">detection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selection</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">TargetImage|endswith</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;\lsass.exe&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">filter</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">SourceImage|startswith</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Windows\System32\&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      - &#39;</span><span class="l">C:\Windows\SysWOW64\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;C:\Program Files\Windows Defender\&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l">selection and not filter</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">falsepositives</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Legitimate security tools</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">AV software</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l">high</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="tooling">Tooling</h2>
+<h3 id="free-and-open-source">Free and open source</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>VECTR</td>
+					<td>Purple team exercise tracking and reporting</td>
+			</tr>
+			<tr>
+					<td>Atomic Red Team</td>
+					<td>Library of ATT&amp;CK technique test scripts</td>
+			</tr>
+			<tr>
+					<td>ATT&amp;CK Navigator</td>
+					<td>Visual ATT&amp;CK coverage mapping</td>
+			</tr>
+			<tr>
+					<td>Sigma</td>
+					<td>Vendor-neutral SIEM detection rule format</td>
+			</tr>
+			<tr>
+					<td>Caldera</td>
+					<td>Automated adversary emulation (MITRE project)</td>
+			</tr>
+			<tr>
+					<td>Invoke-AtomicRedTeam</td>
+					<td>PowerShell runner for Atomic Red Team</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="running-atomic-red-team-tests">Running Atomic Red Team tests</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># Install Atomic Red Team</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="nb">invoke-atomicredteam</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Import</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="nb">invoke-atomicredteam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Test T1003.001 — LSASS Memory Dump</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># List all available tests for a technique</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-ShowDetails</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Run specific test number</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-TestNumbers</span> <span class="mf">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Clean up after test</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-AtomicTest</span> <span class="n">T1003</span><span class="p">.</span><span class="py">001</span> <span class="n">-Cleanup</span>
+</span></span></code></pre></div><h3 id="vectr--tracking-exercise-results">VECTR — tracking exercise results</h3>
+<p>VECTR is a free, open-source platform for tracking purple team exercises:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Deploy VECTR with Docker</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/SecurityRiskAdvisors/VECTR
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> VECTR
+</span></span><span class="line"><span class="cl">docker-compose up -d
+</span></span><span class="line"><span class="cl"><span class="c1"># Access at http://localhost:8081</span>
+</span></span></code></pre></div><hr>
+<h2 id="coverage-measurement">Coverage measurement</h2>
+<p>After each exercise, measure your ATT&amp;CK coverage:</p>
+<pre tabindex="0"><code>Total techniques tested:          45
+Fully detected:                   28  (62%)
+Partially detected:                8  (18%)
+Missed:                            9  (20%)
+
+By tactic:
+Initial Access:      4/5 detected  (80%)
+Execution:           6/8 detected  (75%)
+Persistence:         3/6 detected  (50%)   ← gap
+Credential Access:   2/7 detected  (29%)   ← major gap
+Lateral Movement:    4/6 detected  (67%)
+Exfiltration:        2/3 detected  (67%)
+</code></pre><p>This coverage map directly drives your detection engineering roadmap — address the lowest-coverage tactics first.</p>
+<hr>
+<h2 id="purple-team-maturity-levels">Purple Team maturity levels</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Maturity</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Level 1</td>
+					<td>Ad-hoc: occasional exercises with no tracking</td>
+			</tr>
+			<tr>
+					<td>Level 2</td>
+					<td>Defined: regular exercises tracked in spreadsheet</td>
+			</tr>
+			<tr>
+					<td>Level 3</td>
+					<td>Managed: VECTR-tracked, ATT&amp;CK mapped, metrics reported</td>
+			</tr>
+			<tr>
+					<td>Level 4</td>
+					<td>Optimised: automated continuous testing, integrated with CI/CD</td>
+			</tr>
+	</tbody>
+</table>
+<p>Level 4 is sometimes called <strong>Continuous Purple Teaming</strong> — detection rules are tested automatically on every deployment, like unit tests for your SIEM.</p>
+<hr>
+<h2 id="key-outputs">Key outputs</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Output</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>ATT&amp;CK coverage heat map</td>
+					<td>Visual of detected vs missed techniques</td>
+			</tr>
+			<tr>
+					<td>Detection gap backlog</td>
+					<td>Prioritised list of rules to write</td>
+			</tr>
+			<tr>
+					<td>SOC playbook updates</td>
+					<td>New response procedures for newly detected techniques</td>
+			</tr>
+			<tr>
+					<td>Log source gaps</td>
+					<td>Missing data that prevents detection</td>
+			</tr>
+			<tr>
+					<td>MTTD improvement</td>
+					<td>Mean time to detect improving over time</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — Level 3</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — maps to ATT&CK techniques</a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/"><span class="ref-label">Post</span>Threat Modelling in DevSecOps</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>A complete guide to all six levels of the Security Engineering Maturity Ladder — from Threat Modelling through to Zero Trust Architecture.</description>
+      <content:encoded><![CDATA[<h2 id="overview">Overview</h2>
+<p>The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.</p>
+<pre tabindex="0"><code>Level 1 — Threat Modelling           What could go wrong?
+Level 2 — Attack Surface Management  Where are we exposed right now?
+Level 3 — Red Teaming                Can attacks actually succeed?
+Level 4 — Purple Teaming             Can we detect those attacks?
+Level 5 — Threat Intelligence        Who is actually targeting us?
+Level 6 — Zero Trust Architecture    Eliminate trust entirely
+   +1   — Supply Chain Security      Is our code itself safe?
+</code></pre><p>Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.</p>
+<hr>
+<h2 id="level-1--threat-modelling">Level 1 — Threat Modelling</h2>
+<p><strong>Core question:</strong> What could go wrong with this system?</p>
+<p><strong>What it is:</strong> A structured design-time process for identifying security risks before code is written. Uses frameworks like STRIDE to enumerate threats per component and DREAD to score and prioritise them.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Data flow diagram (DFD) of the system</li>
+<li>Threat register with mitigations</li>
+<li>Security backlog for engineering</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat model produced for every new service</li>
+<li>Findings tracked as engineering tickets</li>
+<li>Security checklist on every PR</li>
+</ul>
+<p><strong>Time investment:</strong> 60–90 min per feature, 15 min per PR</p>
+<p><strong>Full reference:</strong> <a href="/wiki/stride/">Threat Modelling Wiki</a> | <a href="/wiki/stride/">STRIDE</a> | <a href="/wiki/dread/">DREAD</a> | <a href="/wiki/pasta/">PASTA</a></p>
+<hr>
+<h2 id="level-2--attack-surface-management">Level 2 — Attack Surface Management</h2>
+<p><strong>Core question:</strong> What are we actually exposing to the internet right now?</p>
+<p><strong>What it is:</strong> Continuous discovery and monitoring of every internet-facing asset — including assets the organisation does not know it has. Validates and extends threat models with real-world exposure data.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Continuously updated asset inventory</li>
+<li>Risk-scored exposure list</li>
+<li>Alerts on new exposures within hours</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>All internet-facing assets discovered automatically</li>
+<li>Unknown or shadow IT assets detected and investigated</li>
+<li>Certificate expiry monitored automatically</li>
+<li>New exposures trigger alerts within 4 hours</li>
+</ul>
+<p><strong>Free tools to start:</strong> Subfinder, Amass, Nuclei, httpx</p>
+<p><strong>Time investment:</strong> Initial setup 1–2 days, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/asm/">Attack Surface Management Wiki</a></p>
+<hr>
+<h2 id="level-3--red-teaming">Level 3 — Red Teaming</h2>
+<p><strong>Core question:</strong> If an attacker tried to compromise us using our threat model&rsquo;s attack scenarios, would they succeed?</p>
+<p><strong>What it is:</strong> Authorised simulation of a real-world adversary. A red team attempts to achieve a specific objective (steal data, deploy ransomware, access admin systems) using the same techniques real attackers use, mapped to MITRE ATT&amp;CK.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Attack narrative — how far the red team got and how</li>
+<li>ATT&amp;CK heat map of techniques used</li>
+<li>Detection gaps — what the blue team missed</li>
+<li>Business impact statement</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Red team exercises run at least annually</li>
+<li>Threat actor profile derived from threat intelligence</li>
+<li>Findings mapped to MITRE ATT&amp;CK</li>
+<li>Results feed back into threat models</li>
+</ul>
+<p><strong>Tools:</strong> Sliver C2 (free), Metasploit (free), BloodHound (free), Cobalt Strike (commercial)</p>
+<p><strong>Time investment:</strong> 2–8 weeks per engagement</p>
+<p><strong>Full reference:</strong> <a href="/wiki/red-teaming/">Red Teaming Wiki</a></p>
+<hr>
+<h2 id="level-4--purple-teaming">Level 4 — Purple Teaming</h2>
+<p><strong>Core question:</strong> Does our SIEM/EDR actually detect the attacks from the red team exercise?</p>
+<p><strong>What it is:</strong> Red and blue teams working together simultaneously. The red team executes one ATT&amp;CK technique at a time while the blue team checks whether their detection tools catch it. Gaps are fixed in real time.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>ATT&amp;CK detection coverage map (% of techniques detected)</li>
+<li>Detection gap backlog (rules to write)</li>
+<li>SOC playbook improvements</li>
+<li>MTTD (Mean Time to Detect) trend over time</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Purple team exercises run quarterly</li>
+<li>Every technique validated against live SIEM rules</li>
+<li>Detection gaps addressed during the exercise</li>
+<li>Atomic Red Team tests run automatically in CI</li>
+</ul>
+<p><strong>Tools:</strong> VECTR (free), Atomic Red Team (free), ATT&amp;CK Navigator (free), Sigma (free)</p>
+<p><strong>Time investment:</strong> 1–2 days per exercise, quarterly</p>
+<p><strong>Full reference:</strong> <a href="/wiki/purple-teaming/">Purple Teaming Wiki</a></p>
+<hr>
+<h2 id="level-5--threat-intelligence">Level 5 — Threat Intelligence</h2>
+<p><strong>Core question:</strong> Which real-world threat actors are targeting organisations like ours, and what techniques are they using right now?</p>
+<p><strong>What it is:</strong> Structured, curated information about real threat actors — their identities, motivations, and specific tactics — used to make every other security level more precise and relevant. Transforms threat models from hypothetical to intelligence-driven.</p>
+<p><strong>Three tiers:</strong></p>
+<ul>
+<li><strong>Strategic:</strong> What threats should we prepare for this year? (Board/C-suite)</li>
+<li><strong>Operational:</strong> What campaigns are active right now? (Security managers)</li>
+<li><strong>Tactical:</strong> What IOCs should we block today? (SOC analysts)</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Threat actor profiles for your sector</li>
+<li>TTP mappings to MITRE ATT&amp;CK</li>
+<li>IOC feeds integrated with SIEM and firewall</li>
+<li>Intelligence-driven threat models and red team scope</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat models reference real attacker groups</li>
+<li>IOCs ingested and actioned within 1 hour</li>
+<li>Threat hunting hypotheses derived from intelligence</li>
+<li>Intelligence shared with sector peers (ISACs)</li>
+</ul>
+<p><strong>Free tools:</strong> MISP, OpenCTI, OTX AlienVault, URLhaus, MalwareBazaar</p>
+<p><strong>Time investment:</strong> Initial setup 1 week, then ongoing</p>
+<p><strong>Full reference:</strong> <a href="/wiki/threat-intelligence/">Threat Intelligence Wiki</a></p>
+<hr>
+<h2 id="level-6--zero-trust-architecture">Level 6 — Zero Trust Architecture</h2>
+<p><strong>Core question:</strong> What if we never trusted any user, device, or network location by default — ever?</p>
+<p><strong>What it is:</strong> An architectural transformation based on &ldquo;never trust, always verify.&rdquo; Every request — regardless of source — is authenticated, authorised, and continuously validated. Microsegmentation prevents lateral movement. Identity replaces the network as the security perimeter.</p>
+<p><strong>Five pillars:</strong></p>
+<ol>
+<li><strong>Identity</strong> — MFA everywhere, passwordless for privileged accounts, continuous risk scoring</li>
+<li><strong>Devices</strong> — Every device registered, health-checked, and compliance-validated before access</li>
+<li><strong>Network</strong> — Microsegmentation, no implicit trust based on network location, encrypt east-west traffic</li>
+<li><strong>Applications</strong> — Per-app access control, SSO + MFA, session continuous validation</li>
+<li><strong>Data</strong> — Classification, encryption at rest and in transit, DLP</li>
+</ol>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Architecture where lateral movement is structurally prevented</li>
+<li>Identity-based access replacing VPN</li>
+<li>Complete device inventory with compliance enforcement</li>
+<li>Microsegmented network</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>MFA on 100% of applications</li>
+<li>VPN replaced by identity-aware proxy</li>
+<li>Device compliance checked before every access grant</li>
+<li>Privileged access managed via PAM solution</li>
+<li>All internal traffic encrypted</li>
+</ul>
+<p><strong>Reference implementation:</strong> Google BeyondCorp (published as open papers)
+<strong>Standard:</strong> NIST SP 800-207</p>
+<p><strong>Time investment:</strong> Multi-year transformation — typically 3 years to full maturity</p>
+<p><strong>Full reference:</strong> <a href="/wiki/zero-trust/">Zero Trust Architecture Wiki</a></p>
+<hr>
+<h2 id="1--supply-chain-security">+1 — Supply Chain Security</h2>
+<p><strong>Core question:</strong> Is the third-party code we depend on safe, verified, and unmodified?</p>
+<p><strong>What it is:</strong> Securing not just your code but every dependency, build tool, and third-party component. Modern software is 80–90% open source written by others — a compromised dependency undermines every other security control.</p>
+<p><strong>Key capabilities:</strong></p>
+<ul>
+<li>SBOM (Software Bill of Materials) — know every component</li>
+<li>SLSA framework — verify build integrity and provenance</li>
+<li>Dependency scanning — catch CVEs before they reach production</li>
+<li>Artifact signing — prove artifacts have not been tampered with</li>
+<li>Build pipeline hardening — protect the pipeline itself</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>SBOM for every production build</li>
+<li>Signed and verified build artifacts</li>
+<li>Hardened build pipeline</li>
+<li>Dependency vulnerability alerting</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>SBOM generated for every release</li>
+<li>All dependencies scanned on every build</li>
+<li>Build artifacts signed with Cosign/Sigstore</li>
+<li>No dependency updates merged without automated security review</li>
+</ul>
+<p><strong>Free tools:</strong> Syft (SBOM), Grype (scanning), Cosign/Sigstore (signing), Dependabot (GitHub-native), pip-audit, npm audit</p>
+<p><strong>Time investment:</strong> 1–2 weeks initial setup, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/supply-chain/">Supply Chain Security Wiki</a></p>
+<hr>
+<h2 id="how-the-levels-reinforce-each-other">How the levels reinforce each other</h2>
+<pre tabindex="0"><code>Threat Intelligence  ──feeds──▶  Threat Modelling  ──defines──▶  Red Team scope
+        │                               │                               │
+        │                               ▼                               ▼
+        │                          ASM validates              Purple Team validates
+        │                          real exposure              detection coverage
+        │                               │                               │
+        └───────────────────────────────┴───────────────────────────────┘
+                                        │
+                                        ▼
+                              Zero Trust eliminates
+                              entire threat categories
+                                        │
+                                        ▼
+                              Supply Chain secures
+                              the foundation everything runs on
+</code></pre><hr>
+<h2 id="where-to-start-based-on-your-organisation-size">Where to start based on your organisation size</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Size</th>
+					<th>Start here</th>
+					<th>Next 6 months</th>
+					<th>Year 2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Startup</td>
+					<td>Threat Modelling (STRIDE)</td>
+					<td>Dependabot + SBOM</td>
+					<td>ASM</td>
+			</tr>
+			<tr>
+					<td>Scale-up</td>
+					<td>Threat Modelling + ASM</td>
+					<td>Threat Intel feeds</td>
+					<td>First Red Team</td>
+			</tr>
+			<tr>
+					<td>Enterprise</td>
+					<td>Purple Teaming + Threat Intel</td>
+					<td>Zero Trust roadmap</td>
+					<td>TIBER-EU / CBEST</td>
+			</tr>
+			<tr>
+					<td>Regulated (finance/health)</td>
+					<td>All levels audit</td>
+					<td>DORA compliance</td>
+					<td>Continuous purple teaming</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

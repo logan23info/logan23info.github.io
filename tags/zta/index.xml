@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ZTA on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/zta/</link>
+    <description>Recent content in ZTA on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/zta/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero Trust Architecture (ZTA)</title>
+      <link>https://logan23info.github.io/wiki/zero-trust/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/zero-trust/</guid>
+      <description>Complete guide to Zero Trust Architecture — from NIST SP 800-207 foundations through to practical implementation roadmaps.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-zero-trust">What is Zero Trust?</h2>
+<p>Zero Trust is a security architecture philosophy based on a single principle:</p>
+<blockquote>
+<p><strong>&ldquo;Never trust, always verify.&rdquo;</strong></p>
+</blockquote>
+<p>In a traditional perimeter-based security model, anything inside the corporate network is trusted. Zero Trust eliminates the concept of a trusted network. Every request — regardless of where it comes from (corporate office, home, cloud, internal network) — must be authenticated, authorised, and continuously validated before access is granted.</p>
+<p><strong>The traditional model:</strong> Trust the network. Verify at the perimeter. Everything inside is safe.</p>
+<p><strong>Zero Trust:</strong> Trust nothing. Verify everything. Assume breach.</p>
+<hr>
+<h2 id="why-zero-trust-now">Why Zero Trust now?</h2>
+<p>The traditional perimeter has dissolved:</p>
+<ul>
+<li><strong>Cloud:</strong> Corporate data lives in AWS/GCP/Azure, not in an on-premises datacenter</li>
+<li><strong>Remote work:</strong> Users work from home, coffee shops, and hotels — outside the perimeter</li>
+<li><strong>SaaS:</strong> Applications like Salesforce, Slack, and GitHub are accessed over the internet</li>
+<li><strong>Mobile:</strong> Company data is accessed from phones and tablets outside corporate control</li>
+<li><strong>Insider threats:</strong> The perimeter model fails completely against internal attackers</li>
+</ul>
+<p>The result: a VPN that &ldquo;puts you inside the network&rdquo; now gives attackers who steal one credential access to everything.</p>
+<p><strong>Zero Trust solves this by making the identity and device the perimeter, not the network.</strong></p>
+<hr>
+<h2 id="nist-sp-800-207--the-definitive-standard">NIST SP 800-207 — The definitive standard</h2>
+<p>NIST Special Publication 800-207 is the authoritative definition of Zero Trust Architecture. It defines seven core tenets:</p>
+<h3 id="tenet-1--all-data-sources-and-computing-services-are-resources">Tenet 1 — All data sources and computing services are resources</h3>
+<p>Everything is a resource — a database, an API, a printer, a cloud function. No resource is inherently trusted because of where it is located.</p>
+<h3 id="tenet-2--all-communication-is-secured-regardless-of-network-location">Tenet 2 — All communication is secured regardless of network location</h3>
+<p>A request from inside the corporate network is treated the same as a request from the internet. All communication is encrypted and authenticated.</p>
+<h3 id="tenet-3--access-to-individual-resources-is-granted-on-a-per-session-basis">Tenet 3 — Access to individual resources is granted on a per-session basis</h3>
+<p>Access is not granted to a network segment — it is granted to a specific resource for a specific session. Logging into VPN does not grant access to everything; accessing the payroll database requires separate authorisation for that resource.</p>
+<h3 id="tenet-4--access-to-resources-is-determined-by-dynamic-policy">Tenet 4 — Access to resources is determined by dynamic policy</h3>
+<p>The policy engine considers identity, device health, location, time of day, data sensitivity, and behavioural patterns when making access decisions — not just &ldquo;is this user in the right group?&rdquo;</p>
+<h3 id="tenet-5--the-enterprise-monitors-and-measures-the-integrity-of-all-assets">Tenet 5 — The enterprise monitors and measures the integrity of all assets</h3>
+<p>All devices are continuously assessed for security posture — are they patched? Is AV running? Is disk encrypted? An unpatched device gets reduced access, not full trust.</p>
+<h3 id="tenet-6--all-resource-authentication-and-authorisation-is-dynamic-and-strictly-enforced">Tenet 6 — All resource authentication and authorisation is dynamic and strictly enforced</h3>
+<p>Authentication is not a one-time event. Sessions are continuously re-evaluated. An anomalous action (unusual download volume, access from a new location) triggers step-up authentication.</p>
+<h3 id="tenet-7--enterprise-collects-information-about-the-current-state-of-assets-network-and-communications">Tenet 7 — Enterprise collects information about the current state of assets, network, and communications</h3>
+<p>Comprehensive logging of all access requests, policy decisions, and resource access enables audit, threat hunting, and incident response.</p>
+<hr>
+<h2 id="the-zero-trust-logical-architecture">The Zero Trust logical architecture</h2>
+<pre tabindex="0"><code>                    ┌─────────────────────────────────┐
+                    │         CONTROL PLANE            │
+                    │                                  │
+  Identity ─────→  │  Policy Engine ←── Threat Intel  │
+  Device   ─────→  │       ↕                          │
+  Context  ─────→  │  Policy Administrator            │
+                    └──────────────┬──────────────────┘
+                                   │
+                    ┌──────────────▼──────────────────┐
+                    │          DATA PLANE              │
+                    │                                  │
+  Subject ─────→   │  Policy Enforcement Point (PEP)  │ ────→ Resource
+  (User/Device)    │                                  │
+                    └─────────────────────────────────┘
+</code></pre><ul>
+<li><strong>Policy Engine (PE):</strong> Makes the access decision (allow/deny/step-up auth)</li>
+<li><strong>Policy Administrator (PA):</strong> Executes the decision (issues session token, configures PEP)</li>
+<li><strong>Policy Enforcement Point (PEP):</strong> Enforces the decision (API gateway, proxy, firewall)</li>
+</ul>
+<hr>
+<h2 id="the-five-pillars-of-zero-trust">The five pillars of Zero Trust</h2>
+<h3 id="pillar-1--identity">Pillar 1 — Identity</h3>
+<p>Identity is the foundation of Zero Trust — it is the new perimeter.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Multi-factor authentication (MFA) on every application</li>
+<li>Passwordless authentication (FIDO2/WebAuthn) where possible</li>
+<li>Just-in-time (JIT) and just-enough-access (JEA) provisioning</li>
+<li>Privileged Access Management (PAM) for admin accounts</li>
+<li>Continuous identity risk scoring</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Entra ID, Okta, Ping Identity, CyberArk PAM</p>
+<p><strong>Maturity levels:</strong></p>
+<pre tabindex="0"><code>Level 1: MFA enabled for all users
+Level 2: Conditional access policies (block risky sign-ins)
+Level 3: Passwordless for privileged accounts
+Level 4: Continuous access evaluation, real-time risk scoring
+</code></pre><h3 id="pillar-2--devices">Pillar 2 — Devices</h3>
+<p>Every device accessing company resources must be known, managed, and healthy.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Device inventory (every device registered in MDM)</li>
+<li>Device compliance checks before access is granted</li>
+<li>Certificate-based device authentication</li>
+<li>Continuous device health monitoring</li>
+<li>Remote wipe capability for lost/stolen devices</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Intune, Jamf, CrowdStrike Falcon, Carbon Black</p>
+<p><strong>Compliance checks:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Example device compliance policy</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">check_device_compliance</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;disk_encrypted&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">bitlocker_enabled</span> <span class="ow">or</span> <span class="n">device</span><span class="o">.</span><span class="n">filevault_enabled</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;os_patched&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">days_since_patch</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;av_running&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">av_status</span> <span class="o">==</span> <span class="s2">&#34;active&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;screen_lock&#34;</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">screen_lock_timeout</span> <span class="o">&lt;=</span> <span class="mi">15</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;jailbroken&#34;</span><span class="p">:</span> <span class="ow">not</span> <span class="n">device</span><span class="o">.</span><span class="n">is_jailbroken</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">compliance_score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">compliance_score</span> <span class="o">&gt;=</span> <span class="mf">0.8</span>  <span class="c1"># 80% compliance required</span>
+</span></span></code></pre></div><h3 id="pillar-3--network">Pillar 3 — Network</h3>
+<p>Microsegment the network so that compromise of one segment cannot spread to others.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Eliminate implicit trust based on network location</li>
+<li>Microsegmentation — every workload isolated by default</li>
+<li>Encrypt all east-west (internal) traffic</li>
+<li>Software-defined perimeter (SDP) instead of VPN</li>
+<li>Network traffic analytics to detect anomalies</li>
+</ul>
+<p><strong>Technologies:</strong> Zscaler ZPA, Cloudflare Access, Palo Alto Prisma, Cisco Duo</p>
+<p><strong>Before microsegmentation:</strong></p>
+<pre tabindex="0"><code>Corporate Network (all trusted)
+├── Finance systems
+├── HR systems
+├── Developer systems   ← compromised
+│     └── Lateral movement to Finance ← unrestricted
+└── Customer database   ← exfiltrated
+</code></pre><p><strong>After microsegmentation:</strong></p>
+<pre tabindex="0"><code>Corporate Network (no implicit trust)
+├── Finance segment (Finance team only, MFA required per session)
+├── HR segment (HR team only)
+├── Developer segment   ← compromised
+│     └── Cannot reach Finance ← blocked by policy
+└── Customer DB segment (App service only, no direct user access)
+</code></pre><h3 id="pillar-4--applications">Pillar 4 — Applications</h3>
+<p>Move away from network-based access (VPN) to identity-based access per application.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>All applications require authentication (no network-based trust)</li>
+<li>Application-level authorisation (RBAC/ABAC)</li>
+<li>API gateway enforces per-request authorisation</li>
+<li>Single Sign-On (SSO) with MFA for all apps</li>
+<li>Continuous session validation</li>
+</ul>
+<p><strong>Technologies:</strong> Okta, Auth0, Azure AD App Proxy, BeyondCorp</p>
+<h3 id="pillar-5--data">Pillar 5 — Data</h3>
+<p>Protect data at rest and in transit, and enforce data-level access controls.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Data classification (public, internal, confidential, restricted)</li>
+<li>Encryption at rest for all sensitive data</li>
+<li>Encryption in transit (TLS 1.3 minimum)</li>
+<li>Data Loss Prevention (DLP) on endpoints and network</li>
+<li>Rights management for sensitive documents</li>
+</ul>
+<p><strong>Technologies:</strong> Microsoft Purview, Varonis, Forcepoint DLP</p>
+<hr>
+<h2 id="zero-trust-implementation-roadmap">Zero Trust implementation roadmap</h2>
+<p>Zero Trust is a multi-year journey, not a product you buy.</p>
+<h3 id="year-1--foundation">Year 1 — Foundation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> MFA for all users on all applications</li>
+<li><input disabled="" type="checkbox"> Device inventory — know every device accessing your data</li>
+<li><input disabled="" type="checkbox"> Identity governance — review and remove excessive permissions</li>
+<li><input disabled="" type="checkbox"> Conditional access — block sign-ins from unmanaged devices</li>
+<li><input disabled="" type="checkbox"> Data classification — know where your sensitive data is</li>
+</ul>
+<h3 id="year-2--enforcement">Year 2 — Enforcement</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Device compliance policies — block non-compliant devices</li>
+<li><input disabled="" type="checkbox"> Application proxy — remove VPN for internal apps</li>
+<li><input disabled="" type="checkbox"> Microsegmentation — segment at least critical systems</li>
+<li><input disabled="" type="checkbox"> PAM solution — control privileged access</li>
+<li><input disabled="" type="checkbox"> DLP — prevent sensitive data leaving controlled channels</li>
+</ul>
+<h3 id="year-3--optimisation">Year 3 — Optimisation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Continuous access evaluation — real-time session risk assessment</li>
+<li><input disabled="" type="checkbox"> UEBA — behavioural analytics to detect anomalies</li>
+<li><input disabled="" type="checkbox"> Passwordless authentication for all users</li>
+<li><input disabled="" type="checkbox"> Full microsegmentation across all workloads</li>
+<li><input disabled="" type="checkbox"> Automated response — risky sessions terminated automatically</li>
+</ul>
+<hr>
+<h2 id="google-beyondcorp--the-real-world-blueprint">Google BeyondCorp — The real-world blueprint</h2>
+<p>Google built the first enterprise Zero Trust implementation after the Operation Aurora attack in 2010 (a nation-state attack via an IE zero-day). Their BeyondCorp architecture:</p>
+<ul>
+<li><strong>Eliminated the corporate VPN</strong> — all access goes through an identity-aware proxy</li>
+<li><strong>Made the internet the network</strong> — employees work from anywhere with the same access</li>
+<li><strong>Every request validated</strong> — user identity + device certificate + device health</li>
+<li><strong>No special trust for the internal network</strong> — a request from Google HQ is treated the same as from a coffee shop</li>
+</ul>
+<p>Google published their architecture in a series of papers (BeyondCorp 1–6) available free online. This became the template for the entire Zero Trust industry.</p>
+<hr>
+<h2 id="zero-trust-vs-traditional-security">Zero Trust vs traditional security</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Scenario</th>
+					<th>Traditional (Perimeter)</th>
+					<th>Zero Trust</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Stolen VPN credentials</td>
+					<td>Attacker has full network access</td>
+					<td>Access still requires MFA + compliant device</td>
+			</tr>
+			<tr>
+					<td>Compromised laptop on corporate network</td>
+					<td>Full lateral movement possible</td>
+					<td>Microsegmentation blocks cross-segment access</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Can access anything on the network</td>
+					<td>Access limited to job-required resources only</td>
+			</tr>
+			<tr>
+					<td>Shadow IT</td>
+					<td>Unknown apps on the network</td>
+					<td>All access requires policy enforcement point</td>
+			</tr>
+			<tr>
+					<td>Remote worker</td>
+					<td>Reduced access via VPN</td>
+					<td>Same access as office — identity is the perimeter</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MFA coverage</td>
+					<td>100% of users and applications</td>
+			</tr>
+			<tr>
+					<td>Managed device ratio</td>
+					<td>&gt; 95% of devices accessing company data</td>
+			</tr>
+			<tr>
+					<td>Privileged account review</td>
+					<td>Quarterly, all unused accounts removed</td>
+			</tr>
+			<tr>
+					<td>Mean time to revoke access</td>
+					<td>&lt; 1 hour for terminated employees</td>
+			</tr>
+			<tr>
+					<td>Microsegmentation coverage</td>
+					<td>100% of critical workloads isolated</td>
+			</tr>
+			<tr>
+					<td>Lateral movement blast radius</td>
+					<td>&lt; 5% of assets reachable from single compromise</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/supply-chain/"><span class="ref-label">Wiki</span>Supply Chain Security</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — Zero Trust eliminates these threats</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

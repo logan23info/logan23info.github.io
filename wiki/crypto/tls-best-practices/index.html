@@ -1,0 +1,128 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>TLS Best Practices | Security Engineering Wiki</title><meta name=keywords content="cryptography,TLS,SSL,HTTPS,HSTS,mTLS"><meta name=description content="Configuring TLS correctly — protocol versions, cipher suites, HSTS, certificate pinning, mTLS, and testing tools."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/crypto/tls-best-practices/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/crypto/tls-best-practices/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/crypto/tls-best-practices/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/crypto/tls-best-practices/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="TLS Best Practices"><meta property="og:description" content="Configuring TLS correctly — protocol versions, cipher suites, HSTS, certificate pinning, mTLS, and testing tools."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="TLS Best Practices"><meta name=twitter:description content="Configuring TLS correctly — protocol versions, cipher suites, HSTS, certificate pinning, mTLS, and testing tools."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Cryptography","item":"https://logan23info.github.io/wiki/crypto/"},{"@type":"ListItem","position":3,"name":"TLS Best Practices","item":"https://logan23info.github.io/wiki/crypto/tls-best-practices/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/crypto/>Cryptography</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">TLS Best Practices</h1><div class=post-description>Configuring TLS correctly — protocol versions, cipher suites, HSTS, certificate pinning, mTLS, and testing tools.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>505 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#tls-version-support aria-label="TLS version support">TLS version support</a></li><li><a href=#recommended-nginx-tls-configuration aria-label="Recommended nginx TLS configuration">Recommended nginx TLS configuration</a></li><li><a href=#hsts-http-strict-transport-security aria-label="HSTS (HTTP Strict Transport Security)">HSTS (HTTP Strict Transport Security)</a></li><li><a href=#mutual-tls-mtls aria-label="Mutual TLS (mTLS)">Mutual TLS (mTLS)</a></li><li><a href=#testing-tls-configuration aria-label="Testing TLS configuration">Testing TLS configuration</a></li><li><a href=#tls-best-practices-checklist aria-label="TLS best practices checklist">TLS best practices checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=tls-version-support>TLS version support<a hidden class=anchor aria-hidden=true href=#tls-version-support>#</a></h2><pre tabindex=0><code>TLS 1.3 — USE THIS. Faster handshake, forward secrecy by default, removed weak crypto
+TLS 1.2 — Acceptable. Still widely required for compatibility
+TLS 1.1 — DISABLE. Deprecated, no modern browser needs it
+TLS 1.0 — DISABLE. Deprecated, PCI-DSS prohibits it
+SSL 3.0 — DISABLE. Broken (POODLE)
+SSL 2.0 — DISABLE. Completely broken
+</code></pre><hr><h2 id=recommended-nginx-tls-configuration>Recommended nginx TLS configuration<a hidden class=anchor aria-hidden=true href=#recommended-nginx-tls-configuration>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=line><span class=cl><span class=k>server</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kn>listen</span> <span class=mi>443</span> <span class=s>ssl</span> <span class=s>http2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>server_name</span> <span class=s>example.com</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Certificate
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_certificate</span>     <span class=s>/etc/ssl/certs/example.com.pem</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_certificate_key</span> <span class=s>/etc/ssl/private/example.com.key</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Protocols — TLS 1.2 and 1.3 only
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_protocols</span> <span class=s>TLSv1.2</span> <span class=s>TLSv1.3</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Cipher suites — strong ciphers only (TLS 1.2)
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_ciphers</span> <span class=s>ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_prefer_server_ciphers</span> <span class=no>off</span><span class=p>;</span>   <span class=c1># let client choose (better for TLS 1.3)
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Forward secrecy — ECDHE key exchange
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_ecdh_curve</span> <span class=s>X25519:secp384r1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Session resumption
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_session_timeout</span> <span class=s>1d</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_session_cache</span> <span class=s>shared:SSL:10m</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_session_tickets</span> <span class=no>off</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># OCSP stapling
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_stapling</span> <span class=no>on</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_stapling_verify</span> <span class=no>on</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_trusted_certificate</span> <span class=s>/etc/ssl/certs/chain.pem</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>resolver</span> <span class=n>1.1.1.1</span> <span class=n>8.8.8.8</span> <span class=s>valid=300s</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>resolver_timeout</span> <span class=s>5s</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># HSTS — force HTTPS for 2 years, include subdomains, allow preload
+</span></span></span><span class=line><span class=cl>    <span class=kn>add_header</span> <span class=s>Strict-Transport-Security</span> <span class=s>&#34;max-age=63072000</span><span class=p>;</span> <span class=kn>includeSubDomains</span><span class=p>;</span> <span class=kn>preload&#34;</span> <span class=s>always</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Other security headers
+</span></span></span><span class=line><span class=cl>    <span class=kn>add_header</span> <span class=s>X-Content-Type-Options</span> <span class=s>nosniff</span> <span class=s>always</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>add_header</span> <span class=s>X-Frame-Options</span> <span class=s>DENY</span> <span class=s>always</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Redirect all HTTP to HTTPS
+</span></span></span><span class=line><span class=cl><span class=k>server</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kn>listen</span> <span class=mi>80</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>server_name</span> <span class=s>example.com</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>return</span> <span class=mi>301</span> <span class=s>https://</span><span class=nv>$host$request_uri</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><hr><h2 id=hsts-http-strict-transport-security>HSTS (HTTP Strict Transport Security)<a hidden class=anchor aria-hidden=true href=#hsts-http-strict-transport-security>#</a></h2><p>HSTS tells browsers to only ever connect via HTTPS, preventing downgrade attacks.</p><pre tabindex=0><code>Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+max-age=63072000    → remember for 2 years
+includeSubDomains   → apply to all subdomains
+preload             → eligible for browser preload lists
+</code></pre><p><strong>Preloading:</strong> Submit your domain to <a href=https://hstspreload.org>https://hstspreload.org</a> to have HSTS hardcoded into browsers — protects even the very first connection.</p><hr><h2 id=mutual-tls-mtls>Mutual TLS (mTLS)<a hidden class=anchor aria-hidden=true href=#mutual-tls-mtls>#</a></h2><p>In mTLS, both client and server present certificates. Used for service-to-service authentication.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=line><span class=cl><span class=c1># nginx server requiring client certificates
+</span></span></span><span class=line><span class=cl><span class=k>server</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kn>listen</span> <span class=mi>443</span> <span class=s>ssl</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_certificate</span>     <span class=s>/etc/ssl/server.pem</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_certificate_key</span> <span class=s>/etc/ssl/server.key</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Require and verify client certificates
+</span></span></span><span class=line><span class=cl>    <span class=kn>ssl_client_certificate</span> <span class=s>/etc/ssl/client-ca.pem</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_verify_client</span> <span class=no>on</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>ssl_verify_depth</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kn>location</span> <span class=s>/</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Pass client cert info to backend
+</span></span></span><span class=line><span class=cl>        <span class=kn>proxy_set_header</span> <span class=s>X-Client-Cert-DN</span> <span class=nv>$ssl_client_s_dn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kn>proxy_set_header</span> <span class=s>X-Client-Verify</span> <span class=nv>$ssl_client_verify</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kn>proxy_pass</span> <span class=s>http://backend</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>See <a href=/wiki/secure-architecture/microservices/>Microservices Security</a> for service mesh mTLS.</p><hr><h2 id=testing-tls-configuration>Testing TLS configuration<a hidden class=anchor aria-hidden=true href=#testing-tls-configuration>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># testssl.sh — comprehensive TLS testing</span>
+</span></span><span class=line><span class=cl>testssl.sh https://example.com
+</span></span><span class=line><span class=cl>testssl.sh --severity HIGH https://example.com
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># sslyze — fast scanner</span>
+</span></span><span class=line><span class=cl>sslyze example.com:443
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check with OpenSSL</span>
+</span></span><span class=line><span class=cl>openssl s_client -connect example.com:443 -tls1_3    <span class=c1># test TLS 1.3</span>
+</span></span><span class=line><span class=cl>openssl s_client -connect example.com:443 -tls1      <span class=c1># should FAIL (1.0 disabled)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Online: SSL Labs (aim for A+ grade)</span>
+</span></span><span class=line><span class=cl><span class=c1># https://www.ssllabs.com/ssltest/</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check HSTS preload eligibility</span>
+</span></span><span class=line><span class=cl><span class=c1># https://hstspreload.org</span>
+</span></span></code></pre></div><hr><h2 id=tls-best-practices-checklist>TLS best practices checklist<a hidden class=anchor aria-hidden=true href=#tls-best-practices-checklist>#</a></h2><pre tabindex=0><code>Protocol
+□ TLS 1.2 and 1.3 only — 1.0/1.1 and all SSL disabled
+□ Strong cipher suites only (AEAD: GCM, ChaCha20-Poly1305)
+□ Forward secrecy (ECDHE key exchange)
+□ Weak ciphers disabled (RC4, DES, 3DES, export ciphers)
+
+Certificates
+□ Valid certificate from trusted CA (or internal CA for mTLS)
+□ SANs configured (not relying on CN)
+□ Automated renewal (no expiry outages)
+□ OCSP stapling enabled
+
+Headers
+□ HSTS enabled (max-age &gt;= 1 year, includeSubDomains)
+□ Consider HSTS preloading
+□ HTTP redirects to HTTPS
+
+Testing
+□ SSL Labs grade A or A+
+□ testssl.sh run with no HIGH severity findings
+□ Certificate expiry monitoring in place
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/crypto/pki-certificates/><span class=ref-label>Crypto</span>PKI & Certificates</a>
+<a class=ref-card href=/wiki/crypto/fundamentals/><span class=ref-label>Crypto</span>Cryptography Fundamentals</a>
+<a class=ref-card href=/wiki/crypto/key-management/><span class=ref-label>Crypto</span>Key Management</a>
+<a class=ref-card href=/wiki/secure-architecture/microservices/><span class=ref-label>Architecture</span>Microservices — mTLS</a>
+<a class=ref-card href=/wiki/owasp-top10/a02-cryptographic-failures/><span class=ref-label>OWASP</span>A02 Cryptographic Failures</a>
+<a class=ref-card href=/wiki/compliance/pci-dss/><span class=ref-label>Compliance</span>PCI-DSS — TLS requirements</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/cryptography/>Cryptography</a></li><li><a href=https://logan23info.github.io/tags/tls/>TLS</a></li><li><a href=https://logan23info.github.io/tags/ssl/>SSL</a></li><li><a href=https://logan23info.github.io/tags/https/>HTTPS</a></li><li><a href=https://logan23info.github.io/tags/hsts/>HSTS</a></li><li><a href=https://logan23info.github.io/tags/mtls/>MTLS</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>SLSA on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/slsa/</link>
+    <description>Recent content in SLSA on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/slsa/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Supply Chain Security</title>
+      <link>https://logan23info.github.io/wiki/supply-chain/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/supply-chain/</guid>
+      <description>Complete guide to Software Supply Chain Security — SLSA framework, SBOM, dependency management, and securing the build pipeline.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-supply-chain-security">What is Supply Chain Security?</h2>
+<p>Software supply chain security is the practice of securing every component, tool, and process that contributes to building and delivering your software. Modern applications are typically 80–90% third-party code — open source libraries, frameworks, and dependencies written by others.</p>
+<p>A supply chain attack targets this dependency on third-party code. Instead of attacking your application directly, attackers compromise something your application trusts — a popular open source library, a build tool, or a software update mechanism.</p>
+<hr>
+<h2 id="why-supply-chain-security-matters">Why supply chain security matters</h2>
+<h3 id="the-scale-of-the-problem">The scale of the problem</h3>
+<ul>
+<li>The average enterprise application has <strong>528 open source dependencies</strong></li>
+<li>In 2023, there were <strong>245,000+ malicious packages</strong> published to npm, PyPI, and other registries</li>
+<li>Supply chain attacks increased <strong>742%</strong> between 2019 and 2022</li>
+</ul>
+<h3 id="high-profile-supply-chain-attacks">High-profile supply chain attacks</h3>
+<p><strong>SolarWinds (2020)</strong></p>
+<ul>
+<li>Attackers compromised SolarWinds&rsquo; build pipeline</li>
+<li>Malicious code inserted into Orion software update</li>
+<li>18,000 organisations installed the backdoored update</li>
+<li>Victims included US Treasury, State Department, Microsoft, FireEye</li>
+</ul>
+<p><strong>Log4Shell (2021 — CVE-2021-44228)</strong></p>
+<ul>
+<li>Critical zero-day in Log4j — a logging library used in millions of Java applications</li>
+<li>CVSS score 10.0 (maximum)</li>
+<li>Affected organisations had no idea they were using Log4j — it was a transitive dependency</li>
+<li>Demonstrated: you must know every dependency, not just your direct ones</li>
+</ul>
+<p><strong>XZ Utils (2024)</strong></p>
+<ul>
+<li>Attacker spent two years building trust in the XZ Utils open source project</li>
+<li>Gained maintainer access and inserted a backdoor targeting SSH authentication</li>
+<li>Would have affected millions of Linux servers</li>
+<li>Caught by accident before widespread deployment</li>
+</ul>
+<hr>
+<h2 id="the-slsa-framework">The SLSA framework</h2>
+<p>SLSA (Supply chain Levels for Software Artifacts, pronounced &ldquo;salsa&rdquo;) is a security framework developed by Google that provides a checklist of standards to prevent tampering and improve software integrity.</p>
+<h3 id="slsa-levels">SLSA levels</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Level</th>
+					<th>Requirements</th>
+					<th>What it prevents</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SLSA 0</td>
+					<td>No guarantees</td>
+					<td>Nothing</td>
+			</tr>
+			<tr>
+					<td>SLSA 1</td>
+					<td>Build process documented, provenance generated</td>
+					<td>Accidental errors</td>
+			</tr>
+			<tr>
+					<td>SLSA 2</td>
+					<td>Build service used, provenance signed</td>
+					<td>Tampering by rogue developer</td>
+			</tr>
+			<tr>
+					<td>SLSA 3</td>
+					<td>Hardened build service, source verified</td>
+					<td>Compromised build service</td>
+			</tr>
+			<tr>
+					<td>SLSA 4</td>
+					<td>Two-party review, hermetic builds</td>
+					<td>Sophisticated insider attacks</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="slsa-provenance">SLSA provenance</h3>
+<p>Provenance is a verifiable record of how an artifact was built — who built it, from what source, using what process.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;_type&#34;</span><span class="p">:</span> <span class="s2">&#34;https://in-toto.io/Statement/v0.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;subject&#34;</span><span class="p">:</span> <span class="p">[{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;myapp-v1.0.tar.gz&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;sha256&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123...&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;predicateType&#34;</span><span class="p">:</span> <span class="s2">&#34;https://slsa.dev/provenance/v0.2&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;predicate&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;builder&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;https://github.com/actions/runner&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;buildType&#34;</span><span class="p">:</span> <span class="s2">&#34;https://github.com/slsa-framework/slsa-github-generator&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;invocation&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;configSource&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;uri&#34;</span><span class="p">:</span> <span class="s2">&#34;git+https://github.com/myorg/myapp@refs/heads/main&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;sha1&#34;</span><span class="p">:</span> <span class="s2">&#34;def456...&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;entryPoint&#34;</span><span class="p">:</span> <span class="s2">&#34;.github/workflows/release.yml&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;metadata&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;buildStartedOn&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-08-02T09:00:00Z&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;completeness&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;parameters&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nt">&#34;environment&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="implementing-slsa-in-github-actions">Implementing SLSA in GitHub Actions</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .github/workflows/release.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Release with SLSA provenance</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;v*&#39;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">permissions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l">write</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l">write</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">actions</span><span class="p">:</span><span class="w"> </span><span class="l">read</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">outputs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">hashes</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.hash.outputs.hashes }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build artifact</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          make build
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo &#34;artifact=myapp-${{ github.ref_name }}.tar.gz&#34; &gt;&gt; $GITHUB_OUTPUT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Generate SHA256 hashes</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">hash</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          sha256sum myapp-*.tar.gz &gt; checksums.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo &#34;hashes=$(cat checksums.txt | base64 -w0)&#34; &gt;&gt; $GITHUB_OUTPUT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">artifacts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*.tar.gz&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">provenance</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">build]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.10.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">base64-subjects</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;${{ needs.build.outputs.hashes }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">upload-assets</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="software-bill-of-materials-sbom">Software Bill of Materials (SBOM)</h2>
+<p>An SBOM is a complete list of every component in your software — like a nutritional label for code. It enables you to quickly determine whether you are affected by a newly discovered vulnerability.</p>
+<h3 id="sbom-formats">SBOM formats</h3>
+<p><strong>SPDX</strong> (Software Package Data Exchange) — Linux Foundation standard:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;SPDXID&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDXRef-DOCUMENT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;spdxVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDX-2.3&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;myapp-1.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;packages&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;SPDXID&#34;</span><span class="p">:</span> <span class="s2">&#34;SPDXRef-log4j&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;log4j-core&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;supplier&#34;</span><span class="p">:</span> <span class="s2">&#34;Organization: Apache Software Foundation&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;downloadLocation&#34;</span><span class="p">:</span> <span class="s2">&#34;https://search.maven.org/...&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;filesAnalyzed&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;packageVerificationCode&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;packageVerificationCodeValue&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenseConcluded&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenseDeclared&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><strong>CycloneDX</strong> — OWASP standard, security-focused:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;bomFormat&#34;</span><span class="p">:</span> <span class="s2">&#34;CycloneDX&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;specVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;1.5&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;components&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;library&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;log4j-core&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;purl&#34;</span><span class="p">:</span> <span class="s2">&#34;pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;licenses&#34;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&#34;license&#34;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;Apache-2.0&#34;</span><span class="p">}}],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;vulnerabilities&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;CVE-2021-44228&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;ratings&#34;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&#34;severity&#34;</span><span class="p">:</span> <span class="s2">&#34;critical&#34;</span><span class="p">,</span> <span class="nt">&#34;score&#34;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="generating-sboms-in-cicd">Generating SBOMs in CI/CD</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># Add to your GitHub Actions workflow</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Generate SBOM</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">anchore/sbom-action@v0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l">sbom.spdx.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l">spdx-json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Scan SBOM for vulnerabilities</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">anchore/scan-action@v3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">sbom</span><span class="p">:</span><span class="w"> </span><span class="l">sbom.spdx.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fail-build</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">severity-cutoff</span><span class="p">:</span><span class="w"> </span><span class="l">high</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="dependency-security">Dependency security</h2>
+<h3 id="dependency-scanning-tools">Dependency scanning tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Language</th>
+					<th>CI Integration</th>
+					<th>Cost</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Dependabot</td>
+					<td>All</td>
+					<td>GitHub native</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Snyk</td>
+					<td>All</td>
+					<td>GitHub/GitLab/Jenkins</td>
+					<td>Free tier</td>
+			</tr>
+			<tr>
+					<td>OWASP Dependency-Check</td>
+					<td>Java/.NET</td>
+					<td>All CI</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>npm audit</td>
+					<td>JavaScript</td>
+					<td>npm native</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>pip-audit</td>
+					<td>Python</td>
+					<td>Any</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Trivy</td>
+					<td>Containers + packages</td>
+					<td>GitHub Actions</td>
+					<td>Free</td>
+			</tr>
+			<tr>
+					<td>Grype</td>
+					<td>Containers + SBOMs</td>
+					<td>Any</td>
+					<td>Free</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="dependency-confusion-attacks">Dependency confusion attacks</h3>
+<p>Dependency confusion (Alex Birsan, 2021) exploits how package managers resolve package names. If your private package registry has a package called <code>mycompany-utils</code>, an attacker can publish a <strong>public</strong> package with the same name but a higher version number — and package managers may install the malicious public version instead.</p>
+<p><strong>Mitigations:</strong></p>
+<pre tabindex="0"><code>1. Scope private packages: @mycompany/utils (npm scoped packages)
+2. Use private registry that explicitly blocks public fallback for private names
+3. Pin exact versions with lockfiles (package-lock.json, yarn.lock, poetry.lock)
+4. Verify package integrity with checksums
+</code></pre><h3 id="typosquatting">Typosquatting</h3>
+<p>Attackers publish malicious packages with names similar to popular ones:</p>
+<ul>
+<li><code>lodash</code> (legitimate) vs <code>lodashs</code> (malicious)</li>
+<li><code>requests</code> (legitimate) vs <code>request</code> (check carefully)</li>
+<li><code>numpy</code> (legitimate) vs <code>numpay</code> (malicious)</li>
+</ul>
+<p><strong>Mitigation:</strong> Only install packages from verified sources. Review package metadata before installing. Use Typosquatting detection tools.</p>
+<hr>
+<h2 id="securing-the-build-pipeline">Securing the build pipeline</h2>
+<p>Your build pipeline is a high-value target — compromise it and you can tamper with every artifact it produces.</p>
+<h3 id="build-pipeline-hardening-checklist">Build pipeline hardening checklist</h3>
+<pre tabindex="0"><code>Source code
+□ Branch protection on main branch (require PR review)
+□ Signed commits (GPG or SSH signing)
+□ CODEOWNERS for sensitive files
+□ Secret scanning enabled (GitHub Advanced Security / gitleaks)
+
+Build environment
+□ Ephemeral build environments (no persistent build agents)
+□ Minimal permissions for build service accounts
+□ No hardcoded credentials in build scripts
+□ Build artifacts checksummed and signed
+□ Hermetic builds (dependencies pinned, no internet access during build)
+
+Artifact storage
+□ Artifacts stored in access-controlled registry
+□ Vulnerability scanning on container images before push
+□ Image signing with Cosign/Notary
+□ Immutable artifact storage (no overwrite of published versions)
+
+Deployment
+□ Verify artifact signatures before deployment
+□ Verify SLSA provenance before deployment
+□ Deploy from registry, never from local build
+□ GitOps — deployment state in version control
+</code></pre><h3 id="signing-artifacts-with-sigstorecosign">Signing artifacts with Sigstore/Cosign</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Install cosign</span>
+</span></span><span class="line"><span class="cl">brew install cosign  <span class="c1"># or download from sigstore.dev</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Sign a container image (keyless using GitHub Actions OIDC)</span>
+</span></span><span class="line"><span class="cl">cosign sign --yes ghcr.io/myorg/myapp:v1.0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Verify a signed image</span>
+</span></span><span class="line"><span class="cl">cosign verify <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --certificate-identity <span class="s2">&#34;https://github.com/myorg/myapp/.github/workflows/release.yml@refs/heads/main&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --certificate-oidc-issuer <span class="s2">&#34;https://token.actions.githubusercontent.com&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  ghcr.io/myorg/myapp:v1.0
+</span></span></code></pre></div><hr>
+<h2 id="third-party-risk-management">Third-party risk management</h2>
+<h3 id="evaluating-open-source-dependencies">Evaluating open source dependencies</h3>
+<p>Before adding a new dependency, evaluate:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Factor</th>
+					<th>What to check</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Maintainership</td>
+					<td>How many active maintainers? When was the last commit?</td>
+			</tr>
+			<tr>
+					<td>Community</td>
+					<td>Stars, forks, contributors, issue response time</td>
+			</tr>
+			<tr>
+					<td>Security track record</td>
+					<td>Past CVEs, how quickly patched?</td>
+			</tr>
+			<tr>
+					<td>License</td>
+					<td>Compatible with your use case?</td>
+			</tr>
+			<tr>
+					<td>Popularity</td>
+					<td>Widely used = more scrutiny, but also bigger target</td>
+			</tr>
+			<tr>
+					<td>Provenance</td>
+					<td>Who published it? Is it the legitimate maintainer?</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="scorecard--automated-dependency-evaluation">Scorecard — automated dependency evaluation</h3>
+<p>OpenSSF Scorecard evaluates open source packages across 18 security criteria:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Install and run Scorecard</span>
+</span></span><span class="line"><span class="cl">go install sigs.k8s.io/release-utils/cmd/scorecard@latest
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">scorecard --repo<span class="o">=</span>github.com/someorg/somepackage
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Maintained: 8/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Code-Review: 7/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Branch-Protection: 5/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Vulnerabilities: 10/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Pinned-Dependencies: 3/10   ← gap</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># SAST: 6/10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Aggregate: 7.2/10</span>
+</span></span></code></pre></div><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SBOM coverage</td>
+					<td>100% of production software</td>
+			</tr>
+			<tr>
+					<td>Time to patch critical CVE</td>
+					<td>&lt; 24 hours</td>
+			</tr>
+			<tr>
+					<td>Dependency freshness</td>
+					<td>No dependency &gt; 2 major versions behind</td>
+			</tr>
+			<tr>
+					<td>Signed artifact coverage</td>
+					<td>100% of released artifacts</td>
+			</tr>
+			<tr>
+					<td>Secret scan coverage</td>
+					<td>100% of repositories</td>
+			</tr>
+			<tr>
+					<td>Dependency review on PRs</td>
+					<td>100% of dependency-adding PRs reviewed</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Wiki</span>Zero Trust Architecture</a>
+  <a class="ref-card" href="/wiki/tools/threagile/"><span class="ref-label">Tool</span>Threagile — threat model as code</a>
+  <a class="ref-card" href="/wiki/templates/pr-checklist/"><span class="ref-label">Template</span>PR Security Checklist</a>
+  <a class="ref-card" href="/posts/05-threat-modelling-in-devsecops/"><span class="ref-label">Post</span>Threat Modelling in DevSecOps</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

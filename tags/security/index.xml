@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Security on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/security/</link>
+    <description>Recent content in Security on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</guid>
+      <description>What threat modelling is, why every engineering team needs it, and the four core questions that drive every session.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-threat-modelling">What is Threat Modelling?</h2>
+<p>Threat modelling is a structured process for <strong>identifying security risks before attackers do</strong>. Instead of waiting for a penetration test or a production incident, you reason about your system&rsquo;s weaknesses during design — when changes are cheap.</p>
+<p>Every threat modelling session answers four questions:</p>
+<ol>
+<li><strong>What are we building?</strong> — understand the system</li>
+<li><strong>What can go wrong?</strong> — enumerate threats</li>
+<li><strong>What are we going to do about it?</strong> — decide on mitigations</li>
+<li><strong>Did we do a good enough job?</strong> — validate</li>
+</ol>
+<hr>
+<h2 id="why-most-teams-skip-it-and-why-they-shouldnt">Why most teams skip it (and why they shouldn&rsquo;t)</h2>
+<p>Done well, a threat modelling session is a <strong>60-minute whiteboard conversation</strong> that produces a prioritised list of risks — a handful of actionable tickets, not a 40-page report.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Finding stage</th>
+					<th>Average cost to fix</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Design</td>
+					<td>$80</td>
+			</tr>
+			<tr>
+					<td>Development</td>
+					<td>$240</td>
+			</tr>
+			<tr>
+					<td>Testing</td>
+					<td>$960</td>
+			</tr>
+			<tr>
+					<td>Production</td>
+					<td>$7,600+</td>
+			</tr>
+	</tbody>
+</table>
+<p>The earlier you find a flaw, the cheaper it is to fix.</p>
+<hr>
+<h2 id="what-you-need-to-start">What you need to start</h2>
+<ul>
+<li><strong>A data flow diagram (DFD)</strong> — how data moves through your system</li>
+<li><strong>A threat enumeration method</strong> — STRIDE, PASTA, or attack trees</li>
+<li><strong>A risk scoring approach</strong> — DREAD or CVSS</li>
+<li><strong>30–90 minutes</strong> with the people who built the system</li>
+</ul>
+<hr>
+<h2 id="data-flow-diagram-example">Data Flow Diagram example</h2>
+<pre tabindex="0"><code>[Browser] --HTTPS--&gt; [API Gateway] --gRPC--&gt; [Auth Service]
+                          |                        |
+                          v                        v
+                     [App DB]              [User DB]
+</code></pre><p>Every arrow crossing a trust boundary is a candidate threat.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-maturity-ladder">Where threat modelling fits in the maturity ladder</h2>
+<p>Threat modelling is <strong>Level 1</strong> of the <a href="/wiki/maturity-ladder/">Security Engineering Maturity Ladder</a>. It is the foundation that every other security discipline builds on:</p>
+<ul>
+<li><strong>Level 2 ASM</strong> validates your threat model with real exposure data</li>
+<li><strong>Level 3 Red Teaming</strong> proves whether your threat model&rsquo;s mitigations work</li>
+<li><strong>Level 4 Purple Teaming</strong> validates whether you can detect the attacks you modelled</li>
+<li><strong>Level 5 Threat Intelligence</strong> makes your threat model attacker-realistic</li>
+</ul>
+<p>Start here. Get good at this. Then climb the ladder.</p>
+<hr>
+<h2 id="frameworks-covered-in-this-wiki">Frameworks covered in this wiki</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Framework</th>
+					<th>Best for</th>
+					<th>Complexity</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="/wiki/stride/">STRIDE</a></td>
+					<td>General-purpose</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/dread/">DREAD</a></td>
+					<td>Risk scoring</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/pasta/">PASTA</a></td>
+					<td>Business-risk-driven</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/attack-trees/">Attack Trees</a></td>
+					<td>Attack path analysis</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE: The Practitioner&#39;s Guide</title>
+      <link>https://logan23info.github.io/posts/02-stride-methodology/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/02-stride-methodology/</guid>
+      <description>A complete walkthrough of STRIDE with worked examples on a real Auth Service.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-stride">What is STRIDE?</h2>
+<p>STRIDE is a threat categorisation framework developed at Microsoft in 1999. It gives you a checklist of threat types to apply systematically to each component and data flow in your system.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Threat</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>S</strong></td>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Can an attacker pretend to be someone else?</td>
+			</tr>
+			<tr>
+					<td><strong>T</strong></td>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Can an attacker modify data or code?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can an attacker deny having done something?</td>
+			</tr>
+			<tr>
+					<td><strong>I</strong></td>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Can an attacker read data they should not?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can an attacker make the system unavailable?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>Can an attacker gain permissions they should not have?</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stride-by-element-type">STRIDE by element type</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="worked-example-auth-service">Worked example: Auth Service</h2>
+<h3 id="spoofing">Spoofing</h3>
+<ul>
+<li>JWT replay via stolen token</li>
+<li><strong>Mitigation:</strong> Short-lived JWTs (15 min), validate exp claim, rotate signing keys</li>
+</ul>
+<h3 id="tampering">Tampering</h3>
+<ul>
+<li>alg:none JWT forgery — remove signature, set algorithm to none</li>
+<li><strong>Mitigation:</strong> Whitelist allowed algorithms explicitly in jwt.verify()</li>
+</ul>
+<h3 id="repudiation">Repudiation</h3>
+<ul>
+<li>No audit log for password resets or login events</li>
+<li><strong>Mitigation:</strong> Structured auth event logging to tamper-evident store</li>
+</ul>
+<h3 id="information-disclosure">Information Disclosure</h3>
+<ul>
+<li>User enumeration via different error messages for valid vs invalid usernames</li>
+<li><strong>Mitigation:</strong> Return generic error messages to clients always</li>
+</ul>
+<h3 id="denial-of-service">Denial of Service</h3>
+<ul>
+<li>Credential stuffing exhausts database connection pool</li>
+<li><strong>Mitigation:</strong> Rate limiting per IP and account, connection pool limits</li>
+</ul>
+<h3 id="elevation-of-privilege">Elevation of Privilege</h3>
+<ul>
+<li>JWT role claim trusted without server-side validation</li>
+<li><strong>Mitigation:</strong> Always validate roles server-side from the database on every request</li>
+</ul>
+<hr>
+<h2 id="threat-register-output">Threat register output</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>Category</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>Spoofing</td>
+					<td>High</td>
+					<td>Short TTL + rotation</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>alg:none forgery</td>
+					<td>Tampering</td>
+					<td>Critical</td>
+					<td>Whitelist algorithms</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>Repudiation</td>
+					<td>Medium</td>
+					<td>Auth event logging</td>
+			</tr>
+			<tr>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>Info Disclosure</td>
+					<td>Medium</td>
+					<td>Generic errors</td>
+			</tr>
+			<tr>
+					<td>T-05</td>
+					<td>Credential stuffing</td>
+					<td>DoS</td>
+					<td>High</td>
+					<td>Rate limiting</td>
+			</tr>
+			<tr>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>EoP</td>
+					<td>Critical</td>
+					<td>Server-side validation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-scoring-your-findings">Next: scoring your findings</h2>
+<p>Use <a href="/posts/03-dread-scoring/">DREAD</a> to score and prioritise which threats to fix first.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

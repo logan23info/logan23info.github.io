@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Level-5 on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/level-5/</link>
+    <description>Recent content in Level-5 on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/level-5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Threat Intelligence</title>
+      <link>https://logan23info.github.io/wiki/threat-intelligence/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/threat-intelligence/</guid>
+      <description>Complete guide to Cyber Threat Intelligence — from IOC feeds through to strategic intelligence-driven security programmes.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-cyber-threat-intelligence">What is Cyber Threat Intelligence?</h2>
+<p>Cyber Threat Intelligence (CTI) is structured, curated, and contextualised information about threats and threat actors that enables organisations to make faster and more accurate security decisions. It transforms security from reactive (responding to incidents) to proactive (anticipating and preventing them).</p>
+<p>Raw data becomes intelligence through the <strong>Intelligence Cycle:</strong></p>
+<pre tabindex="0"><code>Direction → Collection → Processing → Analysis → Dissemination → Feedback
+    ↑                                                                  |
+    └──────────────────────────────────────────────────────────────────┘
+</code></pre><hr>
+<h2 id="the-three-tiers-of-threat-intelligence">The three tiers of threat intelligence</h2>
+<h3 id="strategic-intelligence">Strategic intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> C-suite, board, business leaders</li>
+<li><strong>Timeframe:</strong> Months to years</li>
+<li><strong>Question:</strong> What threats should our business be preparing for?</li>
+<li><strong>Example:</strong> &ldquo;Nation-state actors are increasingly targeting critical infrastructure in our sector. We should invest in OT security this year.&rdquo;</li>
+<li><strong>Sources:</strong> Annual threat reports (Mandiant M-Trends, CrowdStrike Global Threat Report), government advisories (CISA, NCSC)</li>
+</ul>
+<h3 id="operational-intelligence">Operational intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> Security managers, incident responders, red/purple teams</li>
+<li><strong>Timeframe:</strong> Days to weeks</li>
+<li><strong>Question:</strong> What campaigns and threat actors are active right now?</li>
+<li><strong>Example:</strong> &ldquo;FIN7 is currently running a campaign targeting finance sector companies using a new phishing kit. Our red team should simulate this technique.&rdquo;</li>
+<li><strong>Sources:</strong> Threat intel platforms (Recorded Future, Mandiant), ISAC feeds, dark web monitoring</li>
+</ul>
+<h3 id="tactical-intelligence">Tactical intelligence</h3>
+<ul>
+<li><strong>Audience:</strong> SOC analysts, threat hunters, SIEM engineers</li>
+<li><strong>Timeframe:</strong> Hours to days</li>
+<li><strong>Question:</strong> What specific indicators should we be blocking and detecting right now?</li>
+<li><strong>Example:</strong> IOCs — IP addresses, domains, file hashes, URLs associated with active malware campaigns</li>
+<li><strong>Sources:</strong> MISP, OTX AlienVault, threat intel feeds, VirusTotal</li>
+</ul>
+<hr>
+<h2 id="indicators-of-compromise-iocs">Indicators of Compromise (IOCs)</h2>
+<p>IOCs are artifacts that indicate a system has been compromised or an attack is in progress:</p>
+<table>
+	<thead>
+			<tr>
+					<th>IOC type</th>
+					<th>Example</th>
+					<th>Detection method</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>IP address</td>
+					<td>203.0.113.42 (C2 server)</td>
+					<td>Firewall / proxy block</td>
+			</tr>
+			<tr>
+					<td>Domain</td>
+					<td>evil-c2-server.com</td>
+					<td>DNS sinkhole / block</td>
+			</tr>
+			<tr>
+					<td>File hash (MD5/SHA256)</td>
+					<td>d41d8cd98f00b204e9800998ecf8427e</td>
+					<td>EDR / AV signature</td>
+			</tr>
+			<tr>
+					<td>URL</td>
+					<td><a href="https://phishing-site.com/login">https://phishing-site.com/login</a></td>
+					<td>Web proxy block</td>
+			</tr>
+			<tr>
+					<td>Email address</td>
+					<td><a href="mailto:attacker@evil.com">attacker@evil.com</a></td>
+					<td>Email gateway block</td>
+			</tr>
+			<tr>
+					<td>Registry key</td>
+					<td>HKCU\Software\Malware\persist</td>
+					<td>EDR detection rule</td>
+			</tr>
+			<tr>
+					<td>Mutex</td>
+					<td>\BaseNamedObjects\evil_mutex</td>
+					<td>Memory scanning</td>
+			</tr>
+			<tr>
+					<td>User agent</td>
+					<td>Mozilla/4.0 (compatible; MSIE 6.0)</td>
+					<td>Web proxy detection</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="the-pyramid-of-pain">The Pyramid of Pain</h3>
+<p>David Bianco&rsquo;s Pyramid of Pain shows how much disruption each IOC type causes to an attacker when blocked:</p>
+<pre tabindex="0"><code>              [TTPs]             ← hardest for attacker to change (MOST PAIN)
+           [Tools]
+        [Network/Host Artifacts]
+      [Domain Names]
+   [IP Addresses]
+[File Hashes]                    ← easiest for attacker to change (LEAST PAIN)
+</code></pre><p>Focus detection and blocking efforts on the top of the pyramid. Blocking a file hash costs the attacker nothing — they recompile and get a new hash in minutes. Detecting their TTPs (e.g. &ldquo;this process always dumps LSASS&rdquo;) forces them to fundamentally change their methods.</p>
+<hr>
+<h2 id="mitre-attck-for-threat-intelligence">MITRE ATT&amp;CK for threat intelligence</h2>
+<p>ATT&amp;CK provides a common language for describing threat actor behaviour, making it possible to compare intelligence from multiple sources and translate it directly into detections.</p>
+<h3 id="threat-actor-profiles">Threat actor profiles</h3>
+<p>ATT&amp;CK Groups catalogue known threat actors with their techniques:</p>
+<p><strong>APT29 (Cozy Bear, SVR)</strong></p>
+<ul>
+<li>Nation-state: Russia (SVR — Foreign Intelligence Service)</li>
+<li>Targets: Government, think tanks, healthcare, energy</li>
+<li>Known for: SolarWinds supply chain attack, COVID-19 vaccine research theft</li>
+<li>Key techniques: T1566 Phishing, T1195 Supply Chain Compromise, T1027 Obfuscated Files</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0016/">https://attack.mitre.org/groups/G0016/</a></li>
+</ul>
+<p><strong>FIN7 (Carbanak)</strong></p>
+<ul>
+<li>Motivation: Financial gain</li>
+<li>Targets: Retail, hospitality, finance (POS systems)</li>
+<li>Known for: $1B+ stolen, highly sophisticated spear phishing</li>
+<li>Key techniques: T1566.001 Spear Phishing, T1204 User Execution, T1055 Process Injection</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0046/">https://attack.mitre.org/groups/G0046/</a></li>
+</ul>
+<p><strong>Lazarus Group</strong></p>
+<ul>
+<li>Nation-state: North Korea (RGB)</li>
+<li>Motivation: Financial gain + espionage</li>
+<li>Targets: Cryptocurrency exchanges, banks, defence</li>
+<li>Known for: Bangladesh Bank heist ($81M), WannaCry ransomware</li>
+<li>Key techniques: T1189 Drive-by Compromise, T1195 Supply Chain, T1486 Ransomware</li>
+<li>ATT&amp;CK profile: <a href="https://attack.mitre.org/groups/G0032/">https://attack.mitre.org/groups/G0032/</a></li>
+</ul>
+<h3 id="mapping-intelligence-to-detections">Mapping intelligence to detections</h3>
+<p>When you receive intelligence about a threat actor, translate their TTPs directly into SIEM detection rules:</p>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1003.001 (LSASS Memory Dump) via custom tool &#34;MiniDump&#34;
+
+→ Detection rule: Alert on any process accessing lsass.exe memory
+   that is not a known legitimate security tool
+
+→ Sigma rule:
+title: Suspicious LSASS Access - APT29 MiniDump Pattern
+tags:
+  - attack.t1003.001
+  - attribution.apt29
+detection:
+  selection:
+    TargetImage|endswith: &#39;\lsass.exe&#39;
+    GrantedAccess: &#39;0x1010&#39;
+</code></pre><hr>
+<h2 id="threat-intelligence-platforms">Threat intelligence platforms</h2>
+<h3 id="open-source--free">Open source / free</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MISP</td>
+					<td>Most widely used open-source TI sharing platform</td>
+			</tr>
+			<tr>
+					<td>OpenCTI</td>
+					<td>Modern, graph-based TI platform with ATT&amp;CK integration</td>
+			</tr>
+			<tr>
+					<td>OTX AlienVault</td>
+					<td>Free community threat intel feed</td>
+			</tr>
+			<tr>
+					<td>VirusTotal</td>
+					<td>File and URL analysis + community intelligence</td>
+			</tr>
+			<tr>
+					<td>Shodan</td>
+					<td>Internet scanning data (limited free tier)</td>
+			</tr>
+			<tr>
+					<td>URLhaus</td>
+					<td>Malicious URL database</td>
+			</tr>
+			<tr>
+					<td>MalwareBazaar</td>
+					<td>Malware sample repository</td>
+			</tr>
+			<tr>
+					<td>ThreatFox</td>
+					<td>IOC sharing platform by</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="commercial">Commercial</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Platform</th>
+					<th>Strengths</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Recorded Future</td>
+					<td>Broadest coverage, AI-powered, dark web</td>
+			</tr>
+			<tr>
+					<td>Mandiant Advantage</td>
+					<td>Incident response heritage, actor attribution</td>
+			</tr>
+			<tr>
+					<td>CrowdStrike Falcon Intel</td>
+					<td>Strong nation-state tracking</td>
+			</tr>
+			<tr>
+					<td>Microsoft Sentinel TI</td>
+					<td>Azure-native, MSTI integration</td>
+			</tr>
+			<tr>
+					<td>MISP (enterprise)</td>
+					<td>Self-hosted, full control, large community</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="setting-up-a-free-threat-intelligence-pipeline">Setting up a free threat intelligence pipeline</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># docker-compose.yml — free TI stack</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">misp</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/misp/misp-docker/misp-core:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;443:443&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MISP_ADMIN_EMAIL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;admin@example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">opencti</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">opencti/platform:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">APP__SECRET</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;changeme&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">OPENCTI__URL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;http://localhost:8080&#34;</span><span class="w">
+</span></span></span></code></pre></div><p><strong>Free intelligence feeds to connect:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Connect MISP to free feeds</span>
+</span></span><span class="line"><span class="cl"><span class="n">feeds</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://www.circl.lu/doc/misp/feed-osint/&#34;</span><span class="p">,</span>      <span class="c1"># CIRCL OSINT</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://bazaar.abuse.ch/export/csv/recent/&#34;</span><span class="p">,</span>      <span class="c1"># MalwareBazaar</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://feodotracker.abuse.ch/downloads/ipblocklist.csv&#34;</span><span class="p">,</span>  <span class="c1"># Feodo C2</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://urlhaus.abuse.ch/downloads/csv_recent/&#34;</span><span class="p">,</span>  <span class="c1"># URLhaus</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://otx.alienvault.com/api/v1/pulses/subscribed&#34;</span><span class="p">,</span>     <span class="c1"># OTX</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre></div><hr>
+<h2 id="intelligence-driven-threat-modelling">Intelligence-driven threat modelling</h2>
+<p>The most powerful use of threat intelligence is feeding it directly into your threat models:</p>
+<h3 id="without-threat-intelligence">Without threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;An attacker could perform SQL injection on the login endpoint&#34;
+Severity: High (DREAD score 7.2)
+</code></pre><h3 id="with-threat-intelligence">With threat intelligence</h3>
+<pre tabindex="0"><code>Threat: &#34;FIN7 (active in our sector, confirmed targeting peers in Q3 2026)
+uses T1190 (Exploit Public-Facing Application) as primary initial access.
+Our login endpoint is internet-facing and handles authentication.
+FIN7 has used SQLi in 40% of confirmed incidents against retail targets.&#34;
+
+Severity: Critical (DREAD score 9.1)
+Priority: Immediate — active threat actor, confirmed sector targeting
+</code></pre><p>The second version drives urgency that gets executive attention and budget.</p>
+<hr>
+<h2 id="threat-hunting">Threat hunting</h2>
+<p>Threat intelligence enables proactive threat hunting — searching for attacker presence in your environment before an alert fires.</p>
+<h3 id="hypothesis-driven-hunting">Hypothesis-driven hunting</h3>
+<pre tabindex="0"><code>Intelligence: APT29 uses T1078 (Valid Accounts) — stolen credentials
+              to authenticate to VPN from unusual geographies
+
+Hypothesis: If APT29 has stolen a user&#39;s VPN credentials, we would see
+            successful VPN logins from IPs in Russia/Eastern Europe
+            at unusual times
+
+Hunt query (Splunk):
+index=vpn_logs action=success
+| iplocation src_ip
+| where Country != &#34;India&#34;
+| stats count by user, Country, src_ip
+| where count &gt; 2
+| join user [search index=vpn_logs | stats earliest(_time) as first_seen by user]
+| where relative_time(now(), &#34;-7d&#34;) &gt; first_seen
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Target</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mean Time to Ingest IOC</td>
+					<td>&lt; 1 hour from feed to blocking</td>
+			</tr>
+			<tr>
+					<td>IOC False Positive Rate</td>
+					<td>&lt; 5% (too high = analyst fatigue)</td>
+			</tr>
+			<tr>
+					<td>Threat actor coverage</td>
+					<td>All sector-relevant groups profiled</td>
+			</tr>
+			<tr>
+					<td>Intelligence-to-detection rate</td>
+					<td>&gt; 80% of TTPs translated to detections</td>
+			</tr>
+			<tr>
+					<td>Feed freshness</td>
+					<td>All feeds updated within 24 hours</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Wiki</span>Red Teaming — uses threat intel</a>
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Framework</span>STRIDE — intelligence-driven threat modelling</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

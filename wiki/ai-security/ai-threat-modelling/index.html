@@ -1,0 +1,193 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>AI Threat Modelling | Security Engineering Wiki</title><meta name=keywords content="AI-security,threat-modelling,STRIDE,MAESTRO,LLM,machine-learning"><meta name=description content="Threat modelling for AI and LLM systems — STRIDE applied to AI, the MAESTRO framework, AI-specific data flow diagrams, and a reusable threat model template."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/ai-security/ai-threat-modelling/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/ai-security/ai-threat-modelling/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/ai-security/ai-threat-modelling/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/ai-security/ai-threat-modelling/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="AI Threat Modelling"><meta property="og:description" content="Threat modelling for AI and LLM systems — STRIDE applied to AI, the MAESTRO framework, AI-specific data flow diagrams, and a reusable threat model template."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="AI Threat Modelling"><meta name=twitter:description content="Threat modelling for AI and LLM systems — STRIDE applied to AI, the MAESTRO framework, AI-specific data flow diagrams, and a reusable threat model template."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"AI \u0026 LLM Security","item":"https://logan23info.github.io/wiki/ai-security/"},{"@type":"ListItem","position":3,"name":"AI Threat Modelling","item":"https://logan23info.github.io/wiki/ai-security/ai-threat-modelling/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/ai-security/>AI & LLM Security</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">AI Threat Modelling</h1><div class=post-description>Threat modelling for AI and LLM systems — STRIDE applied to AI, the MAESTRO framework, AI-specific data flow diagrams, and a reusable threat model template.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;·&nbsp;<span>1157 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#why-ai-needs-its-own-threat-modelling-approach aria-label="Why AI needs its own threat modelling approach">Why AI needs its own threat modelling approach</a></li><li><a href=#stride-applied-to-ai-systems aria-label="STRIDE applied to AI systems">STRIDE applied to AI systems</a></li><li><a href=#ai-specific-threat-categories aria-label="AI-specific threat categories">AI-specific threat categories</a><ul><li><a href=#training-time-threats aria-label="Training-time threats">Training-time threats</a></li><li><a href=#inference-time-threats aria-label="Inference-time threats">Inference-time threats</a></li><li><a href=#output-threats aria-label="Output threats">Output threats</a></li></ul></li><li><a href=#the-maestro-framework aria-label="The MAESTRO framework">The MAESTRO framework</a></li><li><a href=#ai-system-data-flow-diagram aria-label="AI system data flow diagram">AI system data flow diagram</a></li><li><a href=#ai-threat-model-template aria-label="AI threat model template">AI threat model template</a></li><li><a href=#ai-threat-modelling-checklist aria-label="AI threat modelling checklist">AI threat modelling checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=why-ai-needs-its-own-threat-modelling-approach>Why AI needs its own threat modelling approach<a hidden class=anchor aria-hidden=true href=#why-ai-needs-its-own-threat-modelling-approach>#</a></h2><p>Standard STRIDE threat modelling still applies to AI systems, but AI introduces threat categories that traditional frameworks miss: training data poisoning, model extraction, adversarial examples, and the collapse of the instruction/data boundary. This page shows how to extend STRIDE for AI and introduces AI-specific frameworks.</p><hr><h2 id=stride-applied-to-ai-systems>STRIDE applied to AI systems<a hidden class=anchor aria-hidden=true href=#stride-applied-to-ai-systems>#</a></h2><table><thead><tr><th>STRIDE</th><th>Traditional meaning</th><th>AI-specific manifestation</th></tr></thead><tbody><tr><td><strong>Spoofing</strong></td><td>Impersonating a user/system</td><td>Impersonating the model (fake responses), synthetic identity via deepfakes</td></tr><tr><td><strong>Tampering</strong></td><td>Modifying data/code</td><td>Training data poisoning, adversarial examples, prompt injection</td></tr><tr><td><strong>Repudiation</strong></td><td>Denying an action</td><td>No audit trail of model decisions, non-reproducible outputs</td></tr><tr><td><strong>Information Disclosure</strong></td><td>Leaking data</td><td>Training data extraction, membership inference, system prompt leakage</td></tr><tr><td><strong>Denial of Service</strong></td><td>Overwhelming the system</td><td>Resource-exhaustion prompts, sponge examples, cost amplification</td></tr><tr><td><strong>Elevation of Privilege</strong></td><td>Gaining unauthorised access</td><td>Excessive agency, tool abuse via injection, jailbreaking guardrails</td></tr></tbody></table><hr><h2 id=ai-specific-threat-categories>AI-specific threat categories<a hidden class=anchor aria-hidden=true href=#ai-specific-threat-categories>#</a></h2><h3 id=training-time-threats>Training-time threats<a hidden class=anchor aria-hidden=true href=#training-time-threats>#</a></h3><pre tabindex=0><code>Data poisoning:
+  Attacker injects malicious samples into training data
+  → Model learns attacker-desired behaviour
+  → Example: poison spam filter training data so attacker&#39;s spam passes
+
+Backdoor / trojan:
+  Model behaves normally except when it sees a specific trigger
+  → Example: face recognition that fails when a specific pattern is worn
+
+Supply chain:
+  Compromised pre-trained model weights, poisoned datasets from public sources
+  → Example: downloading a backdoored model from a public model hub
+</code></pre><h3 id=inference-time-threats>Inference-time threats<a hidden class=anchor aria-hidden=true href=#inference-time-threats>#</a></h3><pre tabindex=0><code>Adversarial examples:
+  Carefully crafted input that causes misclassification
+  → Example: a stop sign with stickers that a self-driving car reads as &#34;speed limit 45&#34;
+
+Prompt injection:
+  Malicious instructions in input or retrieved content
+  → See the Prompt Injection page for full detail
+
+Model extraction / theft:
+  Attacker queries the model repeatedly to steal its behaviour
+  → Reconstructs a copy of a proprietary model
+
+Membership inference:
+  Determine whether a specific record was in the training data
+  → Privacy violation — reveals someone&#39;s data was used
+</code></pre><h3 id=output-threats>Output threats<a hidden class=anchor aria-hidden=true href=#output-threats>#</a></h3><pre tabindex=0><code>Sensitive information disclosure:
+  Model reveals training data, other users&#39; data, or secrets
+  → Example: model trained on customer emails reveals one customer&#39;s data to another
+
+Insecure output handling:
+  Model output executed as code, rendered as HTML, used in SQL
+  → Example: model output containing XSS payload rendered in a web page
+
+Excessive agency:
+  Model takes harmful actions via connected tools
+  → Example: injected instruction causes agent to delete files or send money
+</code></pre><hr><h2 id=the-maestro-framework>The MAESTRO framework<a hidden class=anchor aria-hidden=true href=#the-maestro-framework>#</a></h2><p>MAESTRO (Multi-Agent Environment, Security, Threat, Risk, and Outcome) is a threat modelling framework designed specifically for agentic AI systems. It examines threats across seven layers:</p><table><thead><tr><th>Layer</th><th>Focus</th><th>Example threats</th></tr></thead><tbody><tr><td>1. Foundation Model</td><td>The base LLM</td><td>Backdoors, alignment failures, jailbreaks</td></tr><tr><td>2. Data Operations</td><td>Training and RAG data</td><td>Data poisoning, indirect injection via RAG</td></tr><tr><td>3. Agent Frameworks</td><td>The orchestration layer</td><td>Tool abuse, insecure agent-to-agent communication</td></tr><tr><td>4. Deployment</td><td>Infrastructure</td><td>Model endpoint exposure, credential theft</td></tr><tr><td>5. Evaluation</td><td>Testing and monitoring</td><td>Evaluation gaming, missing guardrails</td></tr><tr><td>6. Security & Compliance</td><td>Controls</td><td>Insufficient access control, audit gaps</td></tr><tr><td>7. Agent Ecosystem</td><td>Multi-agent interactions</td><td>Cascading failures, collusion, trust exploitation</td></tr></tbody></table><hr><h2 id=ai-system-data-flow-diagram>AI system data flow diagram<a hidden class=anchor aria-hidden=true href=#ai-system-data-flow-diagram>#</a></h2><p>A typical LLM application DFD with trust boundaries:</p><pre tabindex=0><code>[User] ──────────────────────────────────────────────┐
+   │ untrusted input                                  │
+   │                                                  │
+═══▼══════════════════════ TRUST BOUNDARY: User Input ═══
+   │
+   ▼
+[Input Guardrail]  ← injection detection, content filter
+   │
+   ▼
+[Prompt Builder]  ← combines system prompt + user input + context
+   │                 ⚠ instruction/data boundary collapses here
+   │
+   ├──────────────◀── [RAG Retrieval] ◀── [Vector DB] ◀── [Documents]
+   │  retrieved content                                    ⚠ indirect injection vector
+   │  (UNTRUSTED)
+   ▼
+═══════════════════════ TRUST BOUNDARY: Model Inference ═══
+   │
+   ▼
+[LLM] ─────────────────────────────┐
+   │ model output (UNTRUSTED)       │
+   │                                │
+   ▼                                ▼
+[Output Guardrail]           [Tool Router]  ← ⚠ excessive agency
+   │ filter sensitive data          │
+   │                                ├──▶ [Database Tool]  ← needs own authz
+   ▼                                ├──▶ [Email Tool]     ← needs user confirm
+[User]                             └──▶ [Web Request]    ← SSRF risk
+</code></pre><p>Key trust boundaries:</p><ul><li><strong>User input</strong> — always untrusted, may contain direct injection</li><li><strong>Retrieved content</strong> — untrusted, may contain indirect injection</li><li><strong>Model output</strong> — untrusted, must be validated before use or rendering</li><li><strong>Tool calls</strong> — each requires independent authorisation</li></ul><hr><h2 id=ai-threat-model-template>AI threat model template<a hidden class=anchor aria-hidden=true href=#ai-threat-model-template>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># ai-threat-model.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>system</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;customer-support-ai-agent&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>model</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;gpt-4-class LLM via API&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>last_reviewed</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2026-08-05&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>components</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>USER_INPUT</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>trust</span><span class=p>:</span><span class=w> </span><span class=l>untrusted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>RAG_STORE</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>trust</span><span class=p>:</span><span class=w> </span><span class=l>untrusted  </span><span class=w> </span><span class=c># content could be poisoned</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Vector DB of support articles + past tickets&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>LLM</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>trust</span><span class=p>:</span><span class=w> </span><span class=l>semi-trusted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Third-party API — subject to injection&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>TOOLS</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>trust</span><span class=p>:</span><span class=w> </span><span class=l>privileged</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>tools</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;search_kb&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;create_ticket&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;issue_refund&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>threats</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-01</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>prompt_injection</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;T, E&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;User directly injects instructions to bypass guardrails and issue unauthorised refunds&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;issue_refund tool requires human approval above $50; injection detection on input&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-02</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>indirect_injection</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;T, E&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Attacker plants injection in a support ticket; when agent retrieves it via RAG, agent follows injected instructions&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;RAG content processed by quarantined model with no tool access; retrieved content clearly delimited as data&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-03</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>information_disclosure</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;I&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Model reveals another customer&#39;s data present in the RAG store&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;RAG retrieval filtered by customer_id at query time — model only ever sees the current user&#39;s data&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-04</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>excessive_agency</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;E&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Injected instruction causes agent to issue large refund or mass-create tickets&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Tools have rate limits; refunds &gt;$50 need human approval; all tool calls logged&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-05</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>sensitive_disclosure</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;I&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;System prompt (containing business logic) leaked via injection&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>high</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>low</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;System prompt contains no secrets; assume it will leak and design accordingly&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>accepted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-06</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>denial_of_service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;D&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Attacker sends resource-exhaustion prompts to amplify API costs&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Per-user rate limits; max token limits; cost alerting&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>AI-07</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>category</span><span class=p>:</span><span class=w> </span><span class=l>insecure_output</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>stride</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;T&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Model output containing XSS rendered in support agent&#39;s browser&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>likelihood</span><span class=p>:</span><span class=w> </span><span class=l>low</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>impact</span><span class=p>:</span><span class=w> </span><span class=l>medium</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>mitigation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;All model output HTML-escaped before rendering&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=l>mitigated</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=ai-threat-modelling-checklist>AI threat modelling checklist<a hidden class=anchor aria-hidden=true href=#ai-threat-modelling-checklist>#</a></h2><pre tabindex=0><code>Data and training
+□ Training data sources documented and trusted
+□ Data poisoning risk assessed for any user-contributed training data
+□ Pre-trained models sourced from verified providers with integrity checks
+□ Model provenance and version tracked
+
+Input
+□ User input treated as untrusted — injection possible
+□ Retrieved/RAG content treated as untrusted — indirect injection possible
+□ Input and instructions clearly separated
+□ Injection detection in place (as telemetry)
+
+Model and inference
+□ Model has minimal agency — least privilege for tools
+□ Sensitive tools require human confirmation
+□ RAG retrieval filtered by user authorisation at query time
+□ Rate limiting and cost controls in place
+
+Output
+□ Model output treated as untrusted
+□ Output validated/escaped before rendering or execution
+□ Output filtered for sensitive data leakage
+□ Tool calls validated against strict schema
+
+Governance
+□ AI system has a documented threat model
+□ AI red teaming conducted before launch
+□ Model decisions are logged for audit
+□ Incident response plan covers AI-specific failures
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/ai-security/prompt-injection/><span class=ref-label>AI</span>Prompt Injection</a>
+<a class=ref-card href=/wiki/ai-security/llm-top10/><span class=ref-label>AI</span>OWASP LLM Top 10</a>
+<a class=ref-card href=/wiki/ai-security/ai-red-teaming/><span class=ref-label>AI</span>AI Red Teaming</a>
+<a class=ref-card href=/wiki/stride/><span class=ref-label>Framework</span>STRIDE Reference</a>
+<a class=ref-card href=/wiki/templates/threat-register/><span class=ref-label>Template</span>Threat Register Template</a>
+<a class=ref-card href=/wiki/supply-chain/><span class=ref-label>Wiki</span>Supply Chain Security</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/ai-security/>AI-Security</a></li><li><a href=https://logan23info.github.io/tags/threat-modelling/>Threat-Modelling</a></li><li><a href=https://logan23info.github.io/tags/stride/>STRIDE</a></li><li><a href=https://logan23info.github.io/tags/maestro/>MAESTRO</a></li><li><a href=https://logan23info.github.io/tags/llm/>LLM</a></li><li><a href=https://logan23info.github.io/tags/machine-learning/>Machine-Learning</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

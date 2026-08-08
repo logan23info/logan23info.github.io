@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Overview on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/overview/</link>
+    <description>Recent content in Overview on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/overview/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Security Engineering Maturity Ladder</title>
+      <link>https://logan23info.github.io/wiki/maturity-ladder/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/maturity-ladder/</guid>
+      <description>The complete Security Engineering Maturity Ladder — from Threat Modelling foundations through to advanced adversary simulation and Zero Trust Architecture.</description>
+      <content:encoded><![CDATA[<h2 id="overview">Overview</h2>
+<p>The Security Engineering Maturity Ladder describes how organisations evolve their security practices from reactive to proactive, from manual to automated, and from hypothetical to intelligence-driven. Each level builds on the previous one — you cannot effectively run a Red Team if you have not first modelled what you are defending.</p>
+<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────┐
+│         SECURITY ENGINEERING MATURITY LADDER                   │
+├───────┬─────────────────────────────────┬──────────────────────┤
+│ Level │ Discipline                      │ Core question        │
+├───────┼─────────────────────────────────┼──────────────────────┤
+│   1   │ Threat Modelling                │ What could go wrong? │
+│   2   │ Attack Surface Management       │ Where are we exposed?│
+│   3   │ Red Teaming                     │ Can attacks succeed? │
+│   4   │ Purple Teaming                  │ Can we detect them?  │
+│   5   │ Threat Intelligence             │ Who is targeting us? │
+│   6   │ Zero Trust Architecture         │ Trust nothing, ever  │
+│  +1   │ Supply Chain Security           │ Is our code safe?    │
+└───────┴─────────────────────────────────┴──────────────────────┘
+</code></pre><p>Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally. Level 6 is a multi-year architectural transformation.</p>
+<hr>
+<h2 id="level-1--threat-modelling">Level 1 — Threat Modelling</h2>
+<p><strong>What it is:</strong> A structured process for identifying security risks during the design phase, before code is written or systems are built.</p>
+<p><strong>Key frameworks:</strong> STRIDE, DREAD, PASTA, Attack Trees</p>
+<p><strong>Core output:</strong> A prioritised threat register with mitigations mapped to each threat.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Threat models are produced for new features and services</li>
+<li>Findings are tracked as engineering tickets</li>
+<li>Threat model is stored as code alongside the system it describes</li>
+<li>Security checklist is part of every PR review</li>
+</ul>
+<p><strong>Where it fits:</strong> Design and development phase. The cheapest place to find and fix security issues.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/stride/">Threat Modelling</a> | <a href="/wiki/stride/">STRIDE</a> | <a href="/wiki/dread/">DREAD</a> | <a href="/wiki/pasta/">PASTA</a></p>
+<hr>
+<h2 id="level-2--attack-surface-management-asm">Level 2 — Attack Surface Management (ASM)</h2>
+<p><strong>What it is:</strong> Continuous discovery, inventory, and monitoring of every externally exposed asset — including assets the organisation may not know it has.</p>
+<p><strong>Key tools:</strong> Censys, Shodan, Microsoft Defender EASM, Tenable ASM, CyCognito</p>
+<p><strong>Core output:</strong> A continuously updated inventory of exposed assets, with risk scores and change alerts.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>All internet-facing assets are discovered automatically, not manually</li>
+<li>Unknown or shadow IT assets are detected and investigated</li>
+<li>New exposures trigger automated alerts within hours</li>
+<li>Asset inventory is integrated with the threat model</li>
+</ul>
+<p><strong>Where it fits:</strong> Continuous, runtime. Validates and extends threat models with real-world exposure data.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/asm/">Attack Surface Management</a></p>
+<hr>
+<h2 id="level-3--red-teaming">Level 3 — Red Teaming</h2>
+<p><strong>What it is:</strong> Authorised simulation of real-world attackers against live systems. Goes beyond penetration testing to simulate full attack campaigns — from initial access through lateral movement to data exfiltration.</p>
+<p><strong>Key frameworks:</strong> MITRE ATT&amp;CK, TIBER-EU, CBEST</p>
+<p><strong>Core output:</strong> An attack narrative showing exactly how far a real attacker could get, and what they could access.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Red team exercises run at least annually against critical systems</li>
+<li>Findings are mapped to MITRE ATT&amp;CK techniques</li>
+<li>Red team scope is derived from threat intelligence, not just compliance</li>
+<li>Results feed directly back into threat models and defensive controls</li>
+</ul>
+<p><strong>Where it fits:</strong> Post-deployment validation. Tests real defensive controls against real attack techniques.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/red-teaming/">Red Teaming</a></p>
+<hr>
+<h2 id="level-4--purple-teaming">Level 4 — Purple Teaming</h2>
+<p><strong>What it is:</strong> Red team (attackers) and Blue team (defenders) working together simultaneously — the red team executes attack techniques while the blue team validates whether their detection and response controls actually work.</p>
+<p><strong>Key frameworks:</strong> MITRE ATT&amp;CK, Atomic Red Team, VECTR</p>
+<p><strong>Core output:</strong> A detection coverage map showing which attack techniques are detected, which are missed, and which alerting rules need improvement.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Purple team exercises run regularly, not just annually</li>
+<li>Every red team technique is validated against SIEM detection rules</li>
+<li>Detection gaps are immediately addressed during the exercise</li>
+<li>Results drive SOC playbook improvements</li>
+</ul>
+<p><strong>Where it fits:</strong> Validation layer. Proves whether defensive investments are actually working.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/purple-teaming/">Purple Teaming</a></p>
+<hr>
+<h2 id="level-5--threat-intelligence">Level 5 — Threat Intelligence</h2>
+<p><strong>What it is:</strong> The use of structured, curated information about real-world threat actors — their identities, motivations, capabilities, and specific tactics — to drive security decisions. Transforms threat modelling from hypothetical to intelligence-driven.</p>
+<p><strong>Key sources:</strong> MITRE ATT&amp;CK Groups, MISP, OpenCTI, Recorded Future, Mandiant Advantage</p>
+<p><strong>Core output:</strong> Threat actor profiles, TTP (Tactics, Techniques, Procedures) mappings, and intelligence-driven threat models.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Threat models reference real attacker groups relevant to your sector</li>
+<li>IOCs (Indicators of Compromise) are ingested and acted on automatically</li>
+<li>Intelligence is operationalised — it drives detection rules, not just reports</li>
+<li>Threat intelligence is shared with sector peers (ISACs)</li>
+</ul>
+<p><strong>Where it fits:</strong> Strategic layer. Makes every other level more precise and relevant.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/threat-intelligence/">Threat Intelligence</a></p>
+<hr>
+<h2 id="level-6--zero-trust-architecture">Level 6 — Zero Trust Architecture</h2>
+<p><strong>What it is:</strong> An architectural philosophy where no user, device, or network location is trusted by default. Every request is authenticated, authorised, and validated — regardless of where it originates. The architectural implementation of the principle of least privilege at every layer.</p>
+<p><strong>Key standards:</strong> NIST SP 800-207, CISA Zero Trust Maturity Model, Google BeyondCorp</p>
+<p><strong>Core output:</strong> An architecture where lateral movement is structurally prevented, not just detected.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>Identity is the new perimeter — every access decision is identity-based</li>
+<li>Microsegmentation prevents lateral movement between services</li>
+<li>Devices are continuously validated, not trusted after initial login</li>
+<li>All traffic is encrypted and inspected, including internal east-west traffic</li>
+</ul>
+<p><strong>Where it fits:</strong> Architectural transformation. Eliminates entire categories of threats rather than mitigating them one by one.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/zero-trust/">Zero Trust Architecture</a></p>
+<hr>
+<h2 id="1--supply-chain-security">+1 — Supply Chain Security</h2>
+<p><strong>What it is:</strong> Securing not just your own code but every dependency, tool, and third-party component your software relies on. Addresses the reality that most modern software is 80–90% open source code written by others.</p>
+<p><strong>Key frameworks:</strong> SLSA (Supply chain Levels for Software Artifacts), SSDF (NIST), SBOM</p>
+<p><strong>Core output:</strong> A verified, signed, and continuously monitored software supply chain with full dependency visibility.</p>
+<p><strong>Maturity indicators:</strong></p>
+<ul>
+<li>SBOM (Software Bill of Materials) is generated for every build</li>
+<li>All dependencies are scanned for known vulnerabilities on every build</li>
+<li>Build artifacts are cryptographically signed (Sigstore/Cosign)</li>
+<li>Third-party code is reviewed before adoption</li>
+</ul>
+<p><strong>Where it fits:</strong> Underlies all levels. A compromised dependency undermines every other security control.</p>
+<p><strong>Detailed guide:</strong> <a href="/wiki/supply-chain/">Supply Chain Security</a></p>
+<hr>
+<h2 id="how-the-levels-interact">How the levels interact</h2>
+<p>The ladder is not strictly sequential — most mature organisations run all levels simultaneously. But each level amplifies the others:</p>
+<ul>
+<li><strong>Threat Intelligence → Threat Modelling:</strong> Real attacker TTPs make threat models more accurate</li>
+<li><strong>Threat Modelling → Red Teaming:</strong> Threat models define what red teams should try to do</li>
+<li><strong>Red Teaming → Purple Teaming:</strong> Red team findings define what blue teams need to detect</li>
+<li><strong>Purple Teaming → Detection Engineering:</strong> Coverage gaps drive SIEM rule development</li>
+<li><strong>ASM → All levels:</strong> Real exposure data keeps threat models, red team scope, and detection rules current</li>
+<li><strong>Zero Trust → All levels:</strong> Architectural controls reduce the blast radius when other levels miss something</li>
+<li><strong>Supply Chain → All levels:</strong> Secure the foundation that everything else runs on</li>
+</ul>
+<hr>
+<h2 id="where-to-start">Where to start</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Organisation size</th>
+					<th>Starting point</th>
+					<th>Next step</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Startup / small team</td>
+					<td>Threat Modelling (Level 1)</td>
+					<td>ASM (Level 2)</td>
+			</tr>
+			<tr>
+					<td>Mid-size / scale-up</td>
+					<td>ASM + basic Threat Intel</td>
+					<td>Red Teaming</td>
+			</tr>
+			<tr>
+					<td>Enterprise</td>
+					<td>Purple Teaming + Threat Intel</td>
+					<td>Zero Trust roadmap</td>
+			</tr>
+			<tr>
+					<td>Regulated (finance, health)</td>
+					<td>All levels + compliance mapping</td>
+					<td>TIBER-EU / CBEST</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-all-wiki-pages">📚 All wiki pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/stride/"><span class="ref-label">Level 1</span>STRIDE</a>
+  <a class="ref-card" href="/wiki/dread/"><span class="ref-label">Level 1</span>DREAD</a>
+  <a class="ref-card" href="/wiki/pasta/"><span class="ref-label">Level 1</span>PASTA</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Level 1</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Level 2</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/red-teaming/"><span class="ref-label">Level 3</span>Red Teaming</a>
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Level 4</span>Purple Teaming</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Level 5</span>Threat Intelligence</a>
+  <a class="ref-card" href="/wiki/zero-trust/"><span class="ref-label">Level 6</span>Zero Trust Architecture</a>
+  <a class="ref-card" href="/wiki/supply-chain/"><span class="ref-label">+1</span>Supply Chain Security</a>
+  <a class="ref-card" href="/wiki/tools/threat-dragon/"><span class="ref-label">Tool</span>OWASP Threat Dragon</a>
+  <a class="ref-card" href="/wiki/tools/threagile/"><span class="ref-label">Tool</span>Threagile</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

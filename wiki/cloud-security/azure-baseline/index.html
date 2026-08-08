@@ -1,0 +1,339 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Azure Security Baseline | Security Engineering Wiki</title><meta name=keywords content="Azure,cloud-security,Entra-ID,RBAC,Defender,Sentinel,CIS-benchmark"><meta name=description content="Azure security baseline — Entra ID, RBAC, Storage, NSGs, Defender for Cloud, Microsoft Sentinel, and CIS Azure Benchmark controls."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/cloud-security/azure-baseline/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/cloud-security/azure-baseline/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/cloud-security/azure-baseline/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/cloud-security/azure-baseline/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="Azure Security Baseline"><meta property="og:description" content="Azure security baseline — Entra ID, RBAC, Storage, NSGs, Defender for Cloud, Microsoft Sentinel, and CIS Azure Benchmark controls."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Azure Security Baseline"><meta name=twitter:description content="Azure security baseline — Entra ID, RBAC, Storage, NSGs, Defender for Cloud, Microsoft Sentinel, and CIS Azure Benchmark controls."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Cloud Security","item":"https://logan23info.github.io/wiki/cloud-security/"},{"@type":"ListItem","position":3,"name":"Azure Security Baseline","item":"https://logan23info.github.io/wiki/cloud-security/azure-baseline/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/cloud-security/>Cloud Security</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Azure Security Baseline</h1><div class=post-description>Azure security baseline — Entra ID, RBAC, Storage, NSGs, Defender for Cloud, Microsoft Sentinel, and CIS Azure Benchmark controls.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;·&nbsp;<span>1202 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#overview aria-label=Overview>Overview</a></li><li><a href=#1-entra-id-azure-active-directory aria-label="1. Entra ID (Azure Active Directory)">1. Entra ID (Azure Active Directory)</a><ul><li><a href=#mfa-and-conditional-access aria-label="MFA and Conditional Access">MFA and Conditional Access</a></li></ul></li><li><a href=#2-azure-rbac--role-based-access-control aria-label="2. Azure RBAC — Role-Based Access Control">2. Azure RBAC — Role-Based Access Control</a></li><li><a href=#3-storage-security aria-label="3. Storage Security">3. Storage Security</a></li><li><a href=#4-network-security-groups aria-label="4. Network Security Groups">4. Network Security Groups</a></li><li><a href=#5-defender-for-cloud--microsoft-sentinel aria-label="5. Defender for Cloud & Microsoft Sentinel">5. Defender for Cloud & Microsoft Sentinel</a></li><li><a href=#azure-security-baseline-checklist aria-label="Azure Security Baseline Checklist">Azure Security Baseline Checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=overview>Overview<a hidden class=anchor aria-hidden=true href=#overview>#</a></h2><p>Microsoft Azure&rsquo;s security model centres on <strong>Entra ID</strong> (formerly Azure AD) for identity and <strong>Azure RBAC</strong> for access control. Azure has the deepest integration with enterprise identity and compliance tooling of the three major clouds, making it the dominant choice for regulated industries. This baseline covers CIS Microsoft Azure Foundations Benchmark v2.0.</p><p><strong>Automated check:</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pip install prowler
+</span></span><span class=line><span class=cl>prowler azure --compliance cis_azure_2.0
+</span></span></code></pre></div><hr><h2 id=1-entra-id-azure-active-directory>1. Entra ID (Azure Active Directory)<a hidden class=anchor aria-hidden=true href=#1-entra-id-azure-active-directory>#</a></h2><h3 id=mfa-and-conditional-access>MFA and Conditional Access<a hidden class=anchor aria-hidden=true href=#mfa-and-conditional-access>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check MFA status for all users (requires Microsoft Graph API)</span>
+</span></span><span class=line><span class=cl>az rest --method GET <span class=se>\
+</span></span></span><span class=line><span class=cl>  --url <span class=s2>&#34;https://graph.microsoft.com/v1.0/reports/credentialUserRegistrationDetails&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --headers <span class=s2>&#34;ConsistencyLevel=eventual&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  jq <span class=s1>&#39;.value[] | select(.isMfaRegistered == false) | {displayName, userPrincipalName}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># List users without MFA registered</span>
+</span></span><span class=line><span class=cl>az rest --method GET <span class=se>\
+</span></span></span><span class=line><span class=cl>  --url <span class=s2>&#34;https://graph.microsoft.com/beta/reports/authenticationMethods/userRegistrationDetails?\$filter=isMfaRegistered eq false&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  jq <span class=s1>&#39;.value[].userPrincipalName&#39;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/entra.tf — Conditional Access policies via Terraform
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azuread_conditional_access_policy&#34; &#34;require_mfa&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  display_name</span> <span class=o>=</span> <span class=s2>&#34;Require MFA for all users&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  state</span>        <span class=o>=</span> <span class=s2>&#34;enabled&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>conditions</span> {
+</span></span><span class=line><span class=cl><span class=n>    client_app_types</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;all&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>users</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_users</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;All&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>      excluded_users</span> <span class=o>=</span> <span class=p>[</span><span class=k>azuread_user</span><span class=p>.</span><span class=k>break_glass</span><span class=p>.</span><span class=k>object_id</span><span class=p>]</span><span class=c1>  # emergency account exempt
+</span></span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>    <span class=k>applications</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_applications</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;All&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>grant_controls</span> {
+</span></span><span class=line><span class=cl><span class=n>    operator</span>          <span class=o>=</span> <span class=s2>&#34;OR&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    built_in_controls</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;mfa&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azuread_conditional_access_policy&#34; &#34;block_legacy_auth&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  display_name</span> <span class=o>=</span> <span class=s2>&#34;Block legacy authentication&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  state</span>        <span class=o>=</span> <span class=s2>&#34;enabled&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>conditions</span> {
+</span></span><span class=line><span class=cl><span class=n>    client_app_types</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;exchangeActiveSync&#34;, &#34;other&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>users</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_users</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;All&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>    <span class=k>applications</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_applications</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;All&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>grant_controls</span> {
+</span></span><span class=line><span class=cl><span class=n>    operator</span>          <span class=o>=</span> <span class=s2>&#34;OR&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    built_in_controls</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;block&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azuread_conditional_access_policy&#34; &#34;require_compliant_device&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  display_name</span> <span class=o>=</span> <span class=s2>&#34;Require compliant device for sensitive apps&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  state</span>        <span class=o>=</span> <span class=s2>&#34;enabled&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>conditions</span> {
+</span></span><span class=line><span class=cl><span class=n>    client_app_types</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;browser&#34;, &#34;mobileAppsAndDesktopClients&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>users</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_users</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;All&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>    <span class=k>applications</span> {
+</span></span><span class=line><span class=cl><span class=n>      included_applications</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;00000003-0000-0000-c000-000000000000&#34;</span><span class=p>,</span><span class=c1>  # Microsoft Graph
+</span></span></span><span class=line><span class=cl>        <span class=s2>&#34;797f4846-ba00-4fd7-ba43-dac1f8f63013&#34;</span><span class=p>,</span><span class=c1>  # Azure Management
+</span></span></span><span class=line><span class=cl>      <span class=p>]</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>grant_controls</span> {
+</span></span><span class=line><span class=cl><span class=n>    operator</span>          <span class=o>=</span> <span class=s2>&#34;AND&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    built_in_controls</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;mfa&#34;, &#34;compliantDevice&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=2-azure-rbac--role-based-access-control>2. Azure RBAC — Role-Based Access Control<a hidden class=anchor aria-hidden=true href=#2-azure-rbac--role-based-access-control>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List all users with Owner role at subscription level — should be minimal</span>
+</span></span><span class=line><span class=cl>az role assignment list <span class=se>\
+</span></span></span><span class=line><span class=cl>  --role <span class=s2>&#34;Owner&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --scope <span class=s2>&#34;/subscriptions/</span><span class=k>$(</span>az account show --query id -o tsv<span class=k>)</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --query <span class=s2>&#34;[].{principalName:principalName,principalType:principalType}&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  -o table
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Find all service principals with high-privilege roles</span>
+</span></span><span class=line><span class=cl>az role assignment list --all <span class=se>\
+</span></span></span><span class=line><span class=cl>  --query <span class=s2>&#34;[?principalType==&#39;ServicePrincipal&#39; &amp;&amp; (roleDefinitionName==&#39;Owner&#39; || roleDefinitionName==&#39;Contributor&#39;)]&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --output table
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Audit all role assignments — export for review</span>
+</span></span><span class=line><span class=cl>az role assignment list --all <span class=se>\
+</span></span></span><span class=line><span class=cl>  --query <span class=s2>&#34;[].{name:principalName,type:principalType,role:roleDefinitionName,scope:scope}&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  -o table &gt; role-assignments-audit.txt
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/rbac.tf — least privilege RBAC
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Custom role — only what the application needs
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_role_definition&#34; &#34;payment_processor&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>        <span class=o>=</span> <span class=s2>&#34;Payment Processor&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  scope</span>       <span class=o>=</span> <span class=s2>&#34;/subscriptions/${var.subscription_id}&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  description</span> <span class=o>=</span> <span class=s2>&#34;Allows reading payment-related secrets and writing to payment queue&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>permissions</span> {
+</span></span><span class=line><span class=cl><span class=n>    actions</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;Microsoft.KeyVault/vaults/secrets/read&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;Microsoft.ServiceBus/namespaces/queues/write&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;Microsoft.ServiceBus/namespaces/queues/read&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>    not_actions</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>    data_actions</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;Microsoft.KeyVault/vaults/secrets/getSecret/action&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  assignable_scopes</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group}&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_role_assignment&#34; &#34;payment_app&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  scope</span>                <span class=o>=</span> <span class=s2>&#34;/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group}&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  role_definition_name</span> <span class=o>=</span> <span class=k>azurerm_role_definition</span><span class=p>.</span><span class=k>payment_processor</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  principal_id</span>         <span class=o>=</span> <span class=k>azurerm_user_assigned_identity</span><span class=p>.</span><span class=k>payment_app</span><span class=p>.</span><span class=k>principal_id</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Managed Identity — no credentials to manage
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_user_assigned_identity&#34; &#34;payment_app&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                <span class=o>=</span> <span class=s2>&#34;payment-app-identity&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span> <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  location</span>            <span class=o>=</span> <span class=k>var</span><span class=p>.</span><span class=k>location</span>
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=3-storage-security>3. Storage Security<a hidden class=anchor aria-hidden=true href=#3-storage-security>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/storage.tf — secure Azure Storage
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_storage_account&#34; &#34;data&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                     <span class=o>=</span> <span class=s2>&#34;${replace(var.project, &#34;-&#34;, &#34;&#34;)}data&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span>      <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  location</span>                 <span class=o>=</span> <span class=k>var</span><span class=p>.</span><span class=k>location</span>
+</span></span><span class=line><span class=cl><span class=n>  account_tier</span>             <span class=o>=</span> <span class=s2>&#34;Standard&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  account_replication_type</span> <span class=o>=</span> <span class=s2>&#34;ZRS&#34;</span><span class=c1>   # zone-redundant
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>  # Security settings
+</span></span></span><span class=line><span class=cl><span class=n>  enable_https_traffic_only</span>       <span class=o>=</span> <span class=kt>true</span><span class=c1>   # deny HTTP
+</span></span></span><span class=line><span class=cl><span class=n>  min_tls_version</span>                 <span class=o>=</span> <span class=s2>&#34;TLS1_2&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  allow_nested_items_to_be_public</span> <span class=o>=</span> <span class=kt>false</span><span class=c1>  # no public blobs
+</span></span></span><span class=line><span class=cl><span class=n>  shared_access_key_enabled</span>       <span class=o>=</span> <span class=kt>false</span><span class=c1>  # use Entra ID only — disable storage keys
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>  # Encryption with customer-managed key
+</span></span></span><span class=line><span class=cl>  <span class=k>customer_managed_key</span> {
+</span></span><span class=line><span class=cl><span class=n>    key_vault_key_id</span>          <span class=o>=</span> <span class=k>azurerm_key_vault_key</span><span class=p>.</span><span class=k>storage</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>    user_assigned_identity_id</span> <span class=o>=</span> <span class=k>azurerm_user_assigned_identity</span><span class=p>.</span><span class=k>storage_cmk</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>identity</span> {
+</span></span><span class=line><span class=cl><span class=n>    type</span>         <span class=o>=</span> <span class=s2>&#34;UserAssigned&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    identity_ids</span> <span class=o>=</span> <span class=p>[</span><span class=k>azurerm_user_assigned_identity</span><span class=p>.</span><span class=k>storage_cmk</span><span class=p>.</span><span class=k>id</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>blob_properties</span> {
+</span></span><span class=line><span class=cl><span class=n>    versioning_enabled</span>  <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl><span class=n>    change_feed_enabled</span> <span class=o>=</span> <span class=kt>true</span>
+</span></span><span class=line><span class=cl>    <span class=k>delete_retention_policy</span> {
+</span></span><span class=line><span class=cl><span class=n>      days</span> <span class=o>=</span> <span class=m>30</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>    <span class=k>container_delete_retention_policy</span> {
+</span></span><span class=line><span class=cl><span class=n>      days</span> <span class=o>=</span> <span class=m>30</span>
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>network_rules</span> {
+</span></span><span class=line><span class=cl><span class=n>    default_action</span>             <span class=o>=</span> <span class=s2>&#34;Deny&#34;</span><span class=c1>     # deny all by default
+</span></span></span><span class=line><span class=cl><span class=n>    bypass</span>                     <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;AzureServices&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>    virtual_network_subnet_ids</span> <span class=o>=</span> <span class=p>[</span><span class=k>azurerm_subnet</span><span class=p>.</span><span class=k>private</span><span class=p>.</span><span class=k>id</span><span class=p>]</span><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>    # No ip_rules with 0.0.0.0/0
+</span></span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Diagnostic settings — log all storage operations
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_monitor_diagnostic_setting&#34; &#34;storage&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>               <span class=o>=</span> <span class=s2>&#34;storage-diagnostics&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  target_resource_id</span> <span class=o>=</span> <span class=s2>&#34;${azurerm_storage_account.data.id}/blobServices/default/&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  log_analytics_workspace_id</span> <span class=o>=</span> <span class=k>azurerm_log_analytics_workspace</span><span class=p>.</span><span class=k>security</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;StorageRead&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;StorageWrite&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;StorageDelete&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  metric { category</span> <span class=o>=</span> <span class=s2>&#34;Transaction&#34;</span> }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=4-network-security-groups>4. Network Security Groups<a hidden class=anchor aria-hidden=true href=#4-network-security-groups>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/nsg.tf — network security baseline
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_network_security_group&#34; &#34;app&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                <span class=o>=</span> <span class=s2>&#34;${var.project}-app-nsg&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  location</span>            <span class=o>=</span> <span class=k>var</span><span class=p>.</span><span class=k>location</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span> <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># DENY all internet inbound — explicit deny rule
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_network_security_rule&#34; &#34;deny_internet_inbound&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                        <span class=o>=</span> <span class=s2>&#34;DenyInternetInbound&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  priority</span>                    <span class=o>=</span> <span class=m>4096</span>
+</span></span><span class=line><span class=cl><span class=n>  direction</span>                   <span class=o>=</span> <span class=s2>&#34;Inbound&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  access</span>                      <span class=o>=</span> <span class=s2>&#34;Deny&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  protocol</span>                    <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  source_port_range</span>           <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  destination_port_range</span>      <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  source_address_prefix</span>       <span class=o>=</span> <span class=s2>&#34;Internet&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  destination_address_prefix</span>  <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span>         <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  network_security_group_name</span> <span class=o>=</span> <span class=k>azurerm_network_security_group</span><span class=p>.</span><span class=k>app</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Allow only from load balancer
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_network_security_rule&#34; &#34;allow_lb&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                        <span class=o>=</span> <span class=s2>&#34;AllowAzureLoadBalancerInbound&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  priority</span>                    <span class=o>=</span> <span class=m>100</span>
+</span></span><span class=line><span class=cl><span class=n>  direction</span>                   <span class=o>=</span> <span class=s2>&#34;Inbound&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  access</span>                      <span class=o>=</span> <span class=s2>&#34;Allow&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  protocol</span>                    <span class=o>=</span> <span class=s2>&#34;Tcp&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  source_port_range</span>           <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  destination_port_range</span>      <span class=o>=</span> <span class=s2>&#34;8080&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  source_address_prefix</span>       <span class=o>=</span> <span class=s2>&#34;AzureLoadBalancer&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  destination_address_prefix</span>  <span class=o>=</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span>         <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  network_security_group_name</span> <span class=o>=</span> <span class=k>azurerm_network_security_group</span><span class=p>.</span><span class=k>app</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># NEVER allow: source_address_prefix = &#34;*&#34; on SSH (22) or RDP (3389)
+</span></span></span><span class=line><span class=cl><span class=c1># Use Azure Bastion for administrative access instead
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_bastion_host&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                <span class=o>=</span> <span class=s2>&#34;${var.project}-bastion&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  location</span>            <span class=o>=</span> <span class=k>var</span><span class=p>.</span><span class=k>location</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span> <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl>  <span class=k>ip_configuration</span> {
+</span></span><span class=line><span class=cl><span class=n>    name</span>                 <span class=o>=</span> <span class=s2>&#34;bastion-ip-config&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>    subnet_id</span>            <span class=o>=</span> <span class=k>azurerm_subnet</span><span class=p>.</span><span class=k>bastion</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl><span class=n>    public_ip_address_id</span> <span class=o>=</span> <span class=k>azurerm_public_ip</span><span class=p>.</span><span class=k>bastion</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=5-defender-for-cloud--microsoft-sentinel>5. Defender for Cloud & Microsoft Sentinel<a hidden class=anchor aria-hidden=true href=#5-defender-for-cloud--microsoft-sentinel>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-hcl data-lang=hcl><span class=line><span class=cl><span class=c1># infra/defender.tf
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Enable Defender for Cloud on all supported resource types
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_security_center_subscription_pricing&#34; &#34;defender_servers&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  tier</span>          <span class=o>=</span> <span class=s2>&#34;Standard&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_type</span> <span class=o>=</span> <span class=s2>&#34;VirtualMachines&#34;</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_security_center_subscription_pricing&#34; &#34;defender_storage&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  tier</span>          <span class=o>=</span> <span class=s2>&#34;Standard&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_type</span> <span class=o>=</span> <span class=s2>&#34;StorageAccounts&#34;</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_security_center_subscription_pricing&#34; &#34;defender_sql&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  tier</span>          <span class=o>=</span> <span class=s2>&#34;Standard&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_type</span> <span class=o>=</span> <span class=s2>&#34;SqlServers&#34;</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_security_center_subscription_pricing&#34; &#34;defender_containers&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  tier</span>          <span class=o>=</span> <span class=s2>&#34;Standard&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_type</span> <span class=o>=</span> <span class=s2>&#34;Containers&#34;</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Microsoft Sentinel — SIEM
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_log_analytics_workspace&#34; &#34;security&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>                <span class=o>=</span> <span class=s2>&#34;${var.project}-security-workspace&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  location</span>            <span class=o>=</span> <span class=k>var</span><span class=p>.</span><span class=k>location</span>
+</span></span><span class=line><span class=cl><span class=n>  resource_group_name</span> <span class=o>=</span> <span class=k>azurerm_resource_group</span><span class=p>.</span><span class=k>main</span><span class=p>.</span><span class=k>name</span>
+</span></span><span class=line><span class=cl><span class=n>  sku</span>                 <span class=o>=</span> <span class=s2>&#34;PerGB2018&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  retention_in_days</span>   <span class=o>=</span> <span class=m>365</span>
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_sentinel_log_analytics_workspace_onboarding&#34; &#34;main&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  workspace_id</span> <span class=o>=</span> <span class=k>azurerm_log_analytics_workspace</span><span class=p>.</span><span class=k>security</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>}<span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1>
+</span></span></span><span class=line><span class=cl><span class=c1># Activity Log — ship all Azure control plane operations to Sentinel
+</span></span></span><span class=line><span class=cl><span class=k>resource</span> <span class=s2>&#34;azurerm_monitor_diagnostic_setting&#34; &#34;activity_log&#34;</span> {
+</span></span><span class=line><span class=cl><span class=n>  name</span>               <span class=o>=</span> <span class=s2>&#34;activity-log-to-sentinel&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  target_resource_id</span> <span class=o>=</span> <span class=s2>&#34;/subscriptions/${var.subscription_id}&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>  log_analytics_workspace_id</span> <span class=o>=</span> <span class=k>azurerm_log_analytics_workspace</span><span class=p>.</span><span class=k>security</span><span class=p>.</span><span class=k>id</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;Administrative&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;Security&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;ServiceHealth&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;Alert&#34;</span> }
+</span></span><span class=line><span class=cl><span class=n>  enabled_log { category</span> <span class=o>=</span> <span class=s2>&#34;Policy&#34;</span> }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><hr><h2 id=azure-security-baseline-checklist>Azure Security Baseline Checklist<a hidden class=anchor aria-hidden=true href=#azure-security-baseline-checklist>#</a></h2><pre tabindex=0><code>Entra ID
+□ MFA enforced via Conditional Access for all users
+□ Legacy authentication blocked via Conditional Access
+□ Privileged Identity Management (PIM) for admin roles — time-limited access
+□ No permanent Global Administrator assignments (use PIM)
+□ Break-glass accounts: 2, cloud-only, hardware MFA, monitored
+□ Password Protection: banned password list enabled
+□ Self-service password reset enabled with MFA
+
+RBAC
+□ No users with Owner at subscription level except emergency
+□ Contributor role reviewed quarterly — remove if unused
+□ Custom roles used instead of built-in for application workloads
+□ Managed Identities used instead of service principals with secrets
+□ Shared access keys disabled on storage accounts
+
+Storage
+□ enable_https_traffic_only = true
+□ min_tls_version = TLS1_2
+□ allow_nested_items_to_be_public = false
+□ Shared access keys disabled
+□ CMEK encryption on sensitive storage
+□ Soft delete enabled (30 days)
+□ Network rules: default_action = Deny
+
+Network
+□ No NSG rule allowing Internet → SSH/RDP
+□ Azure Bastion used for administrative access
+□ NSG flow logs enabled on all NSGs
+□ Azure DDoS Protection Standard enabled on production VNets
+□ Private Endpoints for PaaS services (Storage, SQL, Key Vault)
+
+Detection
+□ Defender for Cloud enabled (all resource types)
+□ Microsoft Sentinel connected to Log Analytics
+□ Activity Logs exported to Sentinel
+□ Entra ID sign-in logs shipped to Sentinel
+□ Alert rules for: global admin added, MFA disabled, bulk download
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/cloud-security/aws-baseline/><span class=ref-label>Cloud</span>AWS Security Baseline</a>
+<a class=ref-card href=/wiki/cloud-security/gcp-baseline/><span class=ref-label>Cloud</span>GCP Security Baseline</a>
+<a class=ref-card href=/wiki/cloud-security/cloud-misconfig-top10/><span class=ref-label>Cloud</span>Cloud Misconfiguration Top 10</a>
+<a class=ref-card href=/wiki/zero-trust/><span class=ref-label>Wiki</span>Zero Trust Architecture</a>
+<a class=ref-card href=/wiki/secure-architecture/secrets-management/><span class=ref-label>Architecture</span>Secrets Management</a>
+<a class=ref-card href=/wiki/advisory-assurance/controls-evidence/><span class=ref-label>Assurance</span>Controls & Evidence Catalogue</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/azure/>Azure</a></li><li><a href=https://logan23info.github.io/tags/cloud-security/>Cloud-Security</a></li><li><a href=https://logan23info.github.io/tags/entra-id/>Entra-ID</a></li><li><a href=https://logan23info.github.io/tags/rbac/>RBAC</a></li><li><a href=https://logan23info.github.io/tags/defender/>Defender</a></li><li><a href=https://logan23info.github.io/tags/sentinel/>Sentinel</a></li><li><a href=https://logan23info.github.io/tags/cis-benchmark/>CIS-Benchmark</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

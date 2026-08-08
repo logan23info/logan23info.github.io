@@ -1,0 +1,1297 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/posts/</link>
+    <description>Recent content in Posts on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/01-intro-to-threat-modelling/</guid>
+      <description>What threat modelling is, why every engineering team needs it, and the four core questions that drive every session.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-threat-modelling">What is Threat Modelling?</h2>
+<p>Threat modelling is a structured process for <strong>identifying security risks before attackers do</strong>. Instead of waiting for a penetration test or a production incident, you reason about your system&rsquo;s weaknesses during design — when changes are cheap.</p>
+<p>Every threat modelling session answers four questions:</p>
+<ol>
+<li><strong>What are we building?</strong> — understand the system</li>
+<li><strong>What can go wrong?</strong> — enumerate threats</li>
+<li><strong>What are we going to do about it?</strong> — decide on mitigations</li>
+<li><strong>Did we do a good enough job?</strong> — validate</li>
+</ol>
+<hr>
+<h2 id="why-most-teams-skip-it-and-why-they-shouldnt">Why most teams skip it (and why they shouldn&rsquo;t)</h2>
+<p>Done well, a threat modelling session is a <strong>60-minute whiteboard conversation</strong> that produces a prioritised list of risks — a handful of actionable tickets, not a 40-page report.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Finding stage</th>
+					<th>Average cost to fix</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Design</td>
+					<td>$80</td>
+			</tr>
+			<tr>
+					<td>Development</td>
+					<td>$240</td>
+			</tr>
+			<tr>
+					<td>Testing</td>
+					<td>$960</td>
+			</tr>
+			<tr>
+					<td>Production</td>
+					<td>$7,600+</td>
+			</tr>
+	</tbody>
+</table>
+<p>The earlier you find a flaw, the cheaper it is to fix.</p>
+<hr>
+<h2 id="what-you-need-to-start">What you need to start</h2>
+<ul>
+<li><strong>A data flow diagram (DFD)</strong> — how data moves through your system</li>
+<li><strong>A threat enumeration method</strong> — STRIDE, PASTA, or attack trees</li>
+<li><strong>A risk scoring approach</strong> — DREAD or CVSS</li>
+<li><strong>30–90 minutes</strong> with the people who built the system</li>
+</ul>
+<hr>
+<h2 id="data-flow-diagram-example">Data Flow Diagram example</h2>
+<pre tabindex="0"><code>[Browser] --HTTPS--&gt; [API Gateway] --gRPC--&gt; [Auth Service]
+                          |                        |
+                          v                        v
+                     [App DB]              [User DB]
+</code></pre><p>Every arrow crossing a trust boundary is a candidate threat.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-maturity-ladder">Where threat modelling fits in the maturity ladder</h2>
+<p>Threat modelling is <strong>Level 1</strong> of the <a href="/wiki/maturity-ladder/">Security Engineering Maturity Ladder</a>. It is the foundation that every other security discipline builds on:</p>
+<ul>
+<li><strong>Level 2 ASM</strong> validates your threat model with real exposure data</li>
+<li><strong>Level 3 Red Teaming</strong> proves whether your threat model&rsquo;s mitigations work</li>
+<li><strong>Level 4 Purple Teaming</strong> validates whether you can detect the attacks you modelled</li>
+<li><strong>Level 5 Threat Intelligence</strong> makes your threat model attacker-realistic</li>
+</ul>
+<p>Start here. Get good at this. Then climb the ladder.</p>
+<hr>
+<h2 id="frameworks-covered-in-this-wiki">Frameworks covered in this wiki</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Framework</th>
+					<th>Best for</th>
+					<th>Complexity</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="/wiki/stride/">STRIDE</a></td>
+					<td>General-purpose</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/dread/">DREAD</a></td>
+					<td>Risk scoring</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/pasta/">PASTA</a></td>
+					<td>Business-risk-driven</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td><a href="/wiki/attack-trees/">Attack Trees</a></td>
+					<td>Attack path analysis</td>
+					<td>Medium</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>STRIDE: The Practitioner&#39;s Guide</title>
+      <link>https://logan23info.github.io/posts/02-stride-methodology/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/02-stride-methodology/</guid>
+      <description>A complete walkthrough of STRIDE with worked examples on a real Auth Service.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-stride">What is STRIDE?</h2>
+<p>STRIDE is a threat categorisation framework developed at Microsoft in 1999. It gives you a checklist of threat types to apply systematically to each component and data flow in your system.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Threat</th>
+					<th>Violated property</th>
+					<th>Key question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>S</strong></td>
+					<td>Spoofing</td>
+					<td>Authentication</td>
+					<td>Can an attacker pretend to be someone else?</td>
+			</tr>
+			<tr>
+					<td><strong>T</strong></td>
+					<td>Tampering</td>
+					<td>Integrity</td>
+					<td>Can an attacker modify data or code?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Repudiation</td>
+					<td>Non-repudiation</td>
+					<td>Can an attacker deny having done something?</td>
+			</tr>
+			<tr>
+					<td><strong>I</strong></td>
+					<td>Information Disclosure</td>
+					<td>Confidentiality</td>
+					<td>Can an attacker read data they should not?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Denial of Service</td>
+					<td>Availability</td>
+					<td>Can an attacker make the system unavailable?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Elevation of Privilege</td>
+					<td>Authorisation</td>
+					<td>Can an attacker gain permissions they should not have?</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stride-by-element-type">STRIDE by element type</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Element</th>
+					<th>S</th>
+					<th>T</th>
+					<th>R</th>
+					<th>I</th>
+					<th>D</th>
+					<th>E</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External entity</td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Process</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+			</tr>
+			<tr>
+					<td>Data store</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Data flow</td>
+					<td></td>
+					<td>✓</td>
+					<td></td>
+					<td>✓</td>
+					<td>✓</td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="worked-example-auth-service">Worked example: Auth Service</h2>
+<h3 id="spoofing">Spoofing</h3>
+<ul>
+<li>JWT replay via stolen token</li>
+<li><strong>Mitigation:</strong> Short-lived JWTs (15 min), validate exp claim, rotate signing keys</li>
+</ul>
+<h3 id="tampering">Tampering</h3>
+<ul>
+<li>alg:none JWT forgery — remove signature, set algorithm to none</li>
+<li><strong>Mitigation:</strong> Whitelist allowed algorithms explicitly in jwt.verify()</li>
+</ul>
+<h3 id="repudiation">Repudiation</h3>
+<ul>
+<li>No audit log for password resets or login events</li>
+<li><strong>Mitigation:</strong> Structured auth event logging to tamper-evident store</li>
+</ul>
+<h3 id="information-disclosure">Information Disclosure</h3>
+<ul>
+<li>User enumeration via different error messages for valid vs invalid usernames</li>
+<li><strong>Mitigation:</strong> Return generic error messages to clients always</li>
+</ul>
+<h3 id="denial-of-service">Denial of Service</h3>
+<ul>
+<li>Credential stuffing exhausts database connection pool</li>
+<li><strong>Mitigation:</strong> Rate limiting per IP and account, connection pool limits</li>
+</ul>
+<h3 id="elevation-of-privilege">Elevation of Privilege</h3>
+<ul>
+<li>JWT role claim trusted without server-side validation</li>
+<li><strong>Mitigation:</strong> Always validate roles server-side from the database on every request</li>
+</ul>
+<hr>
+<h2 id="threat-register-output">Threat register output</h2>
+<table>
+	<thead>
+			<tr>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>Category</th>
+					<th>Severity</th>
+					<th>Mitigation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>Spoofing</td>
+					<td>High</td>
+					<td>Short TTL + rotation</td>
+			</tr>
+			<tr>
+					<td>T-02</td>
+					<td>alg:none forgery</td>
+					<td>Tampering</td>
+					<td>Critical</td>
+					<td>Whitelist algorithms</td>
+			</tr>
+			<tr>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>Repudiation</td>
+					<td>Medium</td>
+					<td>Auth event logging</td>
+			</tr>
+			<tr>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>Info Disclosure</td>
+					<td>Medium</td>
+					<td>Generic errors</td>
+			</tr>
+			<tr>
+					<td>T-05</td>
+					<td>Credential stuffing</td>
+					<td>DoS</td>
+					<td>High</td>
+					<td>Rate limiting</td>
+			</tr>
+			<tr>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>EoP</td>
+					<td>Critical</td>
+					<td>Server-side validation</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-scoring-your-findings">Next: scoring your findings</h2>
+<p>Use <a href="/posts/03-dread-scoring/">DREAD</a> to score and prioritise which threats to fix first.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>DREAD: Risk Scoring for Threat Modelling</title>
+      <link>https://logan23info.github.io/posts/03-dread-scoring/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/03-dread-scoring/</guid>
+      <description>How to use DREAD to score and prioritise threats so your team knows what to fix first.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-dread">What is DREAD?</h2>
+<p>DREAD is a risk scoring model. Where STRIDE tells you what kind of threat something is, DREAD tells you how bad it is — so you can prioritise your mitigation backlog.</p>
+<table>
+	<thead>
+			<tr>
+					<th>Letter</th>
+					<th>Dimension</th>
+					<th>Question</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Damage</td>
+					<td>How much damage if exploited?</td>
+			</tr>
+			<tr>
+					<td><strong>R</strong></td>
+					<td>Reproducibility</td>
+					<td>How easy is it to reproduce?</td>
+			</tr>
+			<tr>
+					<td><strong>E</strong></td>
+					<td>Exploitability</td>
+					<td>How much skill does exploitation require?</td>
+			</tr>
+			<tr>
+					<td><strong>A</strong></td>
+					<td>Affected users</td>
+					<td>How many users are impacted?</td>
+			</tr>
+			<tr>
+					<td><strong>D</strong></td>
+					<td>Discoverability</td>
+					<td>How easy is it to find the vulnerability?</td>
+			</tr>
+	</tbody>
+</table>
+<p>Each dimension scored 1–10. Final score = average of all five.</p>
+<hr>
+<h2 id="scoring-guide">Scoring guide</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Low (1–3)</th>
+					<th>Medium (4–6)</th>
+					<th>High (7–9)</th>
+					<th>Critical (10)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Damage</td>
+					<td>Non-sensitive leak</td>
+					<td>Partial exposure</td>
+					<td>Major breach</td>
+					<td>Full compromise</td>
+			</tr>
+			<tr>
+					<td>Reproducibility</td>
+					<td>Race condition</td>
+					<td>Works most times</td>
+					<td>Reliable</td>
+					<td>One-click</td>
+			</tr>
+			<tr>
+					<td>Exploitability</td>
+					<td>Expert + custom tools</td>
+					<td>Public tools</td>
+					<td>Script kiddie</td>
+					<td>No skills needed</td>
+			</tr>
+			<tr>
+					<td>Affected users</td>
+					<td>Single user</td>
+					<td>Subset</td>
+					<td>Most users</td>
+					<td>All users + admins</td>
+			</tr>
+			<tr>
+					<td>Discoverability</td>
+					<td>Source code only</td>
+					<td>Monitor traffic</td>
+					<td>Published CVE</td>
+					<td>Visible to anyone</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="risk-bands">Risk bands</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Score</th>
+					<th>Risk</th>
+					<th>Fix SLA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>9–10</td>
+					<td>Critical</td>
+					<td>Within 24 hours</td>
+			</tr>
+			<tr>
+					<td>7–8.9</td>
+					<td>High</td>
+					<td>Within 1 week</td>
+			</tr>
+			<tr>
+					<td>4–6.9</td>
+					<td>Medium</td>
+					<td>Within 1 sprint</td>
+			</tr>
+			<tr>
+					<td>1–3.9</td>
+					<td>Low</td>
+					<td>Backlog</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="prioritised-backlog-from-auth-service-threats">Prioritised backlog from Auth Service threats</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Priority</th>
+					<th>ID</th>
+					<th>Threat</th>
+					<th>DREAD</th>
+					<th>Action</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>T-02</td>
+					<td>alg:none JWT forgery</td>
+					<td>9.0</td>
+					<td>Fix immediately</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>T-06</td>
+					<td>JWT role manipulation</td>
+					<td>8.8</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>T-01</td>
+					<td>JWT replay</td>
+					<td>8.4</td>
+					<td>Fix this week</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>T-04</td>
+					<td>User enumeration</td>
+					<td>8.2</td>
+					<td>Fix this sprint</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>T-05</td>
+					<td>Credential stuffing DoS</td>
+					<td>6.6</td>
+					<td>Next sprint</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td>T-03</td>
+					<td>Missing audit logs</td>
+					<td>5.2</td>
+					<td>Next sprint</td>
+			</tr>
+	</tbody>
+</table>
+<p>Now your backlog is prioritised — no guessing what matters most.</p>
+<hr>
+<h2 id="dread-vs-alternatives">DREAD vs alternatives</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Model</th>
+					<th>Strengths</th>
+					<th>When to use</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>DREAD</td>
+					<td>Fast, intuitive</td>
+					<td>Quick triage, smaller teams</td>
+			</tr>
+			<tr>
+					<td>CVSS v3.1</td>
+					<td>Standardised, auditable</td>
+					<td>Enterprise, compliance</td>
+			</tr>
+			<tr>
+					<td>OWASP Risk Rating</td>
+					<td>Includes business impact</td>
+					<td>Stakeholder reporting</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see <a href="/posts/04-pasta-framework/">PASTA</a> for business-risk-aligned threat modelling.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>PASTA: Process for Attack Simulation and Threat Analysis</title>
+      <link>https://logan23info.github.io/posts/04-pasta-framework/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/04-pasta-framework/</guid>
+      <description>A deep dive into PASTA — the seven-stage, business-risk-aligned framework that thinks like an attacker.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-pasta">What is PASTA?</h2>
+<p>PASTA is a seven-stage, risk-centric threat modelling framework. Unlike STRIDE (developer-friendly, component-focused), PASTA is attacker-centric — it simulates realistic attack scenarios and ties every finding back to business impact.</p>
+<p>Use PASTA when findings need to reach business stakeholders, not just engineers.</p>
+<hr>
+<h2 id="the-seven-stages">The seven stages</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Stage</th>
+					<th>Name</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>I</td>
+					<td>Define business objectives</td>
+					<td>Business impact statement, crown jewels</td>
+			</tr>
+			<tr>
+					<td>II</td>
+					<td>Define technical scope</td>
+					<td>Architecture diagram, component inventory</td>
+			</tr>
+			<tr>
+					<td>III</td>
+					<td>Application decomposition</td>
+					<td>DFD, use case map, data classification</td>
+			</tr>
+			<tr>
+					<td>IV</td>
+					<td>Threat analysis</td>
+					<td>Threat library, attacker profiles</td>
+			</tr>
+			<tr>
+					<td>V</td>
+					<td>Vulnerability analysis</td>
+					<td>Vulnerabilities mapped to threats</td>
+			</tr>
+			<tr>
+					<td>VI</td>
+					<td>Attack modelling</td>
+					<td>Attack trees for high-priority threats</td>
+			</tr>
+			<tr>
+					<td>VII</td>
+					<td>Risk and impact analysis</td>
+					<td>Risk register with business-impact scores</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-i--business-objectives-example">Stage I — Business objectives example</h2>
+<pre tabindex="0"><code>Application: Payment processing API
+Crown jewels: cardholder data, payment tokens
+Regulatory scope: PCI-DSS Level 1
+Business impact of breach: up to $500k fines + customer churn
+Critical processes: checkout, refund, fraud detection
+</code></pre><hr>
+<h2 id="stage-iv--attacker-profiling">Stage IV — Attacker profiling</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Threat actor</th>
+					<th>Motivation</th>
+					<th>Capability</th>
+					<th>Likelihood</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>External cybercriminal</td>
+					<td>Financial</td>
+					<td>High</td>
+					<td>High</td>
+			</tr>
+			<tr>
+					<td>Insider threat</td>
+					<td>Sabotage</td>
+					<td>Medium</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Nation-state</td>
+					<td>IP theft</td>
+					<td>Very high</td>
+					<td>Low</td>
+			</tr>
+			<tr>
+					<td>Script kiddie</td>
+					<td>Opportunistic</td>
+					<td>Low</td>
+					<td>High</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="stage-vi--attack-tree-example">Stage VI — Attack tree example</h2>
+<pre tabindex="0"><code>Goal: obtain cardholder PAN in plaintext
+├── Attack the application layer
+│   ├── SQL injection → dump card_tokens table
+│   ├── IDOR → access other users stored cards
+│   └── XSS → steal card details from DOM
+├── Attack the infrastructure
+│   └── Intercept traffic (no TLS enforced)
+└── Attack the supply chain
+    └── Compromise payment SDK dependency
+</code></pre><hr>
+<h2 id="pasta-vs-stride">PASTA vs STRIDE</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>STRIDE</th>
+					<th>PASTA</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time</td>
+					<td>1–2 hours</td>
+					<td>1–2 days</td>
+			</tr>
+			<tr>
+					<td>Audience</td>
+					<td>Engineering</td>
+					<td>Engineering + business + leadership</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Threat list</td>
+					<td>Risk register with financial impact</td>
+			</tr>
+			<tr>
+					<td>Best for</td>
+					<td>Agile sprint review</td>
+					<td>Compliance, enterprise risk management</td>
+			</tr>
+	</tbody>
+</table>
+<p>Next: see how to embed all of this into your CI/CD pipeline in <a href="/posts/05-threat-modelling-in-devsecops/">Threat Modelling in DevSecOps</a>.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Threat Modelling in DevSecOps Pipelines</title>
+      <link>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/05-threat-modelling-in-devsecops/</guid>
+      <description>How to integrate threat modelling into your CI/CD pipeline so security is a gate, not an afterthought.</description>
+      <content:encoded><![CDATA[<h2 id="the-problem-with-point-in-time-threat-modelling">The problem with point-in-time threat modelling</h2>
+<p>Most organisations treat threat modelling as an annual exercise. By the next quarter the system has changed enough that the report is obsolete. DevSecOps flips this — security reviews happen continuously, at the pace of engineering.</p>
+<hr>
+<h2 id="where-threat-modelling-fits-in-the-pipeline">Where threat modelling fits in the pipeline</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Pipeline stage</th>
+					<th>Security activity</th>
+					<th>Threat modelling touchpoint</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Plan / design</td>
+					<td>Architecture review</td>
+					<td>Full threat model for new features</td>
+			</tr>
+			<tr>
+					<td>Code</td>
+					<td>Pre-commit hooks</td>
+					<td>STRIDE checklist for the component</td>
+			</tr>
+			<tr>
+					<td>Build</td>
+					<td>SAST, dependency scanning</td>
+					<td>Checks against threat register</td>
+			</tr>
+			<tr>
+					<td>Test</td>
+					<td>DAST, fuzzing</td>
+					<td>Attack scenarios from threat model</td>
+			</tr>
+			<tr>
+					<td>Release</td>
+					<td>Security gate</td>
+					<td>Unmitigated critical threats block release</td>
+			</tr>
+			<tr>
+					<td>Deploy</td>
+					<td>IaC scanning (Checkov)</td>
+					<td>Infrastructure threat model validated</td>
+			</tr>
+			<tr>
+					<td>Monitor</td>
+					<td>SIEM, anomaly detection</td>
+					<td>Threat model informs detection rules</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="pattern-1--threat-model-as-code">Pattern 1 — Threat model as code</h2>
+<p>Store your threat model as YAML alongside your code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;auth-service&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_reviewed</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-02&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">threats</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-01</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">spoofing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;JWT replay attack using stolen token&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">8.4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">mitigated</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mitigation</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;15-minute TTL enforced, refresh token rotation&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">T-02</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">tampering</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;alg:none JWT forgery&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dread_score</span><span class="p">:</span><span class="w"> </span><span class="m">9.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l">open</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;team-auth&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">due</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2026-08-09&#34;</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-2--security-gate-in-github-actions">Pattern 2 — Security gate in GitHub Actions</h2>
+<p>Block deployments if open Critical threats exist:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Check for open critical threats</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    python3 - &lt;&lt; &#39;PYEOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="sd">    import yaml, sys
+</span></span></span><span class="line"><span class="cl"><span class="sd">    with open(&#34;threat-model.yml&#34;) as f:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        model = yaml.safe_load(f)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    open_critical = [
+</span></span></span><span class="line"><span class="cl"><span class="sd">        t for t in model.get(&#34;threats&#34;, [])
+</span></span></span><span class="line"><span class="cl"><span class="sd">        if t.get(&#34;status&#34;) == &#34;open&#34; and t.get(&#34;dread_score&#34;, 0) &gt;= 9.0
+</span></span></span><span class="line"><span class="cl"><span class="sd">    ]
+</span></span></span><span class="line"><span class="cl"><span class="sd">    if open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">        print(&#34;BLOCKED: Open critical threats found:&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        for t in open_critical:
+</span></span></span><span class="line"><span class="cl"><span class="sd">            print(f&#34;  [{t[&#39;id&#39;]}] {t[&#39;description&#39;]} (DREAD: {t[&#39;dread_score&#39;]})&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">        sys.exit(1)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    print(&#34;Security gate passed.&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sd">    PYEOF</span><span class="w">
+</span></span></span></code></pre></div><hr>
+<h2 id="pattern-3--iac-scanning-with-checkov">Pattern 3 — IaC scanning with Checkov</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run Checkov on infra</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">bridgecrewio/checkov-action@v12</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l">infra/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l">terraform</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">soft_fail</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span></code></pre></div><p>Checkov maps IaC misconfigurations directly to STRIDE categories — an S3 bucket without encryption is Information Disclosure, an open security group is Elevation of Privilege.</p>
+<hr>
+<h2 id="realistic-cadence">Realistic cadence</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Trigger</th>
+					<th>Activity</th>
+					<th>Time</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New service or major feature</td>
+					<td>Full STRIDE threat model</td>
+					<td>60–90 min</td>
+			</tr>
+			<tr>
+					<td>PR touching auth/payments/PII</td>
+					<td>STRIDE checklist review</td>
+					<td>15 min</td>
+			</tr>
+			<tr>
+					<td>Every sprint</td>
+					<td>Review open threat register items</td>
+					<td>20 min</td>
+			</tr>
+			<tr>
+					<td>Quarterly</td>
+					<td>Full PASTA review for tier-1 services</td>
+					<td>Half day</td>
+			</tr>
+			<tr>
+					<td>Post-incident</td>
+					<td>Threat model update to reflect attacker path</td>
+					<td>30 min</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="next-level-climbing-the-maturity-ladder">Next level: climbing the maturity ladder</h2>
+<p>Once threat modelling is embedded in your pipeline, you are ready to climb:</p>
+<ul>
+<li><strong><a href="/wiki/asm/">Level 2: Attack Surface Management</a></strong> — discover what is actually exposed</li>
+<li><strong><a href="/wiki/red-teaming/">Level 3: Red Teaming</a></strong> — prove whether your mitigations work</li>
+<li><strong><a href="/wiki/purple-teaming/">Level 4: Purple Teaming</a></strong> — validate whether you can detect attacks</li>
+<li><strong><a href="/wiki/threat-intelligence/">Level 5: Threat Intelligence</a></strong> — make your threat models attacker-realistic</li>
+<li><strong><a href="/wiki/zero-trust/">Level 6: Zero Trust</a></strong> — eliminate entire threat categories architecturally</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>The Security Engineering Maturity Ladder — Complete Guide</title>
+      <link>https://logan23info.github.io/posts/06-security-engineering-maturity/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/06-security-engineering-maturity/</guid>
+      <description>A complete guide to all six levels of the Security Engineering Maturity Ladder — from Threat Modelling through to Zero Trust Architecture.</description>
+      <content:encoded><![CDATA[<h2 id="overview">Overview</h2>
+<p>The Security Engineering Maturity Ladder describes how organisations evolve their security from reactive to proactive, from manual to automated, from hypothetical to intelligence-driven.</p>
+<pre tabindex="0"><code>Level 1 — Threat Modelling           What could go wrong?
+Level 2 — Attack Surface Management  Where are we exposed right now?
+Level 3 — Red Teaming                Can attacks actually succeed?
+Level 4 — Purple Teaming             Can we detect those attacks?
+Level 5 — Threat Intelligence        Who is actually targeting us?
+Level 6 — Zero Trust Architecture    Eliminate trust entirely
+   +1   — Supply Chain Security      Is our code itself safe?
+</code></pre><p>Most organisations operate at Level 1–2. Reaching Level 4–5 puts you in the top 10% of security programmes globally.</p>
+<hr>
+<h2 id="level-1--threat-modelling">Level 1 — Threat Modelling</h2>
+<p><strong>Core question:</strong> What could go wrong with this system?</p>
+<p><strong>What it is:</strong> A structured design-time process for identifying security risks before code is written. Uses frameworks like STRIDE to enumerate threats per component and DREAD to score and prioritise them.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Data flow diagram (DFD) of the system</li>
+<li>Threat register with mitigations</li>
+<li>Security backlog for engineering</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat model produced for every new service</li>
+<li>Findings tracked as engineering tickets</li>
+<li>Security checklist on every PR</li>
+</ul>
+<p><strong>Time investment:</strong> 60–90 min per feature, 15 min per PR</p>
+<p><strong>Full reference:</strong> <a href="/wiki/stride/">Threat Modelling Wiki</a> | <a href="/wiki/stride/">STRIDE</a> | <a href="/wiki/dread/">DREAD</a> | <a href="/wiki/pasta/">PASTA</a></p>
+<hr>
+<h2 id="level-2--attack-surface-management">Level 2 — Attack Surface Management</h2>
+<p><strong>Core question:</strong> What are we actually exposing to the internet right now?</p>
+<p><strong>What it is:</strong> Continuous discovery and monitoring of every internet-facing asset — including assets the organisation does not know it has. Validates and extends threat models with real-world exposure data.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Continuously updated asset inventory</li>
+<li>Risk-scored exposure list</li>
+<li>Alerts on new exposures within hours</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>All internet-facing assets discovered automatically</li>
+<li>Unknown or shadow IT assets detected and investigated</li>
+<li>Certificate expiry monitored automatically</li>
+<li>New exposures trigger alerts within 4 hours</li>
+</ul>
+<p><strong>Free tools to start:</strong> Subfinder, Amass, Nuclei, httpx</p>
+<p><strong>Time investment:</strong> Initial setup 1–2 days, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/asm/">Attack Surface Management Wiki</a></p>
+<hr>
+<h2 id="level-3--red-teaming">Level 3 — Red Teaming</h2>
+<p><strong>Core question:</strong> If an attacker tried to compromise us using our threat model&rsquo;s attack scenarios, would they succeed?</p>
+<p><strong>What it is:</strong> Authorised simulation of a real-world adversary. A red team attempts to achieve a specific objective (steal data, deploy ransomware, access admin systems) using the same techniques real attackers use, mapped to MITRE ATT&amp;CK.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Attack narrative — how far the red team got and how</li>
+<li>ATT&amp;CK heat map of techniques used</li>
+<li>Detection gaps — what the blue team missed</li>
+<li>Business impact statement</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Red team exercises run at least annually</li>
+<li>Threat actor profile derived from threat intelligence</li>
+<li>Findings mapped to MITRE ATT&amp;CK</li>
+<li>Results feed back into threat models</li>
+</ul>
+<p><strong>Tools:</strong> Sliver C2 (free), Metasploit (free), BloodHound (free), Cobalt Strike (commercial)</p>
+<p><strong>Time investment:</strong> 2–8 weeks per engagement</p>
+<p><strong>Full reference:</strong> <a href="/wiki/red-teaming/">Red Teaming Wiki</a></p>
+<hr>
+<h2 id="level-4--purple-teaming">Level 4 — Purple Teaming</h2>
+<p><strong>Core question:</strong> Does our SIEM/EDR actually detect the attacks from the red team exercise?</p>
+<p><strong>What it is:</strong> Red and blue teams working together simultaneously. The red team executes one ATT&amp;CK technique at a time while the blue team checks whether their detection tools catch it. Gaps are fixed in real time.</p>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>ATT&amp;CK detection coverage map (% of techniques detected)</li>
+<li>Detection gap backlog (rules to write)</li>
+<li>SOC playbook improvements</li>
+<li>MTTD (Mean Time to Detect) trend over time</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Purple team exercises run quarterly</li>
+<li>Every technique validated against live SIEM rules</li>
+<li>Detection gaps addressed during the exercise</li>
+<li>Atomic Red Team tests run automatically in CI</li>
+</ul>
+<p><strong>Tools:</strong> VECTR (free), Atomic Red Team (free), ATT&amp;CK Navigator (free), Sigma (free)</p>
+<p><strong>Time investment:</strong> 1–2 days per exercise, quarterly</p>
+<p><strong>Full reference:</strong> <a href="/wiki/purple-teaming/">Purple Teaming Wiki</a></p>
+<hr>
+<h2 id="level-5--threat-intelligence">Level 5 — Threat Intelligence</h2>
+<p><strong>Core question:</strong> Which real-world threat actors are targeting organisations like ours, and what techniques are they using right now?</p>
+<p><strong>What it is:</strong> Structured, curated information about real threat actors — their identities, motivations, and specific tactics — used to make every other security level more precise and relevant. Transforms threat models from hypothetical to intelligence-driven.</p>
+<p><strong>Three tiers:</strong></p>
+<ul>
+<li><strong>Strategic:</strong> What threats should we prepare for this year? (Board/C-suite)</li>
+<li><strong>Operational:</strong> What campaigns are active right now? (Security managers)</li>
+<li><strong>Tactical:</strong> What IOCs should we block today? (SOC analysts)</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Threat actor profiles for your sector</li>
+<li>TTP mappings to MITRE ATT&amp;CK</li>
+<li>IOC feeds integrated with SIEM and firewall</li>
+<li>Intelligence-driven threat models and red team scope</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>Threat models reference real attacker groups</li>
+<li>IOCs ingested and actioned within 1 hour</li>
+<li>Threat hunting hypotheses derived from intelligence</li>
+<li>Intelligence shared with sector peers (ISACs)</li>
+</ul>
+<p><strong>Free tools:</strong> MISP, OpenCTI, OTX AlienVault, URLhaus, MalwareBazaar</p>
+<p><strong>Time investment:</strong> Initial setup 1 week, then ongoing</p>
+<p><strong>Full reference:</strong> <a href="/wiki/threat-intelligence/">Threat Intelligence Wiki</a></p>
+<hr>
+<h2 id="level-6--zero-trust-architecture">Level 6 — Zero Trust Architecture</h2>
+<p><strong>Core question:</strong> What if we never trusted any user, device, or network location by default — ever?</p>
+<p><strong>What it is:</strong> An architectural transformation based on &ldquo;never trust, always verify.&rdquo; Every request — regardless of source — is authenticated, authorised, and continuously validated. Microsegmentation prevents lateral movement. Identity replaces the network as the security perimeter.</p>
+<p><strong>Five pillars:</strong></p>
+<ol>
+<li><strong>Identity</strong> — MFA everywhere, passwordless for privileged accounts, continuous risk scoring</li>
+<li><strong>Devices</strong> — Every device registered, health-checked, and compliance-validated before access</li>
+<li><strong>Network</strong> — Microsegmentation, no implicit trust based on network location, encrypt east-west traffic</li>
+<li><strong>Applications</strong> — Per-app access control, SSO + MFA, session continuous validation</li>
+<li><strong>Data</strong> — Classification, encryption at rest and in transit, DLP</li>
+</ol>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>Architecture where lateral movement is structurally prevented</li>
+<li>Identity-based access replacing VPN</li>
+<li>Complete device inventory with compliance enforcement</li>
+<li>Microsegmented network</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>MFA on 100% of applications</li>
+<li>VPN replaced by identity-aware proxy</li>
+<li>Device compliance checked before every access grant</li>
+<li>Privileged access managed via PAM solution</li>
+<li>All internal traffic encrypted</li>
+</ul>
+<p><strong>Reference implementation:</strong> Google BeyondCorp (published as open papers)
+<strong>Standard:</strong> NIST SP 800-207</p>
+<p><strong>Time investment:</strong> Multi-year transformation — typically 3 years to full maturity</p>
+<p><strong>Full reference:</strong> <a href="/wiki/zero-trust/">Zero Trust Architecture Wiki</a></p>
+<hr>
+<h2 id="1--supply-chain-security">+1 — Supply Chain Security</h2>
+<p><strong>Core question:</strong> Is the third-party code we depend on safe, verified, and unmodified?</p>
+<p><strong>What it is:</strong> Securing not just your code but every dependency, build tool, and third-party component. Modern software is 80–90% open source written by others — a compromised dependency undermines every other security control.</p>
+<p><strong>Key capabilities:</strong></p>
+<ul>
+<li>SBOM (Software Bill of Materials) — know every component</li>
+<li>SLSA framework — verify build integrity and provenance</li>
+<li>Dependency scanning — catch CVEs before they reach production</li>
+<li>Artifact signing — prove artifacts have not been tampered with</li>
+<li>Build pipeline hardening — protect the pipeline itself</li>
+</ul>
+<p><strong>Key outputs:</strong></p>
+<ul>
+<li>SBOM for every production build</li>
+<li>Signed and verified build artifacts</li>
+<li>Hardened build pipeline</li>
+<li>Dependency vulnerability alerting</li>
+</ul>
+<p><strong>Maturity signs:</strong></p>
+<ul>
+<li>SBOM generated for every release</li>
+<li>All dependencies scanned on every build</li>
+<li>Build artifacts signed with Cosign/Sigstore</li>
+<li>No dependency updates merged without automated security review</li>
+</ul>
+<p><strong>Free tools:</strong> Syft (SBOM), Grype (scanning), Cosign/Sigstore (signing), Dependabot (GitHub-native), pip-audit, npm audit</p>
+<p><strong>Time investment:</strong> 1–2 weeks initial setup, then automated</p>
+<p><strong>Full reference:</strong> <a href="/wiki/supply-chain/">Supply Chain Security Wiki</a></p>
+<hr>
+<h2 id="how-the-levels-reinforce-each-other">How the levels reinforce each other</h2>
+<pre tabindex="0"><code>Threat Intelligence  ──feeds──▶  Threat Modelling  ──defines──▶  Red Team scope
+        │                               │                               │
+        │                               ▼                               ▼
+        │                          ASM validates              Purple Team validates
+        │                          real exposure              detection coverage
+        │                               │                               │
+        └───────────────────────────────┴───────────────────────────────┘
+                                        │
+                                        ▼
+                              Zero Trust eliminates
+                              entire threat categories
+                                        │
+                                        ▼
+                              Supply Chain secures
+                              the foundation everything runs on
+</code></pre><hr>
+<h2 id="where-to-start-based-on-your-organisation-size">Where to start based on your organisation size</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Size</th>
+					<th>Start here</th>
+					<th>Next 6 months</th>
+					<th>Year 2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Startup</td>
+					<td>Threat Modelling (STRIDE)</td>
+					<td>Dependabot + SBOM</td>
+					<td>ASM</td>
+			</tr>
+			<tr>
+					<td>Scale-up</td>
+					<td>Threat Modelling + ASM</td>
+					<td>Threat Intel feeds</td>
+					<td>First Red Team</td>
+			</tr>
+			<tr>
+					<td>Enterprise</td>
+					<td>Purple Teaming + Threat Intel</td>
+					<td>Zero Trust roadmap</td>
+					<td>TIBER-EU / CBEST</td>
+			</tr>
+			<tr>
+					<td>Regulated (finance/health)</td>
+					<td>All levels audit</td>
+					<td>DORA compliance</td>
+					<td>Continuous purple teaming</td>
+			</tr>
+	</tbody>
+</table>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Advisory &amp; Assurance — The Governance Layer Over Security Engineering</title>
+      <link>https://logan23info.github.io/posts/07-advisory-assurance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/posts/07-advisory-assurance/</guid>
+      <description>How Advisory and Assurance activities — Test of Design, Test of Implementation, and Test of Operating Effectiveness — validate the controls your security engineering team builds.</description>
+      <content:encoded><![CDATA[<h2 id="the-missing-layer">The missing layer</h2>
+<p>You have threat models, a red team, purple team exercises, and a Zero Trust roadmap. But how does anyone — the board, your customers, regulators — know the controls are actually working?</p>
+<p>That is the role of <strong>Advisory &amp; Assurance</strong>: an independent governance layer that validates what security engineering builds.</p>
+<pre tabindex="0"><code>Security Engineering   → designs and builds controls
+Advisory               → advises on control design and gaps
+Assurance              → independently validates controls work
+</code></pre><p>These are not competing functions. They are the complete control lifecycle.</p>
+<hr>
+<h2 id="the-three-testing-disciplines">The three testing disciplines</h2>
+<h3 id="test-of-design-tod">Test of Design (ToD)</h3>
+<p><strong>Question: Is the control designed correctly to address the risk?</strong></p>
+<p>ToD happens before or during implementation. An assurance reviewer examines the control design — the architecture document, threat model, or policy — and assesses whether it logically mitigates the risk it is intended to address.</p>
+<p>A control can fail ToD because:</p>
+<ul>
+<li>It does not address the root cause of the risk</li>
+<li>It has a logical bypass built into the design</li>
+<li>It does not meet the relevant regulatory requirement</li>
+</ul>
+<p><strong>Real example:</strong>
+A company designs an MFA policy that requires MFA for all users — but exempts service accounts. An attacker who compromises a service account has full access with no MFA challenge. The design has a gap. ToD catches this before implementation.</p>
+<hr>
+<h3 id="test-of-implementation-toi">Test of Implementation (ToI)</h3>
+<p><strong>Question: Has the control been correctly implemented as designed?</strong></p>
+<p>ToI happens after implementation. The assurance reviewer tests whether the control is actually in place — not just documented.</p>
+<p>Common ToI techniques:</p>
+<ul>
+<li>Configuration inspection (check the actual settings)</li>
+<li>Walkthrough testing (step through the control operation)</li>
+<li>Technical testing (attempt to bypass the control)</li>
+<li>Evidence sampling (verify the control for a sample of cases)</li>
+</ul>
+<p><strong>Real example:</strong>
+MFA policy says all users must have MFA. ToI finds that 14 service accounts, created before the policy, have never had MFA enrolled. The design was correct but implementation is incomplete. ToI catches this.</p>
+<hr>
+<h3 id="test-of-operating-effectiveness-tooe">Test of Operating Effectiveness (ToOE)</h3>
+<p><strong>Question: Has the control operated consistently and effectively over the review period?</strong></p>
+<p>ToOE covers a period of time — typically 3, 6, or 12 months. It is not enough that a control worked once. It must work every time, for every applicable case, throughout the period.</p>
+<p>This is the equivalent of <strong>SOC 2 Type II</strong> — the gold standard for customer-facing security assurance.</p>
+<p><strong>Real example:</strong>
+MFA is enforced for all users. But in March, a bulk user import script created 200 accounts without triggering MFA enrollment. For 11 days, those accounts had no MFA. The control failed to operate effectively for 11 days. ToOE catches this through population sampling or continuous monitoring.</p>
+<hr>
+<h2 id="how-this-maps-to-compliance-frameworks">How this maps to compliance frameworks</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Framework</th>
+					<th>ToD equivalent</th>
+					<th>ToI equivalent</th>
+					<th>ToOE equivalent</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SOC 2</td>
+					<td>Trust service criteria design</td>
+					<td>Type I opinion</td>
+					<td>Type II opinion</td>
+			</tr>
+			<tr>
+					<td>ISO 27001</td>
+					<td>Control objective review</td>
+					<td>Implementation audit</td>
+					<td>Surveillance audit</td>
+			</tr>
+			<tr>
+					<td>PCI-DSS</td>
+					<td>Requirement design review</td>
+					<td>SAQ / onsite assessment</td>
+					<td>Continuous compliance</td>
+			</tr>
+			<tr>
+					<td>DORA (EU)</td>
+					<td>ICT risk control design</td>
+					<td>TLPT (threat-led pen test)</td>
+					<td>Annual ICT assurance</td>
+			</tr>
+			<tr>
+					<td>NIST CSF</td>
+					<td>Identify + Protect</td>
+					<td>Detect</td>
+					<td>Recover + continuous</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="advisory-activities">Advisory activities</h2>
+<p>Beyond testing, the advisory function provides forward-looking guidance:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Activity</th>
+					<th>Description</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Control gap analysis</td>
+					<td>Compare current controls to framework requirements</td>
+					<td>Gap register with priorities</td>
+			</tr>
+			<tr>
+					<td>Risk advisory</td>
+					<td>Advise on emerging risks and appropriate controls</td>
+					<td>Risk advisory report</td>
+			</tr>
+			<tr>
+					<td>Architecture review</td>
+					<td>Review new system designs for security control adequacy</td>
+					<td>Design findings</td>
+			</tr>
+			<tr>
+					<td>Regulatory advisory</td>
+					<td>Interpret new regulations and advise on compliance</td>
+					<td>Compliance roadmap</td>
+			</tr>
+			<tr>
+					<td>Security programme review</td>
+					<td>Assess overall security programme maturity</td>
+					<td>Maturity assessment</td>
+			</tr>
+			<tr>
+					<td>Red team debrief</td>
+					<td>Facilitate discussion of red team findings with stakeholders</td>
+					<td>Remediation priorities</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>The full control assurance lifecycle:</p>
+<pre tabindex="0"><code>1. Risk identified (via threat model, incident, regulatory change)
+        ↓
+2. Control designed (ToD — is the design adequate?)
+        ↓
+3. Control implemented (ToI — is it correctly in place?)
+        ↓
+4. Control operated (ToOE — is it working consistently?)
+        ↓
+5. Evidence collected (Controls &amp; Evidence Catalogue)
+        ↓
+6. Findings reported (to management, audit committee, regulators)
+        ↓
+7. Gaps remediated → back to step 2
+</code></pre><hr>
+<h2 id="quick-reference-what-to-test-and-when">Quick reference: what to test and when</h2>
+<table>
+	<thead>
+			<tr>
+					<th>When</th>
+					<th>Activity</th>
+					<th>Test type</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>New system being designed</td>
+					<td>Architecture review, threat model review</td>
+					<td>ToD</td>
+			</tr>
+			<tr>
+					<td>Pre-go-live</td>
+					<td>Configuration review, walkthrough testing</td>
+					<td>ToI</td>
+			</tr>
+			<tr>
+					<td>Post-go-live (30 days)</td>
+					<td>Verify control operating</td>
+					<td>ToI</td>
+			</tr>
+			<tr>
+					<td>Quarterly</td>
+					<td>Access review validation, exception review</td>
+					<td>ToOE</td>
+			</tr>
+			<tr>
+					<td>Annually</td>
+					<td>Full control effectiveness review</td>
+					<td>ToOE</td>
+			</tr>
+			<tr>
+					<td>Before SOC 2 audit</td>
+					<td>Readiness assessment</td>
+					<td>ToD + ToI + ToOE</td>
+			</tr>
+			<tr>
+					<td>After security incident</td>
+					<td>Post-incident control review</td>
+					<td>ToI + ToOE</td>
+			</tr>
+			<tr>
+					<td>New regulation</td>
+					<td>Regulatory gap analysis</td>
+					<td>ToD</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/advisory-assurance/tod/"><span class="ref-label">Assurance</span>Test of Design (ToD)</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/toi/"><span class="ref-label">Assurance</span>Test of Implementation (ToI)</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/tooe/"><span class="ref-label">Assurance</span>Test of Operating Effectiveness</a>
+  <a class="ref-card" href="/wiki/advisory-assurance/controls-evidence/"><span class="ref-label">Assurance</span>Controls & Evidence Catalogue</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Security Engineering Maturity Ladder</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Adversary-Simulation on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/tags/adversary-simulation/</link>
+    <description>Recent content in Adversary-Simulation on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/tags/adversary-simulation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Red Teaming &amp; Adversary Simulation</title>
+      <link>https://logan23info.github.io/wiki/red-teaming/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/wiki/red-teaming/</guid>
+      <description>Complete guide to Red Teaming — from basic penetration testing through to full adversary simulation using MITRE ATT&amp;amp;CK.</description>
+      <content:encoded><![CDATA[<h2 id="what-is-red-teaming">What is Red Teaming?</h2>
+<p>Red Teaming is the authorised simulation of a real-world adversary against your organisation&rsquo;s people, processes, and technology. It goes far beyond penetration testing — rather than finding vulnerabilities in isolation, a red team simulates a complete attack campaign from initial access through to the attacker&rsquo;s end goal (data theft, ransomware deployment, business disruption).</p>
+<p>The term comes from military wargaming, where a &ldquo;red team&rdquo; plays the role of the enemy to test defensive plans.</p>
+<h3 id="red-team-vs-penetration-test">Red Team vs Penetration Test</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>Penetration Test</th>
+					<th>Red Team</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Goal</td>
+					<td>Find as many vulnerabilities as possible</td>
+					<td>Achieve a specific attacker goal</td>
+			</tr>
+			<tr>
+					<td>Duration</td>
+					<td>Days to weeks</td>
+					<td>Weeks to months</td>
+			</tr>
+			<tr>
+					<td>Scope</td>
+					<td>Defined list of systems</td>
+					<td>Entire organisation</td>
+			</tr>
+			<tr>
+					<td>Rules</td>
+					<td>Specific targets in scope</td>
+					<td>Anything in scope to reach the goal</td>
+			</tr>
+			<tr>
+					<td>Stealth</td>
+					<td>Not required</td>
+					<td>Critical — avoid detection</td>
+			</tr>
+			<tr>
+					<td>Output</td>
+					<td>Vulnerability list</td>
+					<td>Attack narrative + detection gaps</td>
+			</tr>
+			<tr>
+					<td>Frequency</td>
+					<td>Annually / per compliance</td>
+					<td>Annually or after major changes</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="mitre-attck-framework">MITRE ATT&amp;CK Framework</h2>
+<p>Every red team operation should be mapped to MITRE ATT&amp;CK — the world&rsquo;s most comprehensive knowledge base of real adversary tactics and techniques, built from analysis of thousands of real-world incidents.</p>
+<h3 id="the-attck-matrix">The ATT&amp;CK Matrix</h3>
+<p>ATT&amp;CK organises adversary behaviour into <strong>14 Tactics</strong> (the why) and <strong>hundreds of Techniques</strong> (the how):</p>
+<table>
+	<thead>
+			<tr>
+					<th>Tactic</th>
+					<th>Description</th>
+					<th>Example technique</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Reconnaissance</td>
+					<td>Gather information</td>
+					<td>T1595: Active Scanning</td>
+			</tr>
+			<tr>
+					<td>Resource Development</td>
+					<td>Build attack infrastructure</td>
+					<td>T1583: Acquire Infrastructure</td>
+			</tr>
+			<tr>
+					<td>Initial Access</td>
+					<td>Get into the environment</td>
+					<td>T1566: Phishing</td>
+			</tr>
+			<tr>
+					<td>Execution</td>
+					<td>Run malicious code</td>
+					<td>T1059: Command and Scripting</td>
+			</tr>
+			<tr>
+					<td>Persistence</td>
+					<td>Maintain foothold</td>
+					<td>T1053: Scheduled Task/Job</td>
+			</tr>
+			<tr>
+					<td>Privilege Escalation</td>
+					<td>Gain higher permissions</td>
+					<td>T1068: Exploit Vulnerabilities</td>
+			</tr>
+			<tr>
+					<td>Defense Evasion</td>
+					<td>Avoid detection</td>
+					<td>T1070: Indicator Removal</td>
+			</tr>
+			<tr>
+					<td>Credential Access</td>
+					<td>Steal credentials</td>
+					<td>T1003: OS Credential Dumping</td>
+			</tr>
+			<tr>
+					<td>Discovery</td>
+					<td>Explore the environment</td>
+					<td>T1046: Network Service Scanning</td>
+			</tr>
+			<tr>
+					<td>Lateral Movement</td>
+					<td>Move between systems</td>
+					<td>T1021: Remote Services</td>
+			</tr>
+			<tr>
+					<td>Collection</td>
+					<td>Gather data of interest</td>
+					<td>T1005: Data from Local System</td>
+			</tr>
+			<tr>
+					<td>Command &amp; Control</td>
+					<td>Communicate with compromised systems</td>
+					<td>T1071: App Layer Protocol</td>
+			</tr>
+			<tr>
+					<td>Exfiltration</td>
+					<td>Steal data</td>
+					<td>T1041: Exfil over C2 Channel</td>
+			</tr>
+			<tr>
+					<td>Impact</td>
+					<td>Achieve attacker goal</td>
+					<td>T1486: Data Encrypted for Impact</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="red-team-operation-phases">Red Team operation phases</h2>
+<h3 id="phase-1--planning-and-scoping">Phase 1 — Planning and scoping</h3>
+<p>Define:</p>
+<ul>
+<li><strong>Objective:</strong> What is the attacker trying to achieve? (e.g. access customer database, deploy ransomware on 10 systems, access CFO email)</li>
+<li><strong>Threat actor profile:</strong> Which real-world attacker group are we emulating? (e.g. FIN7 for financial sector, APT29 for government)</li>
+<li><strong>Rules of engagement:</strong> What is explicitly out of scope? (production databases, specific systems)</li>
+<li><strong>Success criteria:</strong> How will we measure success or failure?</li>
+<li><strong>Emergency procedures:</strong> How does the red team stop if something goes wrong?</li>
+</ul>
+<h3 id="phase-2--reconnaissance">Phase 2 — Reconnaissance</h3>
+<p>Gather intelligence on the target without touching their systems:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># OSINT on the target organisation</span>
+</span></span><span class="line"><span class="cl">theHarvester -d targetcompany.com -b all
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Find employee names and roles on LinkedIn</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Identify technology stack from job postings</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Enumerate subdomains and IP ranges</span>
+</span></span><span class="line"><span class="cl">subfinder -d targetcompany.com <span class="p">|</span> httpx -title -tech-detect
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Search for leaked credentials</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Check HaveIBeenPwned API for compromised accounts</span>
+</span></span></code></pre></div><h3 id="phase-3--initial-access">Phase 3 — Initial access</h3>
+<p>Attempt to gain a foothold using the threat actor&rsquo;s preferred techniques:</p>
+<p><strong>Common initial access vectors:</strong></p>
+<ul>
+<li>Spear phishing with malicious attachments or links</li>
+<li>Exploiting internet-facing applications (VPN, email, web apps)</li>
+<li>Supply chain compromise (trojanised software update)</li>
+<li>Valid credentials (obtained via OSINT, credential stuffing, or purchase)</li>
+<li>Physical access (USB drops, tailgating)</li>
+</ul>
+<h3 id="phase-4--establish-persistence">Phase 4 — Establish persistence</h3>
+<p>Once inside, ensure the foothold survives reboots and credential rotations:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Common persistence mechanisms (ATT&amp;CK T1053)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Scheduled tasks (Windows)</span>
+</span></span><span class="line"><span class="cl">schtasks /create /tn <span class="s2">&#34;WindowsUpdate&#34;</span> /tr <span class="s2">&#34;C:\Users\Public\beacon.exe&#34;</span> /sc onlogon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Cron jobs (Linux)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;*/5 * * * * /tmp/.update&#34;</span> &gt;&gt; /var/spool/cron/root
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Registry run keys (Windows)</span>
+</span></span><span class="line"><span class="cl">reg add <span class="s2">&#34;HKCU\Software\Microsoft\Windows\CurrentVersion\Run&#34;</span> /v <span class="s2">&#34;Update&#34;</span> /t REG_SZ /d <span class="s2">&#34;C:\beacon.exe&#34;</span>
+</span></span></code></pre></div><h3 id="phase-5--privilege-escalation">Phase 5 — Privilege escalation</h3>
+<p>Escalate from standard user to administrator/root:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check for misconfigured sudo (Linux)</span>
+</span></span><span class="line"><span class="cl">sudo -l
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Look for SUID binaries</span>
+</span></span><span class="line"><span class="cl">find / -perm -4000 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows: check for unquoted service paths</span>
+</span></span><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode <span class="p">|</span> findstr /i <span class="s2">&#34;auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;c:\windows\\&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Token impersonation with tools like Rubeus or Mimikatz</span>
+</span></span></code></pre></div><h3 id="phase-6--lateral-movement">Phase 6 — Lateral movement</h3>
+<p>Move from the initial foothold to higher-value targets:</p>
+<pre tabindex="0"><code>Initial foothold (developer laptop)
+  → Steal credentials from memory (Mimikatz)
+    → Authenticate to internal file server
+      → Find database connection strings in config files
+        → Access production database
+          → Exfiltrate customer records
+</code></pre><p><strong>Common techniques:</strong></p>
+<ul>
+<li>Pass-the-Hash (PTH) — reuse NTLM hashes without cracking</li>
+<li>Pass-the-Ticket (PTT) — Kerberos ticket reuse (Golden/Silver ticket attacks)</li>
+<li>Remote services — RDP, WMI, PSExec, SSH</li>
+<li>Living-off-the-land — using built-in tools (PowerShell, WMI, certutil) to avoid AV detection</li>
+</ul>
+<h3 id="phase-7--objective-completion-and-reporting">Phase 7 — Objective completion and reporting</h3>
+<p>Once the objective is achieved (or time runs out), document:</p>
+<ul>
+<li>Complete attack narrative with timestamps</li>
+<li>Every technique used, mapped to ATT&amp;CK</li>
+<li>Evidence (screenshots, command output, data samples)</li>
+<li>Detection opportunities missed by the blue team</li>
+<li>Recommendations for each gap</li>
+</ul>
+<hr>
+<h2 id="red-team-tooling">Red Team tooling</h2>
+<h3 id="command-and-control-c2-frameworks">Command and Control (C2) frameworks</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Type</th>
+					<th>Notes</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cobalt Strike</td>
+					<td>Commercial</td>
+					<td>Industry standard, expensive (~$3,500/year)</td>
+			</tr>
+			<tr>
+					<td>Sliver</td>
+					<td>Open source</td>
+					<td>Modern Go-based C2, Cobalt Strike alternative</td>
+			</tr>
+			<tr>
+					<td>Metasploit</td>
+					<td>Open source</td>
+					<td>Broad exploit coverage, well-known (easily detected)</td>
+			</tr>
+			<tr>
+					<td>Havoc</td>
+					<td>Open source</td>
+					<td>Modern, evasion-focused</td>
+			</tr>
+			<tr>
+					<td>Brute Ratel</td>
+					<td>Commercial</td>
+					<td>Designed to evade EDR products</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="supporting-tools">Supporting tools</h3>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mimikatz</td>
+					<td>Credential extraction from Windows memory</td>
+			</tr>
+			<tr>
+					<td>Rubeus</td>
+					<td>Kerberos attacks</td>
+			</tr>
+			<tr>
+					<td>BloodHound</td>
+					<td>Active Directory attack path analysis</td>
+			</tr>
+			<tr>
+					<td>Impacket</td>
+					<td>Python tools for Windows protocols</td>
+			</tr>
+			<tr>
+					<td>CrackMapExec</td>
+					<td>Network attack automation</td>
+			</tr>
+			<tr>
+					<td>Responder</td>
+					<td>Network credential capture</td>
+			</tr>
+			<tr>
+					<td>Burp Suite</td>
+					<td>Web application attacks</td>
+			</tr>
+			<tr>
+					<td>Nessus / OpenVAS</td>
+					<td>Vulnerability scanning</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="threat-intelligence-driven-red-teaming">Threat-intelligence-driven red teaming</h2>
+<p>The most advanced form of red teaming uses threat intelligence to emulate a specific threat actor relevant to your organisation and sector.</p>
+<h3 id="frameworks-for-intelligence-driven-red-teaming">Frameworks for intelligence-driven red teaming</h3>
+<p><strong>TIBER-EU</strong> (Threat Intelligence-Based Ethical Red Teaming)</p>
+<ul>
+<li>Developed by the European Central Bank</li>
+<li>Mandatory for financial institutions in many EU countries</li>
+<li>Three phases: preparation, red team test, closure</li>
+<li>Requires accredited threat intelligence provider + red team provider</li>
+</ul>
+<p><strong>CBEST</strong> (UK)</p>
+<ul>
+<li>Bank of England framework for UK financial sector</li>
+<li>Similar structure to TIBER-EU</li>
+<li>Uses CREST-accredited providers</li>
+</ul>
+<p><strong>DORA</strong> (Digital Operational Resilience Act)</p>
+<ul>
+<li>EU regulation requiring TLPT (Threat-Led Penetration Testing) for financial entities</li>
+<li>Effective January 2025</li>
+<li>Based on TIBER-EU methodology</li>
+</ul>
+<h3 id="selecting-a-threat-actor-profile">Selecting a threat actor profile</h3>
+<p>Research which threat actor groups target your sector using:</p>
+<ul>
+<li>MITRE ATT&amp;CK Groups: <a href="https://attack.mitre.org/groups/">https://attack.mitre.org/groups/</a></li>
+<li>Mandiant M-Trends annual report</li>
+<li>CrowdStrike Global Threat Report</li>
+<li>Sector-specific ISACs (Information Sharing and Analysis Centers)</li>
+</ul>
+<p><strong>Example: Financial sector threat actor profile</strong></p>
+<pre tabindex="0"><code>Threat actor: FIN7 (Carbanak)
+Primary motivation: Financial gain
+Typical initial access: Spear phishing with malicious Word docs
+Common tools: Carbanak malware, Cobalt Strike
+Target: Point-of-sale systems, wire transfer fraud
+Notable incidents: $1B+ stolen from banks globally
+MITRE ATT&amp;CK group: https://attack.mitre.org/groups/G0046/
+</code></pre><hr>
+<h2 id="red-team-reporting">Red Team reporting</h2>
+<p>A red team report contains:</p>
+<h3 id="executive-summary-12-pages">Executive summary (1–2 pages)</h3>
+<ul>
+<li>Objective and outcome</li>
+<li>Key findings in business impact terms</li>
+<li>Top 3–5 recommendations</li>
+</ul>
+<h3 id="attack-narrative">Attack narrative</h3>
+<ul>
+<li>Chronological story of the attack campaign</li>
+<li>Each step explained in plain language</li>
+<li>Business risk at each stage</li>
+</ul>
+<h3 id="technical-findings">Technical findings</h3>
+<ul>
+<li>Each technique used, mapped to ATT&amp;CK</li>
+<li>Evidence screenshots</li>
+<li>Detection status (detected / missed)</li>
+<li>Remediation recommendation</li>
+</ul>
+<h3 id="attck-navigator-heat-map">ATT&amp;CK Navigator heat map</h3>
+<p>A visual showing which techniques were used and which were detected:</p>
+<pre tabindex="0"><code>Technique             | Used | Detected | Gap
+T1566 Phishing        |  ✓   |    ✓     | None
+T1003 Credential Dump |  ✓   |    ✗     | HIGH GAP
+T1021 Remote Services |  ✓   |    ✗     | HIGH GAP
+T1486 Ransomware Sim  |  ✓   |    ✓     | None
+</code></pre><hr>
+<h2 id="key-metrics">Key metrics</h2>
+<table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th>Description</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Time to objective</td>
+					<td>How long to achieve the attacker&rsquo;s goal</td>
+			</tr>
+			<tr>
+					<td>Detection rate</td>
+					<td>% of techniques detected by blue team</td>
+			</tr>
+			<tr>
+					<td>Dwell time</td>
+					<td>Time between initial access and detection</td>
+			</tr>
+			<tr>
+					<td>Blast radius</td>
+					<td>Maximum access achieved</td>
+			</tr>
+			<tr>
+					<td>Coverage against ATT&amp;CK</td>
+					<td>% of relevant techniques tested</td>
+			</tr>
+	</tbody>
+</table>
+<div class="references-section">
+<h2 id="-related-pages">📚 Related pages</h2>
+<div class="ref-grid">
+  <a class="ref-card" href="/wiki/purple-teaming/"><span class="ref-label">Wiki</span>Purple Teaming — Level 4</a>
+  <a class="ref-card" href="/wiki/threat-intelligence/"><span class="ref-label">Wiki</span>Threat Intelligence — Level 5</a>
+  <a class="ref-card" href="/wiki/asm/"><span class="ref-label">Wiki</span>Attack Surface Management</a>
+  <a class="ref-card" href="/wiki/attack-trees/"><span class="ref-label">Framework</span>Attack Trees</a>
+  <a class="ref-card" href="/wiki/maturity-ladder/"><span class="ref-label">Wiki</span>Maturity Ladder Overview</a>
+  <a class="ref-card" href="/posts/06-security-engineering-maturity/"><span class="ref-label">Post</span>Full Maturity Ladder Post</a>
+</div>
+</div>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

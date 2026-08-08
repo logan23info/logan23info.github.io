@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on Security Engineering Wiki</title>
+    <link>https://logan23info.github.io/categories/</link>
+    <description>Recent content in Categories on Security Engineering Wiki</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://logan23info.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ai-Security</title>
+      <link>https://logan23info.github.io/categories/ai-security/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/ai-security/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Architecture</title>
+      <link>https://logan23info.github.io/categories/architecture/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/architecture/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cloud-Security</title>
+      <link>https://logan23info.github.io/categories/cloud-security/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/cloud-security/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Compliance</title>
+      <link>https://logan23info.github.io/categories/compliance/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/compliance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cryptography</title>
+      <link>https://logan23info.github.io/categories/cryptography/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/cryptography/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Detection-Engineering</title>
+      <link>https://logan23info.github.io/categories/detection-engineering/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/detection-engineering/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Incident-Response</title>
+      <link>https://logan23info.github.io/categories/incident-response/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/incident-response/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Metrics</title>
+      <link>https://logan23info.github.io/categories/metrics/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/metrics/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ot-Ics</title>
+      <link>https://logan23info.github.io/categories/ot-ics/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/ot-ics/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Overview</title>
+      <link>https://logan23info.github.io/categories/overview/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/overview/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Owasp</title>
+      <link>https://logan23info.github.io/categories/owasp/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/owasp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Privacy</title>
+      <link>https://logan23info.github.io/categories/privacy/</link>
+      <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/privacy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Devsecops</title>
+      <link>https://logan23info.github.io/categories/devsecops/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/devsecops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Frameworks</title>
+      <link>https://logan23info.github.io/categories/frameworks/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/frameworks/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Fundamentals</title>
+      <link>https://logan23info.github.io/categories/fundamentals/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/fundamentals/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Governance</title>
+      <link>https://logan23info.github.io/categories/governance/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/governance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Security-Engineering</title>
+      <link>https://logan23info.github.io/categories/security-engineering/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/security-engineering/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Templates</title>
+      <link>https://logan23info.github.io/categories/templates/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/templates/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tools</title>
+      <link>https://logan23info.github.io/categories/tools/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://logan23info.github.io/categories/tools/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,234 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>DORA — Digital Operational Resilience Act | Security Engineering Wiki</title><meta name=keywords content="DORA,compliance,EU,financial-regulation,ICT-risk,TLPT"><meta name=description content="DORA compliance guide — ICT risk management, incident reporting, resilience testing, and third-party risk for EU financial entities."><meta name=author content="Logan"><link rel=canonical href=https://logan23info.github.io/wiki/compliance/dora/><link crossorigin=anonymous href=/assets/css/stylesheet.26ec0ea695194a5b9950f0a49baa7569a601f613dff6dfe0385cc6c9cae1f030.css integrity="sha256-JuwOppUZSluZUPCkm6p1aaYB9hPf9t/gOFzGycrh8DA=" rel="preload stylesheet" as=style><link rel=icon href=https://logan23info.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://logan23info.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://logan23info.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://logan23info.github.io/apple-touch-icon.png><link rel=mask-icon href=https://logan23info.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://logan23info.github.io/wiki/compliance/dora/index.xml title=rss><link rel=alternate hreflang=en href=https://logan23info.github.io/wiki/compliance/dora/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://logan23info.github.io/wiki/compliance/dora/"><meta property="og:site_name" content="Security Engineering Wiki"><meta property="og:title" content="DORA — Digital Operational Resilience Act"><meta property="og:description" content="DORA compliance guide — ICT risk management, incident reporting, resilience testing, and third-party risk for EU financial entities."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="DORA — Digital Operational Resilience Act"><meta name=twitter:description content="DORA compliance guide — ICT risk management, incident reporting, resilience testing, and third-party risk for EU financial entities."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wiki","item":"https://logan23info.github.io/wiki/"},{"@type":"ListItem","position":2,"name":"Compliance Mappings","item":"https://logan23info.github.io/wiki/compliance/"},{"@type":"ListItem","position":3,"name":"DORA — Digital Operational Resilience Act","item":"https://logan23info.github.io/wiki/compliance/dora/"}]}</script></head><body class=list id=top><header class=header><nav class=header-nav><div class=logo><a href=https://logan23info.github.io/ accesskey=h title="Security Engineering Wiki (Alt + H)">Security Engineering Wiki</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://logan23info.github.io/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://logan23info.github.io/wiki/ title=Wiki><span>Wiki</span></a></li><li><a href=https://logan23info.github.io/threat-modelling/ title="Threat Modelling"><span>Threat Modelling Guide</span></a></li><li><a href=https://logan23info.github.io/wiki/owasp-top10/ title="OWASP Top 10 (2021)"><span>OWASP Top 10</span></a></li><li><a href=https://logan23info.github.io/wiki/cloud-security/ title="Cloud Security"><span>Cloud</span></a></li><li><a href=https://logan23info.github.io/wiki/detection-engineering/ title="Detection Engineering"><span>SOC & Detection</span></a></li><li><a href=https://logan23info.github.io/wiki/ai-security/ title="AI & LLM Security"><span>AI/LLM</span></a></li><li><a href=https://logan23info.github.io/wiki/crypto/ title=Cryptography><span>Crypto</span></a></li><li><a href=https://logan23info.github.io/wiki/compliance/ title="Compliance Mappings"><span>Compliance Mappings</span></a></li><li><a href=https://logan23info.github.io/wiki/incident-response/ title="Incident Response"><span>IR Playbooks</span></a></li><li><a href=https://logan23info.github.io/wiki/ot-ics/ title="OT / ICS Security"><span>OT & ICS Security</span></a></li><li><a href=https://logan23info.github.io/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/>Wiki</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/wiki/compliance/>Compliance Mappings</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">DORA — Digital Operational Resilience Act</h1><div class=post-description>DORA compliance guide — ICT risk management, incident reporting, resilience testing, and third-party risk for EU financial entities.</div><div class=post-meta><span title='2026-08-05 00:00:00 +0000 UTC'>August 5, 2026</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;·&nbsp;<span>1195 words</span>&nbsp;·&nbsp;<span>Logan</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#what-is-dora aria-label="What is DORA?">What is DORA?</a></li><li><a href=#who-dora-applies-to aria-label="Who DORA applies to">Who DORA applies to</a></li><li><a href=#five-pillars-of-dora aria-label="Five pillars of DORA">Five pillars of DORA</a><ul><li><a href=#pillar-1--ict-risk-management-articles-516 aria-label="Pillar 1 — ICT Risk Management (Articles 5–16)">Pillar 1 — ICT Risk Management (Articles 5–16)</a></li><li><a href=#pillar-2--ict-incident-management-and-reporting-articles-1723 aria-label="Pillar 2 — ICT Incident Management and Reporting (Articles 17–23)">Pillar 2 — ICT Incident Management and Reporting (Articles 17–23)</a></li><li><a href=#pillar-3--digital-operational-resilience-testing-articles-2427 aria-label="Pillar 3 — Digital Operational Resilience Testing (Articles 24–27)">Pillar 3 — Digital Operational Resilience Testing (Articles 24–27)</a></li><li><a href=#pillar-4--ict-third-party-risk-management-articles-2844 aria-label="Pillar 4 — ICT Third-Party Risk Management (Articles 28–44)">Pillar 4 — ICT Third-Party Risk Management (Articles 28–44)</a></li><li><a href=#pillar-5--information-sharing-article-45 aria-label="Pillar 5 — Information Sharing (Article 45)">Pillar 5 — Information Sharing (Article 45)</a></li></ul></li><li><a href=#dora-gap-assessment-checklist aria-label="DORA gap assessment checklist">DORA gap assessment checklist</a></li><li><a href=#-related-pages aria-label="📚 Related pages">📚 Related pages</a></li></ul></div></details><div class="post-content md-content"><h2 id=what-is-dora>What is DORA?<a hidden class=anchor aria-hidden=true href=#what-is-dora>#</a></h2><p>The Digital Operational Resilience Act (EU) 2022/2554 is EU regulation that entered into force on <strong>17 January 2025</strong>. It applies to financial entities (banks, investment firms, payment institutions, insurance companies, crypto-asset service providers) and their critical ICT third-party service providers operating in the EU.</p><p><strong>Core objective:</strong> Ensure financial entities can withstand, respond to, and recover from all ICT-related disruptions and threats.
+<strong>Supervisor:</strong> National Competent Authorities (EBA, ESMA, EIOPA for EU entities).
+<strong>Penalties:</strong> Significant fines for non-compliance — specific amounts set by national supervisors.</p><hr><h2 id=who-dora-applies-to>Who DORA applies to<a hidden class=anchor aria-hidden=true href=#who-dora-applies-to>#</a></h2><table><thead><tr><th>Entity type</th><th>In scope?</th></tr></thead><tbody><tr><td>Credit institutions (banks)</td><td>Yes</td></tr><tr><td>Payment and e-money institutions</td><td>Yes</td></tr><tr><td>Investment firms</td><td>Yes</td></tr><tr><td>Insurance and reinsurance undertakings</td><td>Yes</td></tr><tr><td>Crypto-asset service providers (CASPs)</td><td>Yes</td></tr><tr><td>Critical ICT third-party service providers (CTPPs)</td><td>Yes — direct obligations</td></tr><tr><td>Non-critical ICT providers to financial entities</td><td>Indirect — via contractual requirements</td></tr></tbody></table><hr><h2 id=five-pillars-of-dora>Five pillars of DORA<a hidden class=anchor aria-hidden=true href=#five-pillars-of-dora>#</a></h2><h3 id=pillar-1--ict-risk-management-articles-516>Pillar 1 — ICT Risk Management (Articles 5–16)<a hidden class=anchor aria-hidden=true href=#pillar-1--ict-risk-management-articles-516>#</a></h3><p>DORA requires a comprehensive ICT risk management framework integrated into the overall risk framework.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># ict-risk-framework.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>governance</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>board_responsibility</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Approve ICT risk strategy annually</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Ensure adequate budget for ICT security</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Review ICT risk reports at least quarterly</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Accountable for DORA compliance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>ict_risk_roles</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>CISO</span><span class=p>:</span><span class=w> </span><span class=l>responsible for ICT security strategy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>CIO</span><span class=p>:</span><span class=w> </span><span class=l>responsible for ICT operations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>CRO</span><span class=p>:</span><span class=w> </span><span class=l>responsible for ICT risk integration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>risk_management_process</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>identify</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Complete ICT asset inventory with criticality classification</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Map all ICT systems supporting critical functions</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Document all third-party ICT dependencies</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Assess concentration risk (single providers for critical functions)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>protect</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Implement controls proportionate to risk</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>Minimum</span><span class=p>:</span><span class=w> </span><span class=l>encryption, MFA, vulnerability management, patch management</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Network segmentation for critical systems</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Secure development lifecycle</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>detect</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Continuous monitoring of ICT systems</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Anomaly detection and alerting</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Threat intelligence feeds</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>respond_recover</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>ICT incident response plan</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Business continuity plan with RTO/RPO targets</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Communication plan for ICT incidents</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Annual DR test</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>evidence_for_supervisors</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>ICT risk register with treatment decisions</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Board-approved ICT risk strategy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>ICT asset inventory</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Control effectiveness reports</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Audit results</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=pillar-2--ict-incident-management-and-reporting-articles-1723>Pillar 2 — ICT Incident Management and Reporting (Articles 17–23)<a hidden class=anchor aria-hidden=true href=#pillar-2--ict-incident-management-and-reporting-articles-1723>#</a></h3><p>DORA introduces mandatory reporting of major ICT incidents and significant cyber threats to supervisory authorities.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># incident-classification.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>major_incident_criteria</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># A major ICT incident must be reported to the supervisor</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Criteria (any one triggers major classification):</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>client_impact</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;More than a defined number of clients affected&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>threshold</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Determined by national supervisor — typically significant %&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>data_impact</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Personal or confidential data breached&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>severity</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Any significant data breach&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>reputation_impact</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Significant reputational damage to the entity&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>financial_impact</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Direct financial loss above threshold&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>threshold</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Defined by national supervisor&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>duration</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Incident lasting longer than a defined period&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>threshold</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Typically 4 hours for critical services&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>geographic_impact</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Impact across multiple EU member states&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>reporting_timeline</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>initial_notification</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>deadline</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;4 hours after classification as major incident&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>content</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Incident reference and classification</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Date/time of detection</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Nature of incident (preliminary)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Initial assessment of impact</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Containment measures taken</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>intermediate_report</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>deadline</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;72 hours after initial notification&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>content</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Updated impact assessment</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Root cause (if known)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Measures implemented</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Estimated recovery timeline</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>final_report</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>deadline</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;1 month after resolution&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>content</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Root cause analysis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Full impact quantification</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Measures implemented to prevent recurrence</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>Lessons learned</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=pillar-3--digital-operational-resilience-testing-articles-2427>Pillar 3 — Digital Operational Resilience Testing (Articles 24–27)<a hidden class=anchor aria-hidden=true href=#pillar-3--digital-operational-resilience-testing-articles-2427>#</a></h3><p>DORA requires regular testing of ICT systems and, for significant entities, Threat-Led Penetration Testing (TLPT).</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># resilience-testing-programme.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>basic_testing</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Required for all in-scope entities</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>frequency</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;At least annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>types</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>vulnerability_assessments</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Quarterly&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>network_security_assessments</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>gap_analyses</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>physical_security_reviews</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>scenario_based_tests</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>penetration_tests</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Annual&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>evidence</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Vulnerability scan reports with remediation tracking</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Pen test reports from qualified provider</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Test results reviewed by management</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Remediation tracked to closure</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>advanced_testing_tlpt</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Required for significant financial entities</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Threat-Led Penetration Testing (TLPT) based on TIBER-EU methodology</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>frequency</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Every 3 years minimum&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>phases</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>intelligence_gathering</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Threat intelligence provider produces target threat landscape&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>output</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Generic Threat Intelligence Report + Targeted Threat Intelligence Report&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>duration</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;6–8 weeks&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>red_team_test</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Red team conducts full adversarial simulation&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>scope</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Production systems supporting critical functions — live environment&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>duration</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;12+ weeks&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>techniques</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Based on TTIs from intelligence phase&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>closure</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Results shared with blue team, remediation plan agreed&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>output</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;TLPT Summary Report, remediation roadmap&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>attestation</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Supervisor attestation upon completion&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>providers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Must use accredited TLPT providers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Threat intelligence provider and red team must be separate organisations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>At least one provider must be external to the organisation</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=pillar-4--ict-third-party-risk-management-articles-2844>Pillar 4 — ICT Third-Party Risk Management (Articles 28–44)<a hidden class=anchor aria-hidden=true href=#pillar-4--ict-third-party-risk-management-articles-2844>#</a></h3><p>DORA requires financial entities to manage ICT third-party risk systematically, with enhanced requirements for Critical Third-Party Providers (CTPPs).</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># third-party-ict-risk.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>ict_provider_register</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Article 28 — maintain register of all ICT third-party arrangements</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>required_fields</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>provider_name_and_contact</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>service_description</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>date_of_contract_start</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>criticality_classification </span><span class=w> </span><span class=c># critical / important / non-critical</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>data_processed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>sub-processors</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>country_of_data_processing</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>exit_strategy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>last_risk_assessment_date</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>pre_contract_due_diligence</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Security certifications (ISO 27001, SOC 2)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Penetration test results (last 12 months)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Business continuity and DR capabilities</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Sub-processor disclosure</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Data breach history</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=l>Regulatory standing</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>contractual_requirements</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Article 30 — mandatory contractual provisions for critical providers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>mandatory_clauses</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>full_service_level_descriptions</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>data_location_and_portability</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>audit_rights</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>          </span><span class=c># financial entity must be able to audit</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>incident_notification</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>  </span><span class=c># provider must notify within defined SLA</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>business_continuity_obligations</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>right_to_terminate_and_exit</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>sub-contractor_disclosure</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>concentration_risk</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># Monitor dependence on single providers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>assessment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Identify critical functions dependent on single ICT provider</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Assess impact if provider fails or is sanctioned</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Develop exit strategies for critical dependencies</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>Report concentration risk to management quarterly</span><span class=w>
+</span></span></span></code></pre></div><hr><h3 id=pillar-5--information-sharing-article-45>Pillar 5 — Information Sharing (Article 45)<a hidden class=anchor aria-hidden=true href=#pillar-5--information-sharing-article-45>#</a></h3><p>DORA encourages (but does not mandate) sharing of cyber threat intelligence between financial entities.</p><hr><h2 id=dora-gap-assessment-checklist>DORA gap assessment checklist<a hidden class=anchor aria-hidden=true href=#dora-gap-assessment-checklist>#</a></h2><pre tabindex=0><code>Governance (Articles 5–6)
+□ Board formally allocated ICT risk responsibility
+□ ICT risk strategy approved by board annually
+□ CISO/CRO accountable for DORA compliance
+□ ICT risk integrated into enterprise risk framework
+
+ICT Risk Management (Articles 8–16)
+□ Complete ICT asset inventory with criticality classification
+□ ICT risk register with all material risks documented
+□ Vulnerability management: quarterly scans, tracked remediation
+□ Patch management: critical patches within 24 hours
+□ Network segmentation for critical ICT systems
+□ Encryption at rest and in transit for all critical data
+□ MFA for all access to critical ICT systems
+
+Incident Management (Articles 17–20)
+□ Incident classification criteria defined and aligned to DORA thresholds
+□ Major incident reporting procedure documented (4h / 72h / 1 month)
+□ Incident response team trained and tested annually
+□ Incident register maintained
+
+Resilience Testing (Articles 24–27)
+□ Annual penetration test of critical systems
+□ Quarterly vulnerability assessments
+□ Annual DR test with documented RTO/RPO results
+□ TLPT completed every 3 years (if significant entity)
+
+Third-Party Risk (Articles 28–44)
+□ Complete register of all ICT third-party arrangements
+□ Criticality assessment for all ICT providers
+□ Due diligence completed for all critical/important providers
+□ Contractual provisions meet Article 30 requirements
+□ Concentration risk assessed and reported to management
+□ Exit strategies documented for critical dependencies
+</code></pre><div class=references-section><h2 id=-related-pages>📚 Related pages<a hidden class=anchor aria-hidden=true href=#-related-pages>#</a></h2><div class=ref-grid><a class=ref-card href=/wiki/compliance/iso-27001/><span class=ref-label>Compliance</span>ISO 27001:2022</a>
+<a class=ref-card href=/wiki/red-teaming/><span class=ref-label>Wiki</span>Red Teaming — TLPT basis</a>
+<a class=ref-card href=/wiki/threat-intelligence/><span class=ref-label>Wiki</span>Threat Intelligence</a>
+<a class=ref-card href=/wiki/advisory-assurance/tooe/><span class=ref-label>Assurance</span>Test of Operating Effectiveness</a>
+<a class=ref-card href=/wiki/supply-chain/><span class=ref-label>Wiki</span>Supply Chain Security</a>
+<a class=ref-card href=/wiki/maturity-ladder/><span class=ref-label>Wiki</span>Security Engineering Maturity Ladder</a></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://logan23info.github.io/tags/dora/>DORA</a></li><li><a href=https://logan23info.github.io/tags/compliance/>Compliance</a></li><li><a href=https://logan23info.github.io/tags/eu/>EU</a></li><li><a href=https://logan23info.github.io/tags/financial-regulation/>Financial-Regulation</a></li><li><a href=https://logan23info.github.io/tags/ict-risk/>ICT-Risk</a></li><li><a href=https://logan23info.github.io/tags/tlpt/>TLPT</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://logan23info.github.io/>Security Engineering Wiki</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>
