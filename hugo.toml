@@ -64,12 +64,12 @@ Want the full picture first? See the **[Security Engineering Landscape](/wiki/la
     pageRef = "/wiki/"
     weight  = 20
   [[menu.main]]
-    name    = "Threat Modelling"
+    name    = "Threat Modelling Guide"
     url     = "/threat-modelling/"
     pageRef = "/threat-modelling/"
     weight  = 25
   [[menu.main]]
-    name    = "OWASP"
+    name    = "OWASP Top 10"
     url     = "/wiki/owasp-top10/"
     pageRef = "/wiki/owasp-top10/"
     weight  = 30
@@ -79,7 +79,7 @@ Want the full picture first? See the **[Security Engineering Landscape](/wiki/la
     pageRef = "/wiki/cloud-security/"
     weight  = 40
   [[menu.main]]
-    name    = "Detection"
+    name    = "SOC & Detection"
     url     = "/wiki/detection-engineering/"
     pageRef = "/wiki/detection-engineering/"
     weight  = 50
@@ -94,17 +94,17 @@ Want the full picture first? See the **[Security Engineering Landscape](/wiki/la
     pageRef = "/wiki/crypto/"
     weight  = 70
   [[menu.main]]
-    name    = "Compliance"
+    name    = "Compliance Mappings"
     url     = "/wiki/compliance/"
     pageRef = "/wiki/compliance/"
     weight  = 80
   [[menu.main]]
-    name    = "IR"
+    name    = "IR Playbooks"
     url     = "/wiki/incident-response/"
     pageRef = "/wiki/incident-response/"
     weight  = 90
   [[menu.main]]
-    name    = "OT/ICS"
+    name    = "OT & ICS Security"
     url     = "/wiki/ot-ics/"
     pageRef = "/wiki/ot-ics/"
     weight  = 100
