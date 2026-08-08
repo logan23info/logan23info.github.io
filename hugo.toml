@@ -28,7 +28,7 @@ buildFuture = false
   comments            = false
   hidemeta            = false
   ShowAllPagesInArchive = true
-  mainSections        = ["posts"]
+  mainSections        = []
 
 [params.homeInfoParams]
   Title   = "🛡️ Security Engineering Wiki"
@@ -81,7 +81,7 @@ A **Risk Control Matrix** generator for DevOps and platform teams — map contro
 
 </div>
 
-**Reading by role?** Developer, Security Engineer, Auditor, SOC Analyst, AI/ML Engineer, and OT/ICS paths are on the **[Wiki index](/wiki/)**.
+**Reading by role?** Developer, Security Engineer, Auditor, SOC Analyst, AI/ML Engineer, and OT/ICS paths are on the **[Wiki index](/wiki/)**. **Latest posts?** See [/posts/](/posts/).
 """
 
 [[params.socialIcons]]
