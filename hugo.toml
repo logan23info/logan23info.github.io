@@ -30,15 +30,21 @@ buildFuture = false
   ShowAllPagesInArchive = true
   mainSections        = ["posts"]
 
-[params.homeInfoParams]
-  Title   = "🛡️ Security Engineering Wiki"
-  Content = """
-A practitioner's reference covering the full security engineering lifecycle — over 90 pages of working code, templates, and checklists.
-
-**Start here:** [Threat Modelling](/threat-modelling/) · [OWASP Top 10](/wiki/owasp-top10/) · [Cloud Security](/wiki/cloud-security/) · [Detection Engineering](/wiki/detection-engineering/) · [AI & LLM Security](/wiki/ai-security/) · [Incident Response](/wiki/incident-response/)
-
-Want the full picture first? See the **[Security Engineering Landscape](/wiki/landscape/)** — a map of how every domain connects. Or browse everything from the **[Wiki index](/wiki/)**.
-"""
+[params.profileMode]
+  enabled     = true
+  title       = "🛡️ Security Engineering Wiki"
+  subtitle    = "A practitioner's reference covering the full security engineering lifecycle — over 90 pages of working code, templates, and checklists."
+  imageUrl    = ""
+  imageWidth  = 120
+  imageHeight = 120
+  buttons = [
+    { name = "Threat Modelling", url = "/threat-modelling/" },
+    { name = "OWASP Top 10", url = "/wiki/owasp-top10/" },
+    { name = "Cloud Security", url = "/wiki/cloud-security/" },
+    { name = "Detection Eng", url = "/wiki/detection-engineering/" },
+    { name = "AI & LLM Security", url = "/wiki/ai-security/" },
+    { name = "Full Wiki Index", url = "/wiki/" },
+  ]
 
 [[params.socialIcons]]
   name = "github"
